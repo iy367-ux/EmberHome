@@ -12,6 +12,7 @@ android {
         targetSdk 34
         versionCode 2
         versionName '1.1'
+        manifestPlaceholders = [appLabel: 'Ember Home']
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -21,6 +22,7 @@ android {
         debug {
             applicationIdSuffix '.dev'
             versionNameSuffix '-dev'
+            manifestPlaceholders = [appLabel: 'Ember Home Dev']
         }
         release { minifyEnabled false }
     }
