@@ -1502,7 +1502,6 @@ public class MainActivity extends Activity {
 
     private void addMsdSection(LinearLayout body, String title) {
         TextView t = tv(title.toUpperCase(), 12, AMBER);
-        t.setLetterSpacing(0.12f);
         t.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(MATCH, WRAP);
         p.topMargin = dp(18);
