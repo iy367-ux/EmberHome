@@ -20,9 +20,9 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix '.dev'
-            versionNameSuffix '-dev'
-            manifestPlaceholders = [appLabel: 'Ember Home Dev']
+            applicationIdSuffix '.msd338'
+            versionNameSuffix '-msd338'
+            manifestPlaceholders = [appLabel: 'Ember Home MSD338 Edition']
         }
         release { minifyEnabled false }
     }
