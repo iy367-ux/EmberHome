@@ -38,6 +38,7 @@ public class AerialDreamService extends DreamService {
     private int imageIndex = 0;
     private VideoView videoView;
     private ImageView imageView;
+    private Bitmap currentBitmap;
     private SceneView sceneView;
     private Runnable imageRotation;
     private boolean detached;
@@ -59,7 +60,7 @@ public class AerialDreamService extends DreamService {
         });
 
         scanMedia();
-        if (!videos.isEmpty()) {
+        if (!videos.isEmpty() && !DeviceProfile.isLowRamDevice(this)) {
             playVideo(root, 0);
         } else if (!images.isEmpty()) {
             showImages(root);
@@ -143,8 +144,23 @@ public class AerialDreamService extends DreamService {
     private void showNextImage() {
         if (imageView == null || images.isEmpty()) return;
         File file = images.get(imageIndex++ % images.size());
-        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        if (bitmap != null) imageView.setImageBitmap(bitmap);
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file.getAbsolutePath(), bounds);
+        int targetW = imageView.getWidth() > 0 ? imageView.getWidth() : 1920;
+        int targetH = imageView.getHeight() > 0 ? imageView.getHeight() : 1080;
+        int sample = 1;
+        while (bounds.outWidth / (sample * 2) >= targetW
+                && bounds.outHeight / (sample * 2) >= targetH) sample *= 2;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = sample;
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+            if (currentBitmap != null && currentBitmap != bitmap && !currentBitmap.isRecycled())
+                currentBitmap.recycle();
+            currentBitmap = bitmap;
+        }
     }
 
     @Override
@@ -155,6 +171,8 @@ public class AerialDreamService extends DreamService {
         if (videoView != null) {
             try { videoView.stopPlayback(); } catch (Exception ignored) { }
         }
+        if (currentBitmap != null && !currentBitmap.isRecycled()) currentBitmap.recycle();
+        currentBitmap = null;
         super.onDetachedFromWindow();
     }
 
