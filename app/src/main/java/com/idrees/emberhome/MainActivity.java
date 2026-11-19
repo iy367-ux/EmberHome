@@ -15,9 +15,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -136,7 +139,8 @@ public class MainActivity extends Activity {
         style = prefs.getInt("style", 0);
         if (style < 0 || style >= STYLES.length) style = 0;
         root = new FrameLayout(this);
-        root.setBackgroundDrawable(wallpaperDrawable(wallpaperIndex));
+        Drawable customWallpaper = loadCustomWallpaper();
+        root.setBackgroundDrawable(customWallpaper != null ? customWallpaper : wallpaperDrawable(wallpaperIndex));
         setContentView(root);
         String cached = prefs.getString("wx", null);
         if (cached != null) parseWeather(cached);
@@ -938,9 +942,91 @@ public class MainActivity extends Activity {
         return drawable;
     }
 
+    private static final int PHOTO_WALLPAPER_REQUEST = 732;
+
+    private void choosePhotoWallpaper() {
+        try {
+            Intent pick = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            pick.addCategory(Intent.CATEGORY_OPENABLE);
+            pick.setType("image/*");
+            pick.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+            startActivityForResult(pick, PHOTO_WALLPAPER_REQUEST);
+        } catch (Exception e) {
+            Toast.makeText(this, "This device has no compatible image picker.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PHOTO_WALLPAPER_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                getContentResolver().takePersistableUriPermission(uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } catch (Exception ignored) { }
+            prefs.edit().putString("custom_wallpaper_uri", uri.toString()).apply();
+            Drawable drawable = loadCustomWallpaper();
+            if (drawable != null && root != null) {
+                root.setBackgroundDrawable(drawable);
+                Toast.makeText(this, "Photo wallpaper applied.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Could not load that image. Try another picture.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private Drawable loadCustomWallpaper() {
+        String value = prefs.getString("custom_wallpaper_uri", null);
+        if (value == null || value.length() == 0) return null;
+        java.io.InputStream stream = null;
+        try {
+            Uri uri = Uri.parse(value);
+            BitmapFactory.Options bounds = new BitmapFactory.Options();
+            bounds.inJustDecodeBounds = true;
+            stream = getContentResolver().openInputStream(uri);
+            BitmapFactory.decodeStream(stream, null, bounds);
+            if (stream != null) stream.close();
+            stream = null;
+            int targetW = Math.max(1, getResources().getDisplayMetrics().widthPixels);
+            int targetH = Math.max(1, getResources().getDisplayMetrics().heightPixels);
+            int sample = 1;
+            while (bounds.outWidth / (sample * 2) >= targetW
+                    && bounds.outHeight / (sample * 2) >= targetH) sample *= 2;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = sample;
+            stream = getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(stream, null, options);
+            if (bitmap == null) return null;
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+            drawable.setGravity(Gravity.FILL);
+            return drawable;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            if (stream != null) try { stream.close(); } catch (Exception ignored) { }
+        }
+    }
+
+    private void applyThemePreset() {
+        int next = (prefs.getInt("theme_preset", 0) + 1) % 3;
+        int[] wallpapers = {3, 7, 2};
+        prefs.edit().putInt("theme_preset", next)
+                .putInt("wallpaper", wallpapers[next])
+                .remove("custom_wallpaper_uri").apply();
+        wallpaperIndex = wallpapers[next];
+        if (root != null) root.setBackgroundDrawable(wallpaperDrawable(wallpaperIndex));
+    }
+
+    private String themePresetLabel() {
+        int theme = prefs.getInt("theme_preset", 0);
+        return "Theme preset: " + (theme == 0 ? "Ember" : (theme == 1 ? "Ocean" : "Violet"));
+    }
+
     private void applyWallpaper() {
         wallpaperIndex = Math.max(0, Math.min(WALLPAPER_NAMES.length - 1, wallpaperIndex));
-        prefs.edit().putInt("wallpaper", wallpaperIndex).apply();
+        prefs.edit().putInt("wallpaper", wallpaperIndex).remove("custom_wallpaper_uri").apply();
         if (root != null) root.setBackgroundDrawable(wallpaperDrawable(wallpaperIndex));
     }
 
