@@ -1,3 +1,5 @@
+<!-- CI build verification: Android 4.4/API 19 -->
+
 # EmberHome — Thiago-style KitKat port
 
 This branch ports the clean, ad-free, liquid-glass launcher experience documented by [Thiago OS](https://github.com/thiagofernandezguillen-rgb/thiago-os) to **Android 4.4.4 / API 19** for the CVTE / MStar PB801 (MSD338) television.
