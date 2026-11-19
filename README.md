@@ -1,8 +1,16 @@
 [README.md](https://github.com/user-attachments/files/35078002/README.md)
-# Ember Home - TV launcher for Android 4.4+
+# EmberHome v1.1 Premium — MSD338 Edition
 
-Dark, ad-free home screen with four styles (Poster, Rows, Spotlight, Grid), a clock, weather,
-and a settings menu to switch styles. minSdk 19. No libraries, no tracking.
+A lightweight Android TV launcher targeting Android 4.4.4 / API 19, tuned for the CVTE / MStar PB801 (MSD338) board.
+
+The MSD338 edition follows the owner's five-page redesign blueprint:
+- **Apple TV Style** — warm gradient, large colourful app tiles, selected-app heading, top-right clock/date and floating shortcut dock.
+- **VIDAA OS Style** — dark sidebar, wide information panel and two rows of app tiles.
+- **Google TV Style** — teal gradient, centred clock/date and oval app tiles.
+- **Aerial screensaver** — offline coastline-at-dusk scene with clock/date and wake prompt.
+- **Settings** — Home style, Wallpaper, Screensaver, Apps and About.
+
+The three home themes are selectable in Settings and the installed-app list is discovered automatically. The debug package suffix `.msd338` also enables this edition in the API 19 emulator used by CI.
 
 ## Remote controls
 - D-pad: move. OK: open app. Hold OK: add to favorites (Rows style) or app info / uninstall.
