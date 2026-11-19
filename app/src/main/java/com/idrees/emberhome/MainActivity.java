@@ -139,8 +139,8 @@ public class MainActivity extends Activity {
         boolean msd338 = Msd338Profile.isTargetDevice();
         wallpaperIndex = prefs.getInt("wallpaper", msd338 ? 12 : 0);
         enableImmersiveMode();
-        // The PB801 gets the TV-first Spotlight layout on first launch.
-        // Existing user choices are preserved once saved.
+        // Legacy style preference remains intact for non-MSD338 devices.
+        // The PB801 uses the dedicated Smart Hub shell below.
         style = prefs.getInt("style", msd338 ? 2 : 0);
         if (style < 0 || style >= STYLES.length) style = 0;
         root = new FrameLayout(this);
@@ -1421,7 +1421,8 @@ public class MainActivity extends Activity {
     }
 
     private void buildMsd338Ui() {
-        root.setBackgroundDrawable(wallpaperDrawable(wallpaperIndex));
+        Drawable customWallpaper = loadCustomWallpaper();
+        root.setBackgroundDrawable(customWallpaper != null ? customWallpaper : wallpaperDrawable(wallpaperIndex));
         LinearLayout shell = box(LinearLayout.VERTICAL);
         shell.setPadding(dp(34), dp(18), dp(34), dp(18));
         root.addView(shell, new FrameLayout.LayoutParams(MATCH, MATCH));
