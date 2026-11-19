@@ -46,3 +46,6 @@ The APK is available from the Actions run artifact named EmberHome-Thiago-KitKat
 ## Upstream attribution
 
 The UI direction and feature behaviour are based on Thiago OS (MIT), copyright (c) 2026 Thiago. See THIAGO_OS_LICENSE.txt. This port is independently implemented in Java for API 19; it does not bundle the upstream Compose implementation or Inter font.
+
+
+The API 19 test also checks Back-key overlay dismissal and the complete Home → Settings → Control Centre navigation path.
