@@ -50,17 +50,17 @@ jobs:
             mkdir -p screenshots
             adb exec-out screencap -p > screenshots/01-apple-tv-home.png
             adb shell am force-stop com.idrees.emberhome.msd338
-            
+            adb shell run-as com.idrees.emberhome.msd338 sh -c 'echo "<map><int name=\"home_theme\" value=\"1\" /></map>" > shared_prefs/ember.xml'
             adb shell am start -n com.idrees.emberhome.msd338/com.idrees.emberhome.MainActivity
             sleep 5
             adb exec-out screencap -p > screenshots/02-vidaa-home.png
             adb shell am force-stop com.idrees.emberhome.msd338
-            
+            adb shell run-as com.idrees.emberhome.msd338 sh -c 'echo "<map><int name=\"home_theme\" value=\"2\" /></map>" > shared_prefs/ember.xml'
             adb shell am start -n com.idrees.emberhome.msd338/com.idrees.emberhome.MainActivity
             sleep 5
             adb exec-out screencap -p > screenshots/03-google-tv-home.png
             adb shell am force-stop com.idrees.emberhome.msd338
-            
+            adb shell run-as com.idrees.emberhome.msd338 sh -c 'echo "<map><int name=\"home_theme\" value=\"0\" /></map>" > shared_prefs/ember.xml'
             adb shell am start -n com.idrees.emberhome.msd338/com.idrees.emberhome.MainActivity
             sleep 5
             adb shell input tap 1130 45
