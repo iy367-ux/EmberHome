@@ -1,4 +1,4 @@
-name: Build APK
+name: Build, install and screenshot EmberHome
 on:
   push:
     branches: [main, v1.1-development, msd338-edition]
@@ -7,10 +7,12 @@ on:
 permissions:
   contents: write
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: msd338-edition
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -18,13 +20,47 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.2
-      - run: gradle assembleDebug --no-daemon
-      - run: cp app/build/outputs/apk/debug/app-debug.apk EmberHome.apk
-      - uses: actions/upload-artifact@v4
+      - name: Compile debug APK
+        run: gradle assembleDebug --no-daemon
+      - name: Preserve APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk EmberHome-MSD338-Premium.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          name: EmberHome-apk
-          path: EmberHome.apk
+          name: EmberHome-MSD338-Premium-APK
+          path: EmberHome-MSD338-Premium.apk
+
+      - name: Boot Android 4.4 emulator and test launcher
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 19
+          target: default
+          arch: x86
+          profile: Nexus 7
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: |
+            adb install -r EmberHome-MSD338-Premium.apk
+            adb shell am force-stop com.idrees.emberhome.msd338
+            adb shell am start -n com.idrees.emberhome.msd338/com.idrees.emberhome.MainActivity
+            sleep 8
+            adb shell dumpsys activity activities | grep -q 'com.idrees.emberhome.MainActivity'
+            mkdir -p screenshots
+            adb exec-out screencap -p > screenshots/01-apple-tv-home.png
+            adb shell input tap 1130 45
+            sleep 3
+            adb exec-out screencap -p > screenshots/02-settings.png
+            adb shell input keyevent 4
+            sleep 2
+            adb exec-out screencap -p > screenshots/03-home-after-back.png
+      - name: Upload emulator screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmberHome-MSD338-Screenshots
+          path: screenshots/*.png
+          if-no-files-found: warn
       - uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: EmberHome.apk
+          files: EmberHome-MSD338-Premium.apk
