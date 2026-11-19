@@ -137,7 +137,7 @@ public class MainActivity extends Activity {
         density = getResources().getDisplayMetrics().density;
         prefs = getSharedPreferences("ember", MODE_PRIVATE);
         boolean msd338 = Msd338Profile.isTargetDevice();
-        wallpaperIndex = prefs.getInt("wallpaper", msd338 ? 11 : 0);
+        wallpaperIndex = prefs.getInt("wallpaper", msd338 ? 12 : 0);
         enableImmersiveMode();
         // The PB801 gets the TV-first Spotlight layout on first launch.
         // Existing user choices are preserved once saved.
@@ -1407,25 +1407,16 @@ public class MainActivity extends Activity {
         return v;
     }
 
-    private TextView msdInfoCard(String heading, String detail) {
-        LinearLayout card = box(LinearLayout.VERTICAL);
-        card.setPadding(dp(18), dp(16), dp(18), dp(16));
-        card.setBackground(flat(false, dp(16)));
-        TextView h = tv(heading, 18, FG);
-        h.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-        card.addView(h);
-        TextView d = tv(detail, 13, DIM);
-        LinearLayout.LayoutParams dp0 = new LinearLayout.LayoutParams(MATCH, WRAP);
-        dp0.topMargin = dp(7);
-        card.addView(d, dp0);
-        card.setFocusable(false);
-        // A wrapper keeps cards visually consistent without introducing heavy artwork.
-        return wrapMsdCard(card);
-    }
-
-    private TextView wrapMsdCard(LinearLayout card) {
-        TextView v = tv("", 1, FG);
-        v.setVisibility(View.GONE);
+    private TextView msdCommand(String label, final Runnable action) {
+        TextView v = tv(label, 16, FG);
+        v.setGravity(Gravity.CENTER_VERTICAL);
+        v.setPadding(dp(18), dp(13), dp(18), dp(13));
+        v.setFocusable(true);
+        v.setClickable(true);
+        v.setBackground(stateFlat(dp(14), false));
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { action.run(); }
+        });
         return v;
     }
 
@@ -1739,24 +1730,46 @@ public class MainActivity extends Activity {
             LinearLayout options = box(LinearLayout.VERTICAL);
             options.setPadding(dp(18), dp(12), dp(18), dp(12));
             options.addView(tv("Appearance", 20, FG));
-            options.addView(msdAction("Change wallpaper", "settings"));
-            options.addView(msdAction("App display preferences", "settings"));
-            options.addView(msdAction("Manage apps", "settings"));
-            options.addView(msdAction("Open TV settings", "settings"));
+            options.addView(msdCommand("Change wallpaper", new Runnable() {
+                @Override public void run() { showWallpaperGallery(); }
+            }));
+            options.addView(msdCommand("Manage visible apps", new Runnable() {
+                @Override public void run() { showAppManager(); }
+            }));
+            options.addView(msdCommand("Open TV settings", new Runnable() {
+                @Override public void run() { openSystemSettings(); }
+            }));
+            options.addView(msdCommand("More EmberHome settings", new Runnable() {
+                @Override public void run() { showSettings(); }
+            }));
             split.addView(options, new LinearLayout.LayoutParams(0, WRAP, 1f));
             body.addView(split);
         } else {
             LinearLayout cards = box(LinearLayout.VERTICAL);
-            cards.addView(msdAction("Appearance  ·  Wallpapers and theme", "settings"));
-            cards.addView(msdAction("Apps  ·  Manage and organise", "apps"));
-            cards.addView(msdAction("TV  ·  Open manufacturer settings", "settings"));
+            cards.addView(msdCommand("Appearance  ·  Wallpapers and theme", new Runnable() {
+                @Override public void run() { showWallpaperGallery(); }
+            }));
+            cards.addView(msdCommand("Apps  ·  Manage and organise", new Runnable() {
+                @Override public void run() { openMsdPage("apps"); }
+            }));
+            cards.addView(msdCommand("TV  ·  Open manufacturer settings", new Runnable() {
+                @Override public void run() { openSystemSettings(); }
+            }));
             body.addView(cards);
         }
         addMsdSection(body, "PERSONALISATION");
-        body.addView(msdAction("Choose wallpaper", "settings"));
-        body.addView(msdAction("Manage visible apps", "apps"));
-        body.addView(msdAction("Open TV settings", "settings"));
-        body.addView(msdAction("More EmberHome settings", "legacy"));
+        body.addView(msdCommand("Choose wallpaper", new Runnable() {
+            @Override public void run() { showWallpaperGallery(); }
+        }));
+        body.addView(msdCommand("Manage visible apps", new Runnable() {
+            @Override public void run() { showAppManager(); }
+        }));
+        body.addView(msdCommand("Open TV settings", new Runnable() {
+            @Override public void run() { openSystemSettings(); }
+        }));
+        body.addView(msdCommand("More EmberHome settings", new Runnable() {
+            @Override public void run() { showSettings(); }
+        }));
     }
 
     // ================================================================ weather (wttr.in)
