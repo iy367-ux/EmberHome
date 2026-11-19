@@ -134,9 +134,12 @@ public class MainActivity extends Activity {
         super.onCreate(b);
         density = getResources().getDisplayMetrics().density;
         prefs = getSharedPreferences("ember", MODE_PRIVATE);
-        wallpaperIndex = prefs.getInt("wallpaper", 0);
+        boolean msd338 = Msd338Profile.isTargetDevice();
+        wallpaperIndex = prefs.getInt("wallpaper", msd338 ? 11 : 0);
         enableImmersiveMode();
-        style = prefs.getInt("style", 0);
+        // The PB801 gets the TV-first Spotlight layout on first launch.
+        // Existing user choices are preserved once saved.
+        style = prefs.getInt("style", msd338 ? 2 : 0);
         if (style < 0 || style >= STYLES.length) style = 0;
         root = new FrameLayout(this);
         Drawable customWallpaper = loadCustomWallpaper();
@@ -300,7 +303,11 @@ public class MainActivity extends Activity {
     }
 
     private boolean showAppLabels() { return prefs.getBoolean("show_labels", true); }
-    private boolean motionEnabled() { return prefs.getBoolean("motion", true); }
+    private boolean motionEnabled() {
+        // Continuous entrance/scale animations add little on a 512 MB MStar board.
+        if (Msd338Profile.isTargetDevice()) return false;
+        return prefs.getBoolean("motion", true);
+    }
     private float iconScale() {
         int size = prefs.getInt("icon_size", 1);
         return size == 0 ? 0.82f : (size == 2 ? 1.18f : 1f);
@@ -723,7 +730,10 @@ public class MainActivity extends Activity {
 
     private void buildSpotlight() {
         LinearLayout col = box(LinearLayout.VERTICAL);
-        col.setPadding(dp(56), dp(36), dp(56), dp(24));
+        col.setPadding(dp(Msd338Profile.isTargetDevice() ? 42 : 56),
+                dp(Msd338Profile.isTargetDevice() ? 26 : 36),
+                dp(Msd338Profile.isTargetDevice() ? 42 : 56),
+                dp(Msd338Profile.isTargetDevice() ? 18 : 24));
         root.addView(col, new FrameLayout.LayoutParams(MATCH, MATCH));
 
         LinearLayout top = box(LinearLayout.HORIZONTAL);
