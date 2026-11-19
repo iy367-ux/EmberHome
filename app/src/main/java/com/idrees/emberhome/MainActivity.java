@@ -301,7 +301,7 @@ public class MainActivity extends Activity {
         int size = prefs.getInt("icon_size", 1);
         return size == 0 ? 0.82f : (size == 2 ? 1.18f : 1f);
     }
-    private int scaledIcon(int base) { return Math.max(dp(28), dp(base) == 0 ? base : (int) (base * iconScale() + 0.5f)); }
+    private int scaledIcon(int base) { return dp(Math.max(28, (int) (base * iconScale() + 0.5f))); }
 
     private void enter(View v, int idx) {
         if (!motionEnabled()) {
