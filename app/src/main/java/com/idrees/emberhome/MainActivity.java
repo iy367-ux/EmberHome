@@ -1701,8 +1701,8 @@ public class MainActivity extends Activity {
             rp.topMargin=dp(5); content.addView(appRow,rp);
             if(rowNo==0 && appRow.getChildCount()>0) firstTile=appRow.getChildAt(0);
         }
-        shell.addView(content,new LinearLayout.LayoutParams(0,MATCH,1f));
-        body.addView(shell,new LinearLayout.LayoutParams(MATCH,MATCH));
+        shell.addView(content,new LinearLayout.LayoutParams(0,WRAP,1f));
+        body.addView(shell,new LinearLayout.LayoutParams(MATCH,WRAP));
     }
 
     private void buildGoogleHome(LinearLayout body) {
