@@ -200,7 +200,6 @@ public class AerialDreamService extends DreamService {
 
             paint.setColor(0xBFFFFFFF);
             paint.setTextSize(Math.max(14f, h * .018f));
-            paint.setLetterSpacingCompat();
             c.drawText("EMBERHOME  •  AERIAL", w * .055f, h * .92f, paint);
         }
     }
