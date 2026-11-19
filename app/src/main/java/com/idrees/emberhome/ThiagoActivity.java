@@ -27,6 +27,15 @@ public class ThiagoActivity extends Activity {
     private final ArrayList<AppItem> apps = new ArrayList<AppItem>();
     private final HashSet<String> favourites = new HashSet<String>();
     private final ArrayList<String> appOrder = new ArrayList<String>();
+    // Known user-facing apps on the MSD338 TV; keep these at the front by default.
+    private static final String[] TV_APP_ORDER = {
+        "com.android.youtube",
+        "com.netflix.mediaclient",
+        "com.facebook.katana",
+        "com.android.chrome",
+        "com.alphainventor.filemanager",
+        "com.teamsmart.videomanager.tv"
+    };
     private final HashMap<String, Bitmap> icons = new HashMap<String, Bitmap>();
     private SharedPreferences prefs;
     private int page = 0;             // 0 home, 1 settings
@@ -54,6 +63,11 @@ public class ThiagoActivity extends Activity {
         if (saved != null) favourites.addAll(saved);
         String savedOrder = prefs.getString("order", "");
         if (savedOrder.length() > 0) appOrder.addAll(Arrays.asList(savedOrder.split("\n")));
+        else appOrder.addAll(Arrays.asList(TV_APP_ORDER));
+        if (saved == null) {
+            for (String pkg : TV_APP_ORDER) favourites.add(pkg);
+            prefs.edit().putStringSet("favourites", new HashSet<String>(favourites)).commit();
+        }
         zone = 2;
         ui = new ThiagoView(this);
         setContentView(ui);
