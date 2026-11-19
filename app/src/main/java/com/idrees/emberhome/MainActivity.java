@@ -106,6 +106,7 @@ public class MainActivity extends Activity {
     // MSD338 Edition section navigation; isolated from the legacy launcher styles.
     private String msdPage = "home";
     private int gridColumns = 6;
+    private TextView homeHeroTitle;
     private static final int MEDIA_PERMISSION_REQUEST = 731;
 
     private static final String[] WALLPAPER_CATEGORIES = {
@@ -1571,6 +1572,11 @@ public class MainActivity extends Activity {
         tile.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { launch(app); }
         });
+        tile.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus && homeTheme() == 0 && homeHeroTitle != null) homeHeroTitle.setText(app.label);
+            }
+        });
         tile.setOnLongClickListener(new View.OnLongClickListener() {
             @Override public boolean onLongClick(View v) { menuFor(app); return true; }
         });
@@ -1580,10 +1586,8 @@ public class MainActivity extends Activity {
     }
 
     private View wrapTile(View tile, LinearLayout.LayoutParams p) {
-        FrameLayout frame = new FrameLayout(this);
-        frame.addView(tile, new FrameLayout.LayoutParams(MATCH, MATCH));
-        frame.setLayoutParams(p);
-        return frame;
+        tile.setLayoutParams(p);
+        return tile;
     }
 
     private void buildAppleHome(LinearLayout body) {
@@ -1596,7 +1600,8 @@ public class MainActivity extends Activity {
         addThemeClock(top, true, 38);
         body.addView(top);
 
-        TextView selected = tv(apps.isEmpty() ? "Welcome to EmberHome" : apps.get(0).label, 38, 0xFFF7F2F5);
+        homeHeroTitle = tv(apps.isEmpty() ? "Welcome to EmberHome" : apps.get(0).label, 38, 0xFFF7F2F5);
+        TextView selected = homeHeroTitle;
         selected.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
         LinearLayout.LayoutParams titleP = new LinearLayout.LayoutParams(MATCH, WRAP);
         titleP.topMargin = dp(26);
