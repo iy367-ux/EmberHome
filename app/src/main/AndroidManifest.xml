@@ -13,7 +13,7 @@
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:banner="@drawable/banner"
-        android:label="Ember Home"
+        android:label="${appLabel}"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
