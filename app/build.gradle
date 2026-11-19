@@ -9,10 +9,10 @@ android {
     defaultConfig {
         applicationId 'com.idrees.emberhome'
         minSdk 19
-        targetSdk 34
-        versionCode 3
-        versionName '1.1'
-        manifestPlaceholders = [appLabel: 'Ember Home']
+        targetSdk 28
+        versionCode 4
+        versionName '1.2-thiago-kitkat'
+        manifestPlaceholders = [appLabel: 'EmberHome KitKat Edition']
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -22,7 +22,7 @@ android {
         debug {
             applicationIdSuffix '.msd338'
             versionNameSuffix '-msd338'
-            manifestPlaceholders = [appLabel: 'Ember Home MSD338 Edition']
+            manifestPlaceholders = [appLabel: 'EmberHome KitKat Edition']
         }
         release { minifyEnabled false }
     }

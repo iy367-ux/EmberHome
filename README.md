@@ -1,38 +1,46 @@
-[README.md](https://github.com/user-attachments/files/35078002/README.md)
-# EmberHome v1.1 Premium — MSD338 Edition
+# EmberHome — Thiago-style KitKat port
 
-A lightweight Android TV launcher targeting Android 4.4.4 / API 19, tuned for the CVTE / MStar PB801 (MSD338) board.
+This branch ports the clean, ad-free, liquid-glass launcher experience documented by [Thiago OS](https://github.com/thiagofernandezguillen-rgb/thiago-os) to **Android 4.4.4 / API 19** for the CVTE / MStar PB801 (MSD338) television.
 
-The MSD338 edition follows the owner's five-page redesign blueprint:
-- **Apple TV Style** — warm gradient, large colourful app tiles, selected-app heading, top-right clock/date and floating shortcut dock.
-- **VIDAA OS Style** — dark sidebar, wide information panel and two rows of app tiles.
-- **Google TV Style** — teal gradient, centred clock/date and oval app tiles.
-- **Aerial screensaver** — offline coastline-at-dusk scene with clock/date and wake prompt.
-- **Settings** — Home style, Wallpaper, Screensaver, Apps and About.
+It is a native Java implementation using Android's API-19 View, Canvas, PackageManager and SharedPreferences APIs. It does **not** use Jetpack Compose, AndroidX, Kotlin, DataStore, Baseline Profiles, or runtime APIs newer than KitKat.
 
-The three home themes are selectable in Settings and the installed-app list is discovered automatically. The debug package suffix `.msd338` also enables this edition in the API 19 emulator used by CI.
+## Included
 
-## Remote controls
-- D-pad: move. OK: open app. Hold OK: add to favorites (Rows style) or app info / uninstall.
-- Menu key (or the Settings button): change style, weather city, units.
+- Featured application with a large app icon, category, description, Open and Favourite actions.
+- Favourites-first app row and an eight-column full app drawer.
+- Long-press OK / Menu context menu: favourite, move left/right, app info.
+- D-pad-first navigation with visible focus outlines.
+- Soft-gradient wallpaper and translucent glass-like panels, drawn locally.
+- Control centre with Wi-Fi, Bluetooth, Cast, Source and Settings shortcuts plus volume and brightness controls.
+- Settings destinations that hand off to Android / TV settings activities where present.
+- Automatic installed-app discovery; app list and favourites are stored locally.
+- No ads, analytics, telemetry, or launcher-initiated network requests.
+- Existing EmberHome Aerial Dream screensaver retained.
 
-## Weather
-Uses wttr.in (free, no account). By default it finds your city from your internet connection;
-you can type a city in Settings. Only the city name (or nothing) is sent.
+## Remote control
 
-## Build option 1: GitHub (easiest, no Android Studio)
-1. Create a GitHub repo and upload this whole folder.
-2. Open the Actions tab -> "Build APK" -> Run workflow. When it finishes, download "EmberHome-apk".
-3. To publish for others: create a release tagged v1.0 - the APK is attached automatically.
+- D-pad: navigate.
+- OK: open the focused app or action.
+- Hold OK, or press Menu: app context menu.
+- Back: close overlay / return home.
+- Volume keys: adjust media volume.
+- From the top navigation, move right past Settings to open Control Centre.
+- Move to Settings in the top navigation and press Down to open settings shortcuts.
 
-## Build option 2: Android Studio
-Open this folder, wait for sync, Build > Build APK(s).
-APK: app/build/outputs/apk/debug/app-debug.apk
+## Compatibility notes
 
-## Install on a TV
-    adb connect <tv-ip>:5555
-    adb install -r EmberHome.apk
-Press Home, choose Ember Home, tap Always.
-If the old launcher keeps coming back:
-    adb shell pm list packages | findstr launcher
-    adb shell pm disable-user <stock-launcher-package>     (undo: pm enable <package>)
+- minSdk 19; built for Android 4.4.4 (API 19).
+- The UI is deliberately drawn without blur filters or continuous animation to stay responsive on the PB801's roughly 480 MB RAM.
+- Some settings pages, Cast, Bluetooth and HDMI source switching depend on the TV firmware. EmberHome opens the corresponding system screen when available; it does not claim privileged control over HDMI routing, tuner hardware, or protected system services.
+- App ordering and favourites are local launcher preferences. App launches use the installed app's declared launcher activity.
+- The package remains com.idrees.emberhome.msd338 for the MSD338 debug build. The stock CVTE launcher and system services are not disabled or removed.
+
+## Build and test
+
+GitHub Actions builds EmberHome-Thiago-KitKat.apk, boots an Android 4.4 emulator, opens the launcher and captures home, app drawer, context menu, settings and control-centre screenshots.
+
+The APK is available from the Actions run artifact named EmberHome-Thiago-KitKat-APK.
+
+## Upstream attribution
+
+The UI direction and feature behaviour are based on Thiago OS (MIT), copyright (c) 2026 Thiago. See THIAGO_OS_LICENSE.txt. This port is independently implemented in Java for API 19; it does not bundle the upstream Compose implementation or Inter font.
