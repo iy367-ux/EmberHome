@@ -1431,7 +1431,10 @@ public class MainActivity extends Activity {
 
     private void buildMsd338Ui() {
         Drawable customWallpaper = loadCustomWallpaper();
-        root.setBackgroundDrawable(customWallpaper != null ? customWallpaper : wallpaperDrawable(wallpaperIndex));
+        if (customWallpaper != null) root.setBackgroundDrawable(customWallpaper);
+        else if (homeTheme() == 1) root.setBackgroundColor(0xFF0E1015);
+        else if (homeTheme() == 2) root.setBackgroundDrawable(new GradientDrawable(GradientDrawable.Orientation.TL_BR, new int[]{0xFF075E63,0xFF168F8A,0xFF4DB9A9}));
+        else root.setBackgroundDrawable(new GradientDrawable(GradientDrawable.Orientation.TL_BR, new int[]{0xFF321A38,0xFF8E3447,0xFFDF7946}));
         LinearLayout shell = box(LinearLayout.VERTICAL);
         shell.setPadding(dp(34), dp(18), dp(34), dp(18));
         root.addView(shell, new FrameLayout.LayoutParams(MATCH, MATCH));
@@ -1879,83 +1882,113 @@ public class MainActivity extends Activity {
     }
 
     private void buildMsdSettings(LinearLayout body) {
-        addMsdHeading(body, "Settings", "Personalise the EmberHome experience.");
-        int layout = prefs.getInt("msd_settings_layout", 0); // 0 sidebar-style sections, 1 category cards
-        LinearLayout switchRow = box(LinearLayout.HORIZONTAL);
-        switchRow.addView(msdChoice("Apple-style Sidebar", layout == 0, new Runnable() {
-            @Override public void run() { prefs.edit().putInt("msd_settings_layout", 0).apply(); buildUi(); }
-        }));
-        switchRow.addView(msdChoice("Category Cards", layout == 1, new Runnable() {
-            @Override public void run() { prefs.edit().putInt("msd_settings_layout", 1).apply(); buildUi(); }
-        }));
-        body.addView(switchRow);
+        body.setPadding(dp(8), dp(4), dp(8), dp(18));
+        LinearLayout header = box(LinearLayout.HORIZONTAL);
+        header.setGravity(Gravity.CENTER_VERTICAL);
+        TextView title = tv("Settings", 30, FG);
+        title.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        header.addView(title, new LinearLayout.LayoutParams(0, WRAP, 1f));
+        header.addView(clock("HH:mm", 24, AMBER, true));
+        body.addView(header);
+        TextView subtitle = tv("Make EmberHome yours.", 14, SOFT);
+        LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(MATCH, WRAP);
+        sp.bottomMargin = dp(18); body.addView(subtitle, sp);
 
-        if (layout == 0) {
-            LinearLayout split = box(LinearLayout.HORIZONTAL);
-            LinearLayout sidebar = box(LinearLayout.VERTICAL);
-            sidebar.setPadding(dp(8), dp(8), dp(8), dp(8));
-            sidebar.setBackground(msdPremiumSurface(16));
-            String[] labels = {"Appearance", "Apps", "TV"};
-            for (String label : labels) {
-                TextView item = tv(label, 16, FG);
-                item.setPadding(dp(12), dp(14), dp(12), dp(14));
-                sidebar.addView(item);
-            }
-            split.addView(sidebar, new LinearLayout.LayoutParams(dp(150), WRAP));
-            LinearLayout options = box(LinearLayout.VERTICAL);
-            options.setPadding(dp(22), dp(14), dp(22), dp(14));
-            options.setBackground(msdPremiumSurface(16));
-            options.addView(tv("Appearance", 20, FG));
-            options.addView(msdCommand("Change wallpaper", new Runnable() {
-                @Override public void run() { showWallpaperGallery(); }
-            }));
-            options.addView(msdCommand("Manage visible apps", new Runnable() {
-                @Override public void run() { showAppManager(); }
-            }));
-            options.addView(msdCommand("Open TV settings", new Runnable() {
-                @Override public void run() { openSystemSettings(); }
-            }));
-            options.addView(msdCommand("More EmberHome settings", new Runnable() {
-                @Override public void run() { showSettings(); }
-            }));
-            split.addView(options, new LinearLayout.LayoutParams(0, WRAP, 1f));
-            body.addView(split);
-        } else {
-            LinearLayout cards = box(LinearLayout.VERTICAL);
-            cards.addView(msdCommand("Appearance  ·  Wallpapers and theme", new Runnable() {
-                @Override public void run() { showWallpaperGallery(); }
-            }));
-            cards.addView(msdCommand("Apps  ·  Manage and organise", new Runnable() {
-                @Override public void run() { openMsdPage("apps"); }
-            }));
-            cards.addView(msdCommand("TV  ·  Open manufacturer settings", new Runnable() {
-                @Override public void run() { openSystemSettings(); }
-            }));
-            body.addView(cards);
+        LinearLayout split = box(LinearLayout.HORIZONTAL);
+        LinearLayout sidebar = box(LinearLayout.VERTICAL);
+        sidebar.setPadding(dp(8), dp(8), dp(8), dp(8));
+        sidebar.setBackground(msdPremiumSurface(16));
+        String[] labels = {"Home style", "Wallpaper", "Screensaver", "Apps", "About"};
+        for (int i = 0; i < labels.length; i++) {
+            LinearLayout item = box(LinearLayout.VERTICAL);
+            item.setPadding(dp(12), dp(12), dp(10), dp(12));
+            item.setFocusable(true); item.setBackground(stateFlat(dp(12), false));
+            item.addView(tv(labels[i], 15, i == 0 ? AMBER : FG));
+            final int section = i;
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (section == 1) showWallpaperGallery();
+                    else if (section == 2) showScreensaverOptions();
+                    else if (section == 3) showAppManager();
+                    else if (section == 4) showAboutEmber();
+                }
+            });
+            sidebar.addView(item, new LinearLayout.LayoutParams(MATCH, WRAP));
         }
-        addMsdSection(body, "PERSONALISATION");
-        body.addView(msdCommand("Choose wallpaper", new Runnable() {
+        split.addView(sidebar, new LinearLayout.LayoutParams(dp(170), MATCH));
+
+        LinearLayout options = box(LinearLayout.VERTICAL);
+        options.setPadding(dp(20), dp(14), dp(20), dp(14));
+        options.setBackground(msdPremiumSurface(16));
+        options.addView(tv("Home style", 22, FG));
+        options.addView(tv("Left/Right to browse, OK to apply. Your icon layout is kept.", 12, SOFT));
+        LinearLayout cards = box(LinearLayout.HORIZONTAL);
+        cards.setPadding(0, dp(14), 0, dp(10));
+        addThemeOption(cards, "Apple TV Style", 0);
+        addThemeOption(cards, "VIDAA OS Style", 1);
+        addThemeOption(cards, "Google TV Style", 2);
+        options.addView(cards);
+        options.addView(msdCommand("Choose wallpaper", new Runnable() {
             @Override public void run() { showWallpaperGallery(); }
         }));
-        addMsdSection(body, "APPS DISPLAY");
-        int appLayout = prefs.getInt("msd_app_layout", 0);
-        LinearLayout appChoices = box(LinearLayout.HORIZONTAL);
-        appChoices.addView(msdChoice("Classic App Drawer", appLayout == 0, new Runnable() {
-            @Override public void run() { prefs.edit().putInt("msd_app_layout", 0).apply(); buildUi(); }
+        options.addView(msdCommand("Aerial screensaver  ·  On", new Runnable() {
+            @Override public void run() { showScreensaverOptions(); }
         }));
-        appChoices.addView(msdChoice("Apple-style Grid", appLayout == 1, new Runnable() {
-            @Override public void run() { prefs.edit().putInt("msd_app_layout", 1).apply(); buildUi(); }
-        }));
-        body.addView(appChoices);
-        body.addView(msdCommand("Manage visible apps", new Runnable() {
+        options.addView(msdCommand("Manage visible apps", new Runnable() {
             @Override public void run() { showAppManager(); }
         }));
-        body.addView(msdCommand("Open TV settings", new Runnable() {
-            @Override public void run() { openSystemSettings(); }
+        options.addView(msdCommand("About EmberHome", new Runnable() {
+            @Override public void run() { showAboutEmber(); }
         }));
-        body.addView(msdCommand("More EmberHome settings", new Runnable() {
-            @Override public void run() { showSettings(); }
-        }));
+        split.addView(options, new LinearLayout.LayoutParams(0, MATCH, 1f));
+        body.addView(split);
+        if (cards.getChildCount() > 0) firstTile = cards.getChildAt(0);
+    }
+
+    private void addThemeOption(LinearLayout parent, String label, final int theme) {
+        LinearLayout card = box(LinearLayout.VERTICAL);
+        card.setPadding(dp(8), dp(8), dp(8), dp(8));
+        card.setFocusable(true); card.setBackground(stateFlat(dp(12), false));
+        int[] colors = theme == 0 ? new int[]{0xFF572A49,0xFFDB7543}
+                : theme == 1 ? new int[]{0xFF171B25,0xFF333A4A}
+                : new int[]{0xFF075E63,0xFF4DB9A9};
+        GradientDrawable preview = new GradientDrawable(GradientDrawable.Orientation.TL_BR, colors);
+        preview.setCornerRadius(dp(10));
+        preview.setStroke(dp(homeTheme() == theme ? 3 : 1), homeTheme() == theme ? AMBER : 0xFF596273);
+        View swatch = new View(this); swatch.setBackgroundDrawable(preview);
+        card.addView(swatch, new LinearLayout.LayoutParams(MATCH, dp(72)));
+        TextView name = tv(label, 12, homeTheme() == theme ? AMBER : FG);
+        name.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams np = new LinearLayout.LayoutParams(MATCH, WRAP);
+        np.topMargin = dp(6); card.addView(name, np);
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                prefs.edit().putInt("home_theme", theme).apply();
+                msdPage = "home"; buildUi();
+            }
+        });
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, WRAP, 1f);
+        cp.rightMargin = dp(8); parent.addView(card, cp);
+    }
+
+    private void showScreensaverOptions() {
+        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
+                .setTitle("Aerial screensaver")
+                .setMessage("EmberHome includes an offline coastline-at-dusk scene. Configure the inactivity timeout and activate EmberHome Aerial in your TV's system screensaver settings.")
+                .setPositiveButton("System screensaver settings", new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface d, int w) {
+                        try { startActivity(new Intent("android.settings.DREAM_SETTINGS")); }
+                        catch (Exception e) { openSystemSettings(); }
+                    }
+                })
+                .setNegativeButton("Close", null).show();
+    }
+
+    private void showAboutEmber() {
+        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
+                .setTitle("EmberHome")
+                .setMessage("EmberHome v1.1 Premium\\nMSD338 / CVTE PB801 edition\\nAndroid 4.4.4 and newer\\n\\nDesigned for the living room.")
+                .setPositiveButton("OK", null).show();
     }
 
     // ================================================================ weather (wttr.in)
