@@ -36,3 +36,17 @@ Do not assume all PB801 televisions have identical panels, remotes, tuner hardwa
 ## First implementation milestone
 
 Add a hardware profile that recognizes the known PB801 identifiers and applies conservative rendering defaults. Next: build the D-pad-first home shell and verify it on the actual TV before adding integrations.
+
+
+## Owner-selected interface specification
+
+The owner selected the following MSD338 Edition direction:
+
+- Home: Smart Hub.
+- Apps: Classic App Drawer by default, with Apple-style Grid selectable in Settings.
+- Inputs: Compact Control Panel. The UI may label available sources, but must not claim to switch HDMI inputs unless a verified CVTE/MStar API is found.
+- Media: Cinematic Library, focused on launching installed media applications and clearly distinguishing local library access from playback functionality.
+- Settings: Apple-style Sidebar by default, with Category Cards selectable in Settings.
+- Theme: Midnight Black.
+
+The current implementation adds a dedicated MSD338 navigation shell in MainActivity and stores the two layout choices in the existing EmberHome preferences. The media page is an app-launch/library landing page, not a media playback engine. The input page is a source-information panel; actual source switching remains firmware-controlled. The settings page links to existing Android/CVTE settings where available.
