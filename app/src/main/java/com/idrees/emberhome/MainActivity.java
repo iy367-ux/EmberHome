@@ -395,7 +395,7 @@ public class MainActivity extends Activity {
         populator = null;
         listView = null;
         listAdapter = null;
-        if (Msd338Profile.isTargetDevice()) {
+        if (isMsd338Edition()) {
             buildMsd338Ui();
             updateWx();
             populate();
