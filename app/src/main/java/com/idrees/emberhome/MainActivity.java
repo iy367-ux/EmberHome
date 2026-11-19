@@ -1232,6 +1232,9 @@ public class MainActivity extends Activity {
         personal.addView(chip("Manage apps", new Runnable() {
             @Override public void run() { d.dismiss(); showAppManager(); }
         }));
+        personal.addView(chip("My photo", new Runnable() {
+            @Override public void run() { d.dismiss(); choosePhotoWallpaper(); }
+        }));
         p.addView(personal);
 
         p.addView(sectionLabel("Aerial screensaver"));
@@ -1259,6 +1262,12 @@ public class MainActivity extends Activity {
             sizeParams.leftMargin = dp(8);
             appearance.addView(iconSize, sizeParams);
             p.addView(appearance);
+            p.addView(chip(themePresetLabel(), new Runnable() {
+                @Override public void run() {
+                    applyThemePreset();
+                    d.dismiss(); showSettings();
+                }
+            }));
 
             p.addView(chip(motionEnabled() ? "Motion effects: On" : "Motion effects: Off", new Runnable() {
                 @Override public void run() {
