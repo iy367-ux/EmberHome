@@ -130,6 +130,10 @@ public class MainActivity extends Activity {
         @Override public void onReceive(Context c, Intent i) { loadApps(); }
     };
 
+    private boolean isMsd338Edition() {
+        return Msd338Profile.isTargetDevice() || getPackageName().endsWith(".msd338");
+    }
+
     // ================================================================ lifecycle
 
     @Override
@@ -137,7 +141,7 @@ public class MainActivity extends Activity {
         super.onCreate(b);
         density = getResources().getDisplayMetrics().density;
         prefs = getSharedPreferences("ember", MODE_PRIVATE);
-        boolean msd338 = Msd338Profile.isTargetDevice();
+        boolean msd338 = isMsd338Edition();
         wallpaperIndex = prefs.getInt("wallpaper", msd338 ? 12 : 0);
         enableImmersiveMode();
         // Legacy style preference remains intact for non-MSD338 devices.
@@ -181,7 +185,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (Msd338Profile.isTargetDevice() && !"home".equals(msdPage)) {
+        if (isMsd338Edition() && !"home".equals(msdPage)) {
             msdPage = "home";
             buildUi();
             return;
