@@ -1031,6 +1031,15 @@ public class MainActivity extends Activity {
         p.setBackground(pb);
 
         p.addView(tv("Settings", 24, FG));
+        p.addView(sectionLabel("Customisation mode"));
+        final boolean advanced = prefs.getBoolean("advanced_settings", false);
+        p.addView(chip(advanced ? "Advanced control panel  •  ON" : "Simple settings  •  ON", new Runnable() {
+            @Override public void run() {
+                prefs.edit().putBoolean("advanced_settings", !advanced).apply();
+                d.dismiss();
+                showSettings();
+            }
+        }));
         p.addView(sectionLabel("Style"));
         LinearLayout styleRow = box(LinearLayout.HORIZONTAL);
         TextView selected = null;
@@ -1073,6 +1082,43 @@ public class MainActivity extends Activity {
         }));
         p.addView(personal);
 
+        p.addView(sectionLabel("Aerial screensaver"));
+        p.addView(chip("Set up Aerial screensaver", new Runnable() {
+            @Override public void run() { d.dismiss(); startAerialSetup(); }
+        }));
+
+        if (advanced) {
+            p.addView(sectionLabel("Advanced appearance"));
+            LinearLayout appearance = box(LinearLayout.HORIZONTAL);
+            appearance.addView(chip(showAppLabels() ? "App labels: On" : "App labels: Off", new Runnable() {
+                @Override public void run() {
+                    prefs.edit().putBoolean("show_labels", !showAppLabels()).apply();
+                    d.dismiss(); buildUi(); showSettings();
+                }
+            }));
+            TextView iconSize = chip(iconSizeLabel(), new Runnable() {
+                @Override public void run() {
+                    int next = (prefs.getInt("icon_size", 1) + 1) % 3;
+                    prefs.edit().putInt("icon_size", next).apply();
+                    d.dismiss(); buildUi(); showSettings();
+                }
+            });
+            LinearLayout.LayoutParams sizeParams = new LinearLayout.LayoutParams(WRAP, WRAP);
+            sizeParams.leftMargin = dp(8);
+            appearance.addView(iconSize, sizeParams);
+            p.addView(appearance);
+
+            p.addView(chip(motionEnabled() ? "Motion effects: On" : "Motion effects: Off", new Runnable() {
+                @Override public void run() {
+                    prefs.edit().putBoolean("motion", !motionEnabled()).apply();
+                    d.dismiss(); buildUi(); showSettings();
+                }
+            }));
+            p.addView(chip("Device compatibility info", new Runnable() {
+                @Override public void run() { showDeviceInfo(); }
+            }));
+        }
+
         p.addView(sectionLabel("Weather"));
         LinearLayout wxRow = box(LinearLayout.HORIZONTAL);
         wxRow.setGravity(Gravity.CENTER_VERTICAL);
@@ -1107,7 +1153,7 @@ public class MainActivity extends Activity {
         more.addView(chip("Close", new Runnable() { @Override public void run() { d.dismiss(); } }));
         p.addView(more);
 
-        d.setContentView(p);
+        ScrollView scroll = new ScrollView(this);\n        scroll.setFillViewport(true);\n        scroll.addView(p);\n        d.setContentView(scroll);
         if (d.getWindow() != null) {
             d.getWindow().setLayout(dp(700), WRAP);
             d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
