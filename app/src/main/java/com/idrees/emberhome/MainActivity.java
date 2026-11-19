@@ -47,6 +47,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -100,6 +101,7 @@ public class MainActivity extends Activity {
     private String focusPkg = null;
     private int wallpaperIndex = 0;
     private int gridColumns = 6;
+    private static final int MEDIA_PERMISSION_REQUEST = 731;
 
     private static final String[] WALLPAPER_CATEGORIES = {
             "Gradients", "Sunsets", "Nature", "Cities", "Plain colours"
@@ -293,7 +295,20 @@ public class MainActivity extends Activity {
         return l;
     }
 
+    private boolean showAppLabels() { return prefs.getBoolean("show_labels", true); }
+    private boolean motionEnabled() { return prefs.getBoolean("motion", true); }
+    private float iconScale() {
+        int size = prefs.getInt("icon_size", 1);
+        return size == 0 ? 0.82f : (size == 2 ? 1.18f : 1f);
+    }
+    private int scaledIcon(int base) { return Math.max(dp(28), dp(base) == 0 ? base : (int) (base * iconScale() + 0.5f)); }
+
     private void enter(View v, int idx) {
+        if (!motionEnabled()) {
+            v.setAlpha(1f);
+            v.setTranslationY(0f);
+            return;
+        }
         v.setAlpha(0f);
         v.setTranslationY(dp(22));
         v.animate().alpha(1f).translationY(0f).setStartDelay(idx * 90L).setDuration(520)
@@ -301,7 +316,12 @@ public class MainActivity extends Activity {
     }
 
     private void scale(View v, float s) {
-        v.animate().scaleX(s).scaleY(s).setDuration(170).start();
+        if (!motionEnabled()) {
+            v.setScaleX(s);
+            v.setScaleY(s);
+        } else {
+            v.animate().scaleX(s).scaleY(s).setDuration(170).start();
+        }
     }
 
     // ---- flat dark drawables ----
@@ -543,7 +563,7 @@ public class MainActivity extends Activity {
                 icon = new ImageView(MainActivity.this);
                 row.addView(label, new LinearLayout.LayoutParams(0, WRAP, 1f));
                 label.setGravity(Gravity.RIGHT);
-                LinearLayout.LayoutParams il = new LinearLayout.LayoutParams(dp(44), dp(44));
+                LinearLayout.LayoutParams il = new LinearLayout.LayoutParams(scaledIcon(44), scaledIcon(44));
                 il.leftMargin = dp(14);
                 row.addView(icon, il);
                 row.setTag(new View[]{label, icon});
@@ -562,6 +582,7 @@ public class MainActivity extends Activity {
             AppEntry e = apps.get(pos);
             row.setContentDescription("ember:" + e.pkg);
             label.setText(e.label);
+            label.setVisibility(showAppLabels() ? View.VISIBLE : View.GONE);
             icon.setImageDrawable(e.icon);
             return row;
         }
@@ -662,8 +683,8 @@ public class MainActivity extends Activity {
         t.setLayoutParams(lp);
         ImageView ic = new ImageView(this);
         ic.setImageDrawable(e.icon);
-        t.addView(ic, new LinearLayout.LayoutParams(dp(iconDp), dp(iconDp)));
-        if (label) {
+        t.addView(ic, new LinearLayout.LayoutParams(scaledIcon(iconDp), scaledIcon(iconDp)));
+        if (label && showAppLabels()) {
             TextView l = tv(e.label, 13, FG);
             l.setSingleLine(true);
             l.setEllipsize(TextUtils.TruncateAt.END);
@@ -835,13 +856,14 @@ public class MainActivity extends Activity {
                 tile.setBackground(stateFlat(dp(18), false));
                 tile.setLayoutParams(new AbsListView.LayoutParams(MATCH, dp(112)));
                 icon = new ImageView(MainActivity.this);
-                tile.addView(icon, new LinearLayout.LayoutParams(dp(56), dp(56)));
+                tile.addView(icon, new LinearLayout.LayoutParams(scaledIcon(56), scaledIcon(56)));
                 label = tv("", 14, FG);
                 label.setSingleLine(true);
                 label.setEllipsize(TextUtils.TruncateAt.END);
                 label.setGravity(Gravity.CENTER);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH, WRAP);
                 lp.topMargin = dp(8);
+                label.setVisibility(showAppLabels() ? View.VISIBLE : View.GONE);
                 tile.addView(label, lp);
                 tile.setTag(new View[]{icon, label});
             } else {
@@ -857,6 +879,7 @@ public class MainActivity extends Activity {
             tile.setContentDescription("ember:" + e.pkg);
             icon.setImageDrawable(e.icon);
             label.setText(e.label);
+            label.setVisibility(showAppLabels() ? View.VISIBLE : View.GONE);
             return tile;
         }
     }
