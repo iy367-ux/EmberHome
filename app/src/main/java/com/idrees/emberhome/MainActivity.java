@@ -1509,64 +1509,222 @@ public class MainActivity extends Activity {
         body.addView(t, p);
     }
 
+
+    // Premium three-theme home screen based on the user's EmberHome v1.1 blueprint.
+    private int homeTheme() { return prefs.getInt("home_theme", 0); }
+
     private void buildMsdHome(LinearLayout body) {
-        LinearLayout hero = box(LinearLayout.HORIZONTAL);
-        hero.setGravity(Gravity.CENTER_VERTICAL);
-        hero.setPadding(dp(28), dp(24), dp(28), dp(24));
-        hero.setBackground(msdPremiumSurface(22));
-        LinearLayout left = box(LinearLayout.VERTICAL);
-        hero.addView(left, new LinearLayout.LayoutParams(0, WRAP, 1f));
-        TextView eyebrow = tv("MSD338 EDITION   /   SMART HUB", 11, AMBER);
-        eyebrow.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-        left.addView(eyebrow);
-        TextView title = tv("Your screen.\nYour world.", 38, FG);
-        title.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        int theme = homeTheme();
+        if (theme == 1) buildVidaaHome(body);
+        else if (theme == 2) buildGoogleHome(body);
+        else buildAppleHome(body);
+    }
+
+    private void addThemeClock(LinearLayout parent, boolean rightAligned, int size) {
+        LinearLayout clockBox = box(LinearLayout.VERTICAL);
+        clockBox.setGravity(rightAligned ? Gravity.RIGHT : Gravity.CENTER);
+        TextView time = clock("HH:mm", size, FG, true);
+        time.setGravity(rightAligned ? Gravity.RIGHT : Gravity.CENTER);
+        clockBox.addView(time);
+        TextView date = dateView(14);
+        date.setTextColor(0xFFD8DCE5);
+        date.setGravity(rightAligned ? Gravity.RIGHT : Gravity.CENTER);
+        clockBox.addView(date);
+        parent.addView(clockBox);
+    }
+
+    private int[] tileColors() {
+        return new int[]{0xFFE34B2F, 0xFF873FB0, 0xFF21866B, 0xFF3476D5, 0xFFC58A1E,
+                0xFFE63D55, 0xFFEF741F, 0xFF555B68, 0xFF267E91, 0xFF7655B7};
+    }
+
+    private View premiumAppTile(final AppEntry app, int index, int width, int height, boolean oval) {
+        LinearLayout tile = box(LinearLayout.VERTICAL);
+        tile.setGravity(Gravity.CENTER);
+        tile.setPadding(dp(10), dp(10), dp(10), dp(8));
+        GradientDrawable normal = new GradientDrawable();
+        normal.setColor(tileColors()[index % tileColors().length]);
+        normal.setCornerRadius(dp(oval ? 48 : 22));
+        GradientDrawable focused = new GradientDrawable();
+        focused.setColor(tileColors()[index % tileColors().length]);
+        focused.setCornerRadius(dp(oval ? 48 : 22));
+        focused.setStroke(dp(3), Color.WHITE);
+        android.graphics.drawable.StateListDrawable states = new android.graphics.drawable.StateListDrawable();
+        states.addState(new int[]{android.R.attr.state_focused}, focused);
+        states.addState(new int[]{}, normal);
+        tile.setBackgroundDrawable(states);
+        tile.setFocusable(true);
+        tile.setClickable(true);
+        android.widget.ImageView icon = new android.widget.ImageView(this);
+        icon.setImageDrawable(app.icon);
+        icon.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
+        tile.addView(icon, new LinearLayout.LayoutParams(dp(oval ? 42 : 54), dp(oval ? 42 : 54)));
+        TextView label = tv(app.label, 13, FG);
+        label.setGravity(Gravity.CENTER);
+        label.setMaxLines(1);
+        LinearLayout.LayoutParams labelP = new LinearLayout.LayoutParams(MATCH, WRAP);
+        labelP.topMargin = dp(8);
+        tile.addView(label, labelP);
+        tile.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { launch(app); }
+        });
+        tile.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override public boolean onLongClick(View v) { menuFor(app); return true; }
+        });
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(dp(width), dp(height));
+        p.rightMargin = dp(14);
+        return wrapTile(tile, p);
+    }
+
+    private View wrapTile(View tile, LinearLayout.LayoutParams p) {
+        FrameLayout frame = new FrameLayout(this);
+        frame.addView(tile, new FrameLayout.LayoutParams(MATCH, MATCH));
+        frame.setLayoutParams(p);
+        return frame;
+    }
+
+    private void buildAppleHome(LinearLayout body) {
+        body.setPadding(dp(18), dp(8), dp(18), dp(12));
+        LinearLayout top = box(LinearLayout.HORIZONTAL);
+        top.setGravity(Gravity.CENTER_VERTICAL);
+        TextView brand = tv("EmberHome", 17, 0xFFF4F1F7);
+        brand.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        top.addView(brand, new LinearLayout.LayoutParams(0, WRAP, 1f));
+        addThemeClock(top, true, 38);
+        body.addView(top);
+
+        TextView selected = tv(apps.isEmpty() ? "Welcome to EmberHome" : apps.get(0).label, 38, 0xFFF7F2F5);
+        selected.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
         LinearLayout.LayoutParams titleP = new LinearLayout.LayoutParams(MATCH, WRAP);
-        titleP.topMargin = dp(8);
-        left.addView(title, titleP);
-        TextView heroSub = tv("Entertainment, apps and connected devices —\nall in one beautifully simple place.", 14, SOFT);
-        LinearLayout.LayoutParams heroSubP = new LinearLayout.LayoutParams(MATCH, WRAP);
-        heroSubP.topMargin = dp(7);
-        left.addView(heroSub, heroSubP);
-        LinearLayout right = box(LinearLayout.VERTICAL);
-        right.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        right.addView(clock("HH:mm", 48, FG, true));
-        TextView date = dateView(13);
-        date.setGravity(Gravity.RIGHT);
-        right.addView(date);
-        TextView weather = wx(0, 14, SOFT);
-        weather.setGravity(Gravity.RIGHT);
-        LinearLayout.LayoutParams weatherP = new LinearLayout.LayoutParams(WRAP, WRAP);
-        weatherP.topMargin = dp(5);
-        right.addView(weather, weatherP);
-        hero.addView(right);
-        body.addView(hero);
+        titleP.topMargin = dp(26);
+        body.addView(selected, titleP);
 
-        addMsdSection(body, "QUICK ACCESS");
-        LinearLayout quick = box(LinearLayout.HORIZONTAL);
-        quick.setGravity(Gravity.CENTER_VERTICAL);
-        addMsdQuickCard(quick, "Apps", "All installed applications", "apps");
-        addMsdQuickCard(quick, "Inputs", "HDMI and TV sources", "inputs");
-        addMsdQuickCard(quick, "Media", "Your media apps and library", "media");
-        body.addView(quick);
-
-        addMsdSection(body, "YOUR APPS");
-        LinearLayout appsRow = box(LinearLayout.HORIZONTAL);
-        appsRow.setGravity(Gravity.CENTER_VERTICAL);
-        int count = 0;
-        for (AppEntry app : apps) {
-            if (count >= 6) break;
-            View tile = makeTile(app, 100, 94, 48, true, 1.08f, null, true);
-            appsRow.addView(tile);
-            if (firstTile == null) firstTile = tile;
-            count++;
+        HorizontalScrollView appScroll = new HorizontalScrollView(this);
+        appScroll.setHorizontalScrollBarEnabled(false);
+        LinearLayout row = box(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        int count = Math.min(apps.size(), 9);
+        for (int i = 0; i < count; i++) {
+            AppEntry app = apps.get(i);
+            row.addView(premiumAppTile(app, i, 126, 154, false));
         }
-        if (count == 0) appsRow.addView(tv("No launchable apps found.", 14, DIM));
-        body.addView(rowScroll(appsRow), new LinearLayout.LayoutParams(MATCH, WRAP));
-        TextView all = msdAction("Browse all apps  ›", "apps");
-        LinearLayout.LayoutParams allP = new LinearLayout.LayoutParams(WRAP, WRAP);
-        allP.topMargin = dp(8);
-        body.addView(all, allP);
+        appScroll.addView(row);
+        LinearLayout.LayoutParams rowP = new LinearLayout.LayoutParams(MATCH, dp(190));
+        rowP.topMargin = dp(12);
+        body.addView(appScroll, rowP);
+
+        LinearLayout dock = box(LinearLayout.HORIZONTAL);
+        dock.setGravity(Gravity.CENTER);
+        dock.setPadding(dp(18), dp(10), dp(18), dp(10));
+        GradientDrawable dockBg = new GradientDrawable();
+        dockBg.setColor(0x55FFFFFF);
+        dockBg.setCornerRadius(dp(44));
+        dock.setBackgroundDrawable(dockBg);
+        String[] labels = {"Apps", "Inputs", "Files", "Settings"};
+        String[] pages = {"apps", "inputs", "media", "settings"};
+        for (int i = 0; i < labels.length; i++) {
+            final String page = pages[i];
+            TextView item = tv(labels[i], 13, Color.WHITE);
+            item.setGravity(Gravity.CENTER);
+            item.setPadding(dp(16), dp(12), dp(16), dp(12));
+            item.setFocusable(true);
+            item.setBackground(stateFlat(dp(30), true));
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) { openMsdPage(page); }
+            });
+            dock.addView(item);
+        }
+        LinearLayout.LayoutParams dockP = new LinearLayout.LayoutParams(WRAP, WRAP);
+        dockP.gravity = Gravity.CENTER_HORIZONTAL;
+        dockP.topMargin = dp(18);
+        body.addView(dock, dockP);
+        if (row.getChildCount() > 0) firstTile = row.getChildAt(0);
+    }
+
+    private void buildVidaaHome(LinearLayout body) {
+        body.setPadding(dp(12), dp(6), dp(12), dp(12));
+        LinearLayout shell = box(LinearLayout.HORIZONTAL);
+        LinearLayout sidebar = box(LinearLayout.VERTICAL);
+        sidebar.setGravity(Gravity.CENTER);
+        sidebar.setPadding(dp(8), dp(10), dp(8), dp(10));
+        sidebar.setBackgroundColor(0xFF171B25);
+        String[] nav = {"●", "◉", "⌂", "▣", "⚙"};
+        String[] pages = {"home", "apps", "inputs", "media", "settings"};
+        for (int i=0;i<nav.length;i++) {
+            final String page=pages[i];
+            TextView item=tv(nav[i], 23, i==0?0xFFFF6846:0xFF596273);
+            item.setGravity(Gravity.CENTER);
+            item.setFocusable(true);
+            item.setPadding(dp(10),dp(12),dp(10),dp(12));
+            item.setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){openMsdPage(page);}});
+            sidebar.addView(item,new LinearLayout.LayoutParams(MATCH,dp(58)));
+        }
+        shell.addView(sidebar,new LinearLayout.LayoutParams(dp(62),MATCH));
+        LinearLayout content=box(LinearLayout.VERTICAL);
+        content.setPadding(dp(20),dp(4),dp(8),dp(4));
+        LinearLayout hero=box(LinearLayout.HORIZONTAL);
+        hero.setGravity(Gravity.CENTER_VERTICAL);
+        GradientDrawable heroBg=new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{0xFF813D24,0xFFD65B28});
+        heroBg.setCornerRadius(dp(20)); heroBg.setStroke(dp(2),0xFFEFE8E3);
+        hero.setBackgroundDrawable(heroBg);
+        LinearLayout time=box(LinearLayout.VERTICAL);
+        time.addView(clock("HH:mm",38,Color.WHITE,true));
+        TextView date=dateView(13); date.setTextColor(Color.WHITE); time.addView(date);
+        hero.addView(time,new LinearLayout.LayoutParams(0,WRAP,1f));
+        TextView weather=wx(0,15,0xFFFFE1D1); hero.addView(weather);
+        content.addView(hero,new LinearLayout.LayoutParams(MATCH,dp(104)));
+        TextView title=tv(apps.isEmpty()?"Apps":"YouTube",34,0xFFFFA36B);
+        title.setTypeface(Typeface.create("sans-serif-light",Typeface.NORMAL));
+        LinearLayout.LayoutParams titleP=new LinearLayout.LayoutParams(MATCH,dp(62)); titleP.topMargin=dp(8);
+        content.addView(title,titleP);
+        int max=Math.min(apps.size(),10);
+        for(int rowNo=0;rowNo<2;rowNo++){
+            LinearLayout appRow=box(LinearLayout.HORIZONTAL);
+            for(int col=0;col<5;col++){
+                int index=rowNo*5+col;
+                if(index<max) appRow.addView(premiumAppTile(apps.get(index),index,104,108,false));
+            }
+            LinearLayout.LayoutParams rp=new LinearLayout.LayoutParams(MATCH,dp(122));
+            rp.topMargin=dp(5); content.addView(appRow,rp);
+            if(rowNo==0 && appRow.getChildCount()>0) firstTile=appRow.getChildAt(0);
+        }
+        shell.addView(content,new LinearLayout.LayoutParams(0,MATCH,1f));
+        body.addView(shell,new LinearLayout.LayoutParams(MATCH,MATCH));
+    }
+
+    private void buildGoogleHome(LinearLayout body) {
+        body.setGravity(Gravity.CENTER_HORIZONTAL);
+        body.setPadding(dp(18),dp(4),dp(18),dp(10));
+        addThemeClock(body,false,52);
+        TextView heading=tv(apps.isEmpty()?"Welcome":apps.get(0).label,34,0xFFE5F5F3);
+        heading.setTypeface(Typeface.create("sans-serif-light",Typeface.NORMAL));
+        LinearLayout.LayoutParams hp=new LinearLayout.LayoutParams(MATCH,dp(92));
+        hp.topMargin=dp(24); body.addView(heading,hp);
+        HorizontalScrollView scroll=new HorizontalScrollView(this);
+        scroll.setHorizontalScrollBarEnabled(false);
+        LinearLayout row=box(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER);
+        int count=Math.min(apps.size(),10);
+        for(int i=0;i<count;i++) row.addView(premiumAppTile(apps.get(i),i,108,142,true));
+        scroll.addView(row);
+        body.addView(scroll,new LinearLayout.LayoutParams(MATCH,dp(164)));
+        LinearLayout dock=box(LinearLayout.HORIZONTAL);
+        dock.setGravity(Gravity.CENTER);
+        String[] labels={"Apps","Browser","Files","Settings"};
+        String[] pages={"apps","media","media","settings"};
+        for(int i=0;i<labels.length;i++){
+            final String page=pages[i];
+            TextView item=tv(labels[i],13,0xFFF0FFFF);
+            item.setGravity(Gravity.CENTER); item.setFocusable(true);
+            item.setPadding(dp(17),dp(12),dp(17),dp(12));
+            item.setBackground(stateFlat(dp(28),true));
+            item.setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){openMsdPage(page);}});
+            dock.addView(item);
+        }
+        LinearLayout.LayoutParams dp=new LinearLayout.LayoutParams(WRAP,WRAP);
+        dp.topMargin=dp(28); body.addView(dock,dp);
+        if(row.getChildCount()>0) firstTile=row.getChildAt(0);
     }
 
     private void addMsdQuickCard(LinearLayout row, String title, String detail, String page) {
