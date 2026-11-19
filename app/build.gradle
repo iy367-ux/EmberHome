@@ -10,7 +10,7 @@ android {
         applicationId 'com.idrees.emberhome'
         minSdk 19
         targetSdk 34
-        versionCode 2
+        versionCode 3
         versionName '1.1'
         manifestPlaceholders = [appLabel: 'Ember Home']
     }
