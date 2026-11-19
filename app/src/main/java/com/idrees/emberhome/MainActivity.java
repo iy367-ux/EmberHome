@@ -99,6 +99,7 @@ public class MainActivity extends Activity {
     private int editingIndex = -1;
     private String focusPkg = null;
     private int wallpaperIndex = 0;
+    private int gridColumns = 6;
 
     private static final String[] WALLPAPER_CATEGORIES = {
             "Gradients", "Sunsets", "Nature", "Cities", "Plain colours"
@@ -212,8 +213,8 @@ public class MainActivity extends Activity {
             if (style == 3) {
                 if (key == KeyEvent.KEYCODE_DPAD_LEFT) delta = -1;
                 else if (key == KeyEvent.KEYCODE_DPAD_RIGHT) delta = 1;
-                else if (key == KeyEvent.KEYCODE_DPAD_UP) delta = -6;
-                else if (key == KeyEvent.KEYCODE_DPAD_DOWN) delta = 6;
+                else if (key == KeyEvent.KEYCODE_DPAD_UP) delta = -gridColumns;
+                else if (key == KeyEvent.KEYCODE_DPAD_DOWN) delta = gridColumns;
             } else {
                 if (key == KeyEvent.KEYCODE_DPAD_LEFT || key == KeyEvent.KEYCODE_DPAD_UP) delta = -1;
                 else if (key == KeyEvent.KEYCODE_DPAD_RIGHT || key == KeyEvent.KEYCODE_DPAD_DOWN) delta = 1;
@@ -778,7 +779,8 @@ public class MainActivity extends Activity {
         enter(head, 0);
 
         GridView g = new GridView(this);
-        g.setNumColumns(6);
+        gridColumns = DeviceProfile.gridColumns(this);
+        g.setNumColumns(gridColumns);
         g.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
         g.setHorizontalSpacing(dp(14));
         g.setVerticalSpacing(dp(14));
