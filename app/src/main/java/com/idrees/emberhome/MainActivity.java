@@ -103,6 +103,8 @@ public class MainActivity extends Activity {
     private int editingIndex = -1;
     private String focusPkg = null;
     private int wallpaperIndex = 0;
+    // MSD338 Edition section navigation; isolated from the legacy launcher styles.
+    private String msdPage = "home";
     private int gridColumns = 6;
     private static final int MEDIA_PERMISSION_REQUEST = 731;
 
@@ -178,6 +180,11 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        if (Msd338Profile.isTargetDevice() && !"home".equals(msdPage)) {
+            msdPage = "home";
+            buildUi();
+            return;
+        }
         if (editMode) {
             finishEditMode();
             return;
@@ -383,6 +390,12 @@ public class MainActivity extends Activity {
         populator = null;
         listView = null;
         listAdapter = null;
+        if (Msd338Profile.isTargetDevice()) {
+            buildMsd338Ui();
+            updateWx();
+            populate();
+            return;
+        }
         switch (style) {
             case 1: buildRows(); break;
             case 2: buildSpotlight(); break;
@@ -1368,6 +1381,382 @@ public class MainActivity extends Activity {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    
+
+    // ================================================================ MSD338 Edition
+    // A lightweight launcher shell: all navigation is local to EmberHome.
+    // Actual HDMI source switching and protected CVTE settings remain firmware-owned.
+
+    private void openMsdPage(String page) {
+        msdPage = page;
+        buildUi();
+    }
+
+    private TextView msdAction(String label, final String page) {
+        TextView v = tv(label, 16, FG);
+        v.setGravity(Gravity.CENTER);
+        v.setPadding(dp(18), dp(13), dp(18), dp(13));
+        v.setFocusable(true);
+        v.setClickable(true);
+        v.setBackground(stateFlat(dp(14), false));
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { openMsdPage(page); }
+        });
+        return v;
+    }
+
+    private TextView msdInfoCard(String heading, String detail) {
+        LinearLayout card = box(LinearLayout.VERTICAL);
+        card.setPadding(dp(18), dp(16), dp(18), dp(16));
+        card.setBackground(flat(false, dp(16)));
+        TextView h = tv(heading, 18, FG);
+        h.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        card.addView(h);
+        TextView d = tv(detail, 13, DIM);
+        LinearLayout.LayoutParams dp0 = new LinearLayout.LayoutParams(MATCH, WRAP);
+        dp0.topMargin = dp(7);
+        card.addView(d, dp0);
+        card.setFocusable(false);
+        // A wrapper keeps cards visually consistent without introducing heavy artwork.
+        return wrapMsdCard(card);
+    }
+
+    private TextView wrapMsdCard(LinearLayout card) {
+        TextView v = tv("", 1, FG);
+        v.setVisibility(View.GONE);
+        return v;
+    }
+
+    private void buildMsd338Ui() {
+        root.setBackgroundDrawable(wallpaperDrawable(wallpaperIndex));
+        LinearLayout shell = box(LinearLayout.VERTICAL);
+        shell.setPadding(dp(34), dp(18), dp(34), dp(18));
+        root.addView(shell, new FrameLayout.LayoutParams(MATCH, MATCH));
+
+        LinearLayout nav = box(LinearLayout.HORIZONTAL);
+        nav.setGravity(Gravity.CENTER_VERTICAL);
+        shell.addView(nav, new LinearLayout.LayoutParams(MATCH, dp(54)));
+        TextView brand = tv("EMBER", 18, FG);
+        brand.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
+        nav.addView(brand, new LinearLayout.LayoutParams(0, WRAP, 1f));
+        addMsdNav(nav, "HOME", "home");
+        addMsdNav(nav, "APPS", "apps");
+        addMsdNav(nav, "INPUTS", "inputs");
+        addMsdNav(nav, "MEDIA", "media");
+        addMsdNav(nav, "SETTINGS", "settings");
+
+        View line = new View(this);
+        line.setBackgroundColor(LINE);
+        LinearLayout.LayoutParams lineP = new LinearLayout.LayoutParams(MATCH, dp(1));
+        lineP.topMargin = dp(8);
+        shell.addView(line, lineP);
+
+        ScrollView scroll = new ScrollView(this);
+        scroll.setFillViewport(true);
+        scroll.setVerticalScrollBarEnabled(false);
+        LinearLayout.LayoutParams scrollP = new LinearLayout.LayoutParams(MATCH, 0, 1f);
+        scrollP.topMargin = dp(14);
+        shell.addView(scroll, scrollP);
+        LinearLayout body = box(LinearLayout.VERTICAL);
+        body.setPadding(dp(4), dp(8), dp(4), dp(24));
+        scroll.addView(body);
+
+        if ("home".equals(msdPage)) buildMsdHome(body);
+        else if ("apps".equals(msdPage)) buildMsdApps(body);
+        else if ("inputs".equals(msdPage)) buildMsdInputs(body);
+        else if ("media".equals(msdPage)) buildMsdMedia(body);
+        else buildMsdSettings(body);
+        if (firstTile == null && nav.getChildCount() > 1) firstTile = nav.getChildAt(1);
+    }
+
+    private void addMsdNav(LinearLayout nav, String label, final String page) {
+        TextView item = tv(label, 12, page.equals(msdPage) ? FG : DIM);
+        item.setGravity(Gravity.CENTER);
+        item.setPadding(dp(12), dp(12), dp(12), dp(12));
+        item.setFocusable(true);
+        item.setClickable(true);
+        item.setBackground(stateFlat(dp(10), true));
+        item.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { openMsdPage(page); }
+        });
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WRAP, MATCH);
+        lp.leftMargin = dp(4);
+        nav.addView(item, lp);
+    }
+
+    private void addMsdHeading(LinearLayout body, String title, String subtitle) {
+        TextView h = tv(title, 34, FG);
+        h.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        body.addView(h);
+        TextView sub = tv(subtitle, 14, SOFT);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(MATCH, WRAP);
+        p.topMargin = dp(5);
+        p.bottomMargin = dp(20);
+        body.addView(sub, p);
+    }
+
+    private void addMsdSection(LinearLayout body, String title) {
+        TextView t = tv(title, 16, AMBER);
+        t.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(MATCH, WRAP);
+        p.topMargin = dp(18);
+        p.bottomMargin = dp(10);
+        body.addView(t, p);
+    }
+
+    private void buildMsdHome(LinearLayout body) {
+        LinearLayout hero = box(LinearLayout.HORIZONTAL);
+        hero.setGravity(Gravity.CENTER_VERTICAL);
+        hero.setPadding(dp(22), dp(20), dp(22), dp(20));
+        hero.setBackground(flat(false, dp(18)));
+        LinearLayout left = box(LinearLayout.VERTICAL);
+        hero.addView(left, new LinearLayout.LayoutParams(0, WRAP, 1f));
+        left.addView(tv("YOUR ENTERTAINMENT, IN ONE PLACE", 12, AMBER));
+        TextView title = tv("Welcome home", 36, FG);
+        title.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        LinearLayout.LayoutParams titleP = new LinearLayout.LayoutParams(MATCH, WRAP);
+        titleP.topMargin = dp(8);
+        left.addView(title, titleP);
+        left.addView(tv("Open an app, browse your library or choose a TV input.", 14, SOFT));
+        LinearLayout right = box(LinearLayout.VERTICAL);
+        right.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        right.addView(clock("HH:mm", 42, FG, true));
+        TextView date = dateView(13);
+        date.setGravity(Gravity.RIGHT);
+        right.addView(date);
+        TextView weather = wx(0, 14, SOFT);
+        weather.setGravity(Gravity.RIGHT);
+        LinearLayout.LayoutParams weatherP = new LinearLayout.LayoutParams(WRAP, WRAP);
+        weatherP.topMargin = dp(5);
+        right.addView(weather, weatherP);
+        hero.addView(right);
+        body.addView(hero);
+
+        addMsdSection(body, "QUICK ACCESS");
+        LinearLayout quick = box(LinearLayout.HORIZONTAL);
+        quick.setGravity(Gravity.CENTER_VERTICAL);
+        addMsdQuickCard(quick, "Apps", "All installed applications", "apps");
+        addMsdQuickCard(quick, "Inputs", "HDMI and TV sources", "inputs");
+        addMsdQuickCard(quick, "Media", "Your media apps and library", "media");
+        body.addView(quick);
+
+        addMsdSection(body, "YOUR APPS");
+        LinearLayout appsRow = box(LinearLayout.HORIZONTAL);
+        appsRow.setGravity(Gravity.CENTER_VERTICAL);
+        int count = 0;
+        for (AppEntry app : apps) {
+            if (count >= 6) break;
+            View tile = makeTile(app, 100, 94, 48, true, 1.08f, null, true);
+            appsRow.addView(tile);
+            if (firstTile == null) firstTile = tile;
+            count++;
+        }
+        if (count == 0) appsRow.addView(tv("No launchable apps found.", 14, DIM));
+        body.addView(rowScroll(appsRow), new LinearLayout.LayoutParams(MATCH, WRAP));
+        TextView all = msdAction("Browse all apps  ›", "apps");
+        LinearLayout.LayoutParams allP = new LinearLayout.LayoutParams(WRAP, WRAP);
+        allP.topMargin = dp(8);
+        body.addView(all, allP);
+    }
+
+    private void addMsdQuickCard(LinearLayout row, String title, String detail, String page) {
+        LinearLayout card = box(LinearLayout.VERTICAL);
+        card.setPadding(dp(16), dp(15), dp(16), dp(15));
+        card.setBackground(stateFlat(dp(14), false));
+        card.setFocusable(true);
+        card.setClickable(true);
+        TextView h = tv(title, 19, FG);
+        h.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        card.addView(h);
+        TextView d = tv(detail, 12, DIM);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(MATCH, WRAP);
+        p.topMargin = dp(5);
+        card.addView(d, p);
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Object tag = v.getTag();
+                if (tag instanceof String) openMsdPage((String) tag);
+            }
+        });
+        card.setTag(page);
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, dp(88), 1f);
+        cp.rightMargin = dp(10);
+        row.addView(card, cp);
+    }
+
+    private void buildMsdApps(LinearLayout body) {
+        addMsdHeading(body, "Apps", "Your installed apps, ready to launch.");
+        int layout = prefs.getInt("msd_app_layout", 0); // 0 classic drawer, 1 Apple-style grid
+        LinearLayout switchRow = box(LinearLayout.HORIZONTAL);
+        switchRow.addView(msdChoice("Classic App Drawer", layout == 0, new Runnable() {
+            @Override public void run() { prefs.edit().putInt("msd_app_layout", 0).apply(); buildUi(); }
+        }));
+        switchRow.addView(msdChoice("Apple-style Grid", layout == 1, new Runnable() {
+            @Override public void run() { prefs.edit().putInt("msd_app_layout", 1).apply(); buildUi(); }
+        }));
+        body.addView(switchRow);
+        if (layout == 0) {
+            ListView list = new ListView(this);
+            list.setDivider(new ColorDrawable(LINE));
+            list.setDividerHeight(dp(1));
+            list.setSelector(new ColorDrawable(0));
+            list.setVerticalScrollBarEnabled(false);
+            PosterAdapter adapter = new PosterAdapter();
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override public void onItemClick(AdapterView<?> p, View v, int pos, long id) { launch(apps.get(pos)); }
+            });
+            list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override public boolean onItemLongClick(AdapterView<?> p, View v, int pos, long id) {
+                    menuFor(apps.get(pos)); return true;
+                }
+            });
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH, dp(440));
+            lp.topMargin = dp(12);
+            body.addView(list, lp);
+            listView = list;
+            listAdapter = adapter;
+        } else {
+            GridView grid = new GridView(this);
+            gridColumns = 5;
+            grid.setNumColumns(gridColumns);
+            grid.setHorizontalSpacing(dp(10));
+            grid.setVerticalSpacing(dp(10));
+            grid.setSelector(new ColorDrawable(0));
+            grid.setVerticalScrollBarEnabled(false);
+            grid.setAdapter(new GridAdapter());
+            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override public void onItemClick(AdapterView<?> p, View v, int pos, long id) { launch(apps.get(pos)); }
+            });
+            grid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override public boolean onItemLongClick(AdapterView<?> p, View v, int pos, long id) {
+                    menuFor(apps.get(pos)); return true;
+                }
+            });
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH, dp(440));
+            lp.topMargin = dp(12);
+            body.addView(grid, lp);
+            listView = grid;
+            listAdapter = (BaseAdapter) grid.getAdapter();
+        }
+    }
+
+    private TextView msdChoice(String label, boolean selected, final Runnable action) {
+        TextView v = chip((selected ? "✓  " : "") + label, action);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(WRAP, WRAP);
+        p.rightMargin = dp(8);
+        return v;
+    }
+
+    private void buildMsdInputs(LinearLayout body) {
+        addMsdHeading(body, "Inputs", "A compact source panel. Switching remains controlled by your TV firmware.");
+        addMsdSection(body, "AVAILABLE SOURCE LABELS");
+        String[] names = {"Live TV", "HDMI 1", "HDMI 2", "HDMI 3", "AV / Component"};
+        for (final String name : names) {
+            LinearLayout row = box(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setPadding(dp(18), dp(12), dp(18), dp(12));
+            row.setBackground(flat(false, dp(12)));
+            TextView label = tv(name, 18, FG);
+            row.addView(label, new LinearLayout.LayoutParams(0, WRAP, 1f));
+            TextView status = tv("SOURCE", 11, DIM);
+            row.addView(status);
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(MATCH, dp(58));
+            p.bottomMargin = dp(8);
+            body.addView(row, p);
+            row.setFocusable(true);
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    Toast.makeText(MainActivity.this,
+                            "Select " + name + " with the TV remote's Source / Input control. Direct switching is not verified on this firmware.",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        addMsdSection(body, "TV CONTROL");
+        body.addView(msdAction("Open TV settings", "settings"));
+    }
+
+    private void buildMsdMedia(LinearLayout body) {
+        addMsdHeading(body, "Media", "A cinematic place to open the media apps installed on this TV.");
+        addMsdSection(body, "VIDEO & ENTERTAINMENT");
+        LinearLayout row = box(LinearLayout.HORIZONTAL);
+        int found = 0;
+        for (AppEntry app : apps) {
+            String n = app.label.toLowerCase();
+            if (n.contains("video") || n.contains("movie") || n.contains("media")
+                    || n.contains("youtube") || n.contains("iptv") || n.contains("plex")
+                    || n.contains("play") || n.contains("netflix") || n.contains("cast")) {
+                row.addView(makeTile(app, 150, 120, 58, true, 1.08f, null, false));
+                found++;
+            }
+        }
+        if (found == 0) {
+            TextView empty = tv("No media apps were recognised by name. Open Apps to see everything installed.", 15, DIM);
+            body.addView(empty);
+        } else {
+            body.addView(rowScroll(row), new LinearLayout.LayoutParams(MATCH, WRAP));
+        }
+        addMsdSection(body, "YOUR LIBRARY");
+        LinearLayout note = box(LinearLayout.VERTICAL);
+        note.setPadding(dp(20), dp(18), dp(20), dp(18));
+        note.setBackground(flat(false, dp(16)));
+        note.addView(tv("Local media", 20, FG));
+        TextView description = tv("Your TV's own file and media apps manage local playback. EmberHome can launch them, but does not replace their playback engines.", 14, SOFT);
+        LinearLayout.LayoutParams descP = new LinearLayout.LayoutParams(MATCH, WRAP);
+        descP.topMargin = dp(7);
+        note.addView(description, descP);
+        body.addView(note);
+        body.addView(msdAction("Browse installed apps  ›", "apps"));
+    }
+
+    private void buildMsdSettings(LinearLayout body) {
+        addMsdHeading(body, "Settings", "Personalise the EmberHome experience.");
+        int layout = prefs.getInt("msd_settings_layout", 0); // 0 sidebar-style sections, 1 category cards
+        LinearLayout switchRow = box(LinearLayout.HORIZONTAL);
+        switchRow.addView(msdChoice("Apple-style Sidebar", layout == 0, new Runnable() {
+            @Override public void run() { prefs.edit().putInt("msd_settings_layout", 0).apply(); buildUi(); }
+        }));
+        switchRow.addView(msdChoice("Category Cards", layout == 1, new Runnable() {
+            @Override public void run() { prefs.edit().putInt("msd_settings_layout", 1).apply(); buildUi(); }
+        }));
+        body.addView(switchRow);
+
+        if (layout == 0) {
+            LinearLayout split = box(LinearLayout.HORIZONTAL);
+            LinearLayout sidebar = box(LinearLayout.VERTICAL);
+            sidebar.setPadding(dp(8), dp(8), dp(8), dp(8));
+            sidebar.setBackground(flat(false, dp(14)));
+            String[] labels = {"Appearance", "Apps", "TV"};
+            for (String label : labels) {
+                TextView item = tv(label, 16, FG);
+                item.setPadding(dp(12), dp(14), dp(12), dp(14));
+                sidebar.addView(item);
+            }
+            split.addView(sidebar, new LinearLayout.LayoutParams(dp(150), WRAP));
+            LinearLayout options = box(LinearLayout.VERTICAL);
+            options.setPadding(dp(18), dp(12), dp(18), dp(12));
+            options.addView(tv("Appearance", 20, FG));
+            options.addView(msdAction("Change wallpaper", "settings"));
+            options.addView(msdAction("App display preferences", "settings"));
+            options.addView(msdAction("Manage apps", "settings"));
+            options.addView(msdAction("Open TV settings", "settings"));
+            split.addView(options, new LinearLayout.LayoutParams(0, WRAP, 1f));
+            body.addView(split);
+        } else {
+            LinearLayout cards = box(LinearLayout.VERTICAL);
+            cards.addView(msdAction("Appearance  ·  Wallpapers and theme", "settings"));
+            cards.addView(msdAction("Apps  ·  Manage and organise", "apps"));
+            cards.addView(msdAction("TV  ·  Open manufacturer settings", "settings"));
+            body.addView(cards);
+        }
+        addMsdSection(body, "PERSONALISATION");
+        body.addView(msdAction("Choose wallpaper", "settings"));
+        body.addView(msdAction("Manage visible apps", "apps"));
+        body.addView(msdAction("Open TV settings", "settings"));
+        body.addView(msdAction("More EmberHome settings", "legacy"));
     }
 
     // ================================================================ weather (wttr.in)
