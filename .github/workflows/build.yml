@@ -53,6 +53,7 @@ jobs:
             sleep 2
             adb exec-out screencap -p > screenshots/03-context-menu.png
             adb shell input keyevent 4
+            adb shell input keyevent 4
             adb shell input keyevent 19
             adb shell input keyevent 19
             adb shell input keyevent 22

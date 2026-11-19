@@ -219,13 +219,16 @@ public class ThiagoActivity extends Activity {
             if (!longHandled) handleKey("ok");
             longHandled = false; ui.invalidate(); return true;
         }
+        if (k == KeyEvent.KEYCODE_BACK || k == KeyEvent.KEYCODE_ESCAPE) {
+            if (e.getAction() == KeyEvent.ACTION_UP) { handleKey("back"); if (ui != null) ui.invalidate(); }
+            return true;
+        }
         if (e.getAction() == KeyEvent.ACTION_DOWN) {
             switch(k) {
                 case KeyEvent.KEYCODE_DPAD_UP: handleKey("up"); return true;
                 case KeyEvent.KEYCODE_DPAD_DOWN: handleKey("down"); return true;
                 case KeyEvent.KEYCODE_DPAD_LEFT: handleKey("left"); return true;
                 case KeyEvent.KEYCODE_DPAD_RIGHT: handleKey("right"); return true;
-                case KeyEvent.KEYCODE_BACK: case KeyEvent.KEYCODE_ESCAPE: handleKey("back"); return true;
                 case KeyEvent.KEYCODE_MENU: openContext(drawer ? appAt(grid) : appAt(selected)); return true;
                 case KeyEvent.KEYCODE_VOLUME_UP: changeVolume(1); return true;
                 case KeyEvent.KEYCODE_VOLUME_DOWN: changeVolume(-1); return true;
