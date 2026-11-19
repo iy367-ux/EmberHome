@@ -47,6 +47,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -83,6 +84,7 @@ public class MainActivity extends Activity {
 
     private FrameLayout root;
     private final List<AppEntry> apps = new ArrayList<AppEntry>();
+    private final List<AppEntry> allApps = new ArrayList<AppEntry>();
     private final List<TextView> wxViews = new ArrayList<TextView>();
     private final List<Animator> anims = new ArrayList<Animator>();
     private SharedPreferences prefs;
@@ -93,6 +95,21 @@ public class MainActivity extends Activity {
     private BaseAdapter listAdapter;
     private AbsListView listView;
     private Dialog settingsDlg;
+    private boolean editMode = false;
+    private int editingIndex = -1;
+    private String focusPkg = null;
+    private int wallpaperIndex = 0;
+
+    private static final String[] WALLPAPER_CATEGORIES = {
+            "Gradients", "Sunsets", "Nature", "Cities", "Plain colours"
+    };
+    private static final String[] WALLPAPER_NAMES = {
+            "Amber Horizon", "Midnight Blue", "Violet Fade",
+            "Golden Dusk", "Afterglow", "Desert Sunset",
+            "Forest Night", "Ocean Deep", "Moss & Stone",
+            "City Lights", "Neon District", "Midnight Skyline",
+            "Pure Black", "Deep Blue", "Charcoal"
+    };
 
     // weather: 0 loading, 1 ok, 2 failed
     private int wxState = 0;
@@ -111,10 +128,12 @@ public class MainActivity extends Activity {
         super.onCreate(b);
         density = getResources().getDisplayMetrics().density;
         prefs = getSharedPreferences("ember", MODE_PRIVATE);
+        wallpaperIndex = prefs.getInt("wallpaper", 0);
+        enableImmersiveMode();
         style = prefs.getInt("style", 0);
         if (style < 0 || style >= STYLES.length) style = 0;
         root = new FrameLayout(this);
-        root.setBackgroundColor(BG);
+        root.setBackgroundDrawable(wallpaperDrawable(wallpaperIndex));
         setContentView(root);
         String cached = prefs.getString("wx", null);
         if (cached != null) parseWeather(cached);
@@ -147,7 +166,72 @@ public class MainActivity extends Activity {
         focusFirst();
     }
 
-    @Override public void onBackPressed() { }
+    @Override
+    public void onBackPressed() {
+        if (editMode) {
+            finishEditMode();
+            return;
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) enableImmersiveMode();
+    }
+
+    private void enableImmersiveMode() {
+        if (android.os.Build.VERSION.SDK_INT >= 19) {
+            final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            getWindow().getDecorView().setSystemUiVisibility(flags);
+        } else {
+            getWindow().setFlags(1024, 1024);
+        }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (editMode && event.getAction() == KeyEvent.ACTION_DOWN) {
+            int key = event.getKeyCode();
+            if (key == KeyEvent.KEYCODE_BACK) {
+                finishEditMode();
+                return true;
+            }
+            if (key == KeyEvent.KEYCODE_MENU || key == 176 /* KEYCODE_SETTINGS */) {
+                if (editingIndex >= 0 && editingIndex < apps.size()) {
+                    menuFor(apps.get(editingIndex));
+                }
+                return true;
+            }
+            int delta = 0;
+            if (style == 3) {
+                if (key == KeyEvent.KEYCODE_DPAD_LEFT) delta = -1;
+                else if (key == KeyEvent.KEYCODE_DPAD_RIGHT) delta = 1;
+                else if (key == KeyEvent.KEYCODE_DPAD_UP) delta = -6;
+                else if (key == KeyEvent.KEYCODE_DPAD_DOWN) delta = 6;
+            } else {
+                if (key == KeyEvent.KEYCODE_DPAD_LEFT || key == KeyEvent.KEYCODE_DPAD_UP) delta = -1;
+                else if (key == KeyEvent.KEYCODE_DPAD_RIGHT || key == KeyEvent.KEYCODE_DPAD_DOWN) delta = 1;
+            }
+            if (delta != 0) {
+                moveApp(editingIndex, editingIndex + delta);
+                return true;
+            }
+            if (key == KeyEvent.KEYCODE_ENTER || key == KeyEvent.KEYCODE_DPAD_CENTER) {
+                finishEditMode();
+                return true;
+            }
+            if (key == KeyEvent.KEYCODE_DPAD_CENTER || key == KeyEvent.KEYCODE_DPAD_LEFT
+                    || key == KeyEvent.KEYCODE_DPAD_RIGHT || key == KeyEvent.KEYCODE_DPAD_UP
+                    || key == KeyEvent.KEYCODE_DPAD_DOWN) return true;
+        }
+        return super.dispatchKeyEvent(event);
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent e) {
@@ -285,10 +369,78 @@ public class MainActivity extends Activity {
     private void focusFirst() {
         root.post(new Runnable() {
             @Override public void run() {
+                if (focusPkg != null) {
+                    View tile = root.findViewWithTag("ember:" + focusPkg);
+                    if (tile != null && tile.requestFocus()) return;
+                    int index = indexOfPackage(focusPkg);
+                    if (index >= 0 && listView != null) {
+                        listView.setSelection(index);
+                        listView.requestFocus();
+                        return;
+                    }
+                }
                 if (firstTile != null) firstTile.requestFocus();
                 else if (listView != null) listView.requestFocus();
             }
         });
+    }
+
+    private int indexOfPackage(String pkg) {
+        for (int i = 0; i < apps.size(); i++) {
+            if (apps.get(i).pkg.equals(pkg)) return i;
+        }
+        return -1;
+    }
+
+    private void beginEditMode(AppEntry app) {
+        int index = apps.indexOf(app);
+        if (index < 0) return;
+        editMode = true;
+        editingIndex = index;
+        focusPkg = app.pkg;
+        Toast.makeText(this, "EDIT MODE: " + app.label
+                + "  •  arrows to move  •  OK to finish  •  Menu for options",
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void finishEditMode() {
+        editMode = false;
+        editingIndex = -1;
+        populate();
+    }
+
+    private void saveAppOrder() {
+        StringBuilder order = new StringBuilder();
+        for (AppEntry app : apps) {
+            if (order.length() > 0) order.append("|");
+            order.append(app.pkg);
+        }
+        prefs.edit().putString("app_order", order.toString()).apply();
+    }
+
+    private void applySavedAppOrder(List<AppEntry> list) {
+        final String saved = prefs.getString("app_order", "");
+        if (saved.length() == 0) return;
+        final String[] order = saved.split("\\|");
+        Collections.sort(list, new Comparator<AppEntry>() {
+            @Override public int compare(AppEntry a, AppEntry b) {
+                int pa = java.util.Arrays.asList(order).indexOf(a.pkg);
+                int pb = java.util.Arrays.asList(order).indexOf(b.pkg);
+                if (pa < 0) pa = Integer.MAX_VALUE;
+                if (pb < 0) pb = Integer.MAX_VALUE;
+                return pa == pb ? a.label.compareToIgnoreCase(b.label) : (pa < pb ? -1 : 1);
+            }
+        });
+    }
+
+    private void moveApp(int from, int to) {
+        if (from < 0 || to < 0 || from >= apps.size() || to >= apps.size() || from == to) return;
+        AppEntry moving = apps.remove(from);
+        apps.add(to, moving);
+        editingIndex = to;
+        focusPkg = moving.pkg;
+        saveAppOrder();
+        populate();
     }
 
     // ---------------------------------------------------------------- A: Poster
@@ -344,7 +496,10 @@ public class MainActivity extends Activity {
             @Override public void onItemClick(AdapterView<?> p, View v, int pos, long id) { launch(apps.get(pos)); }
         });
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override public boolean onItemLongClick(AdapterView<?> p, View v, int pos, long id) { menuFor(apps.get(pos)); return true; }
+            @Override public boolean onItemLongClick(AdapterView<?> p, View v, int pos, long id) {
+                beginEditMode(apps.get(pos));
+                return true;
+            }
         });
         lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
@@ -404,6 +559,7 @@ public class MainActivity extends Activity {
             icon.setScaleY(1f);
             label.setTextColor(SOFT);
             AppEntry e = apps.get(pos);
+            row.setContentDescription("ember:" + e.pkg);
             label.setText(e.label);
             icon.setImageDrawable(e.icon);
             return row;
@@ -466,7 +622,7 @@ public class MainActivity extends Activity {
                     }
                 }
                 if (n == 0) {
-                    TextView hint = tv("Hold OK on any app to add it here", 15, DIM);
+                    TextView hint = tv("Use Menu while editing an app to manage favorites", 15, DIM);
                     hint.setPadding(0, dp(40), 0, dp(40));
                     favRow.addView(hint);
                 }
@@ -515,11 +671,18 @@ public class MainActivity extends Activity {
             ll.topMargin = dp(6);
             t.addView(l, ll);
         }
+        t.setTag("ember:" + e.pkg);
         t.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { launch(e); }
+            @Override public void onClick(View v) {
+                if (editMode) finishEditMode();
+                else launch(e);
+            }
         });
         t.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View v) { menuFor(e); return true; }
+            @Override public boolean onLongClick(View v) {
+                beginEditMode(e);
+                return true;
+            }
         });
         t.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override public void onFocusChange(View v, boolean has) {
@@ -564,7 +727,7 @@ public class MainActivity extends Activity {
         big.setSingleLine(true);
         big.setEllipsize(TextUtils.TruncateAt.END);
         mid.addView(big);
-        mid.addView(tv("OK to open     Hold OK for options     Menu for settings", 14, AMBER));
+        mid.addView(tv("OK to open     Hold OK to rearrange     Menu for options", 14, AMBER));
         enter(mid, 2);
 
         final LinearLayout row = box(LinearLayout.HORIZONTAL);
@@ -637,7 +800,10 @@ public class MainActivity extends Activity {
             @Override public void onItemClick(AdapterView<?> p, View v, int pos, long id) { launch(apps.get(pos)); }
         });
         g.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override public boolean onItemLongClick(AdapterView<?> p, View v, int pos, long id) { menuFor(apps.get(pos)); return true; }
+            @Override public boolean onItemLongClick(AdapterView<?> p, View v, int pos, long id) {
+                beginEditMode(apps.get(pos));
+                return true;
+            }
         });
         g.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
@@ -686,10 +852,143 @@ public class MainActivity extends Activity {
             tile.setScaleX(1f);
             tile.setScaleY(1f);
             AppEntry e = apps.get(pos);
+            tile.setContentDescription("ember:" + e.pkg);
             icon.setImageDrawable(e.icon);
             label.setText(e.label);
             return tile;
         }
+    }
+
+    private Set<String> hiddenApps() {
+        return new HashSet<String>(prefs.getStringSet("hidden_apps", new HashSet<String>()));
+    }
+
+    private void showAppManager() {
+        if (allApps.isEmpty()) {
+            Toast.makeText(this, "No installed apps found yet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        final String[] labels = new String[allApps.size()];
+        boolean[] checked = new boolean[allApps.size()];
+        final Set<String> hidden = hiddenApps();
+        for (int i = 0; i < allApps.size(); i++) {
+            AppEntry app = allApps.get(i);
+            labels[i] = app.label;
+            checked[i] = !hidden.contains(app.pkg);
+        }
+        AlertDialog dialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
+                .setTitle("Show apps on home")
+                .setMultiChoiceItems(labels, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override public void onClick(DialogInterface d, int which, boolean isChecked) {
+                        String pkg = allApps.get(which).pkg;
+                        Set<String> current = hiddenApps();
+                        if (isChecked) current.remove(pkg);
+                        else current.add(pkg);
+                        prefs.edit().putStringSet("hidden_apps", current).apply();
+                    }
+                })
+                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface d, int which) { loadApps(); }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override public void onDismiss(DialogInterface d) { loadApps(); }
+        });
+        dialog.show();
+    }
+
+    private GradientDrawable wallpaperDrawable(int index) {
+        int[][] palettes = {
+                {0xFF071B33, 0xFF4C6A92}, {0xFF101A35, 0xFF244D73}, {0xFF24133F, 0xFF7B4C9A},
+                {0xFF311B2B, 0xFFF29A58}, {0xFF54233D, 0xFFEA6A57}, {0xFF3B1E2D, 0xFFDA8B45},
+                {0xFF061F1B, 0xFF27665A}, {0xFF071D2B, 0xFF145A72}, {0xFF202A20, 0xFF65734A},
+                {0xFF080F24, 0xFF34466D}, {0xFF170D2A, 0xFF563B86}, {0xFF090D18, 0xFF303B50},
+                {0xFF000000, 0xFF000000}, {0xFF06152E, 0xFF0B2B55}, {0xFF101010, 0xFF292929}
+        };
+        int safe = index < 0 || index >= palettes.length ? 0 : index;
+        GradientDrawable drawable = new GradientDrawable(
+                GradientDrawable.Orientation.TL_BR, palettes[safe]);
+        drawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+        return drawable;
+    }
+
+    private void applyWallpaper() {
+        wallpaperIndex = Math.max(0, Math.min(WALLPAPER_NAMES.length - 1, wallpaperIndex));
+        prefs.edit().putInt("wallpaper", wallpaperIndex).apply();
+        if (root != null) root.setBackgroundDrawable(wallpaperDrawable(wallpaperIndex));
+    }
+
+    private void showWallpaperGallery() {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Holo_NoActionBar_Fullscreen);
+        final FrameLayout stage = new FrameLayout(this);
+        final LinearLayout content = box(LinearLayout.VERTICAL);
+        content.setGravity(Gravity.CENTER);
+        content.setPadding(dp(40), dp(30), dp(40), dp(30));
+        stage.addView(content, new FrameLayout.LayoutParams(MATCH, MATCH));
+
+        final TextView category = tv("", 16, AMBER);
+        category.setGravity(Gravity.CENTER);
+        final TextView name = tv("", 34, FG);
+        name.setGravity(Gravity.CENTER);
+        final TextView hint = tv("LEFT / RIGHT: browse     UP / DOWN: category     OK: apply     BACK: close",
+                13, SOFT);
+        hint.setGravity(Gravity.CENTER);
+        content.addView(category, new LinearLayout.LayoutParams(MATCH, WRAP));
+        LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(MATCH, 0, 1f);
+        content.addView(name, nameParams);
+        content.addView(hint, new LinearLayout.LayoutParams(MATCH, WRAP));
+
+        final Runnable refresh = new Runnable() {
+            @Override public void run() {
+                int cat = wallpaperIndex / 3;
+                category.setText(WALLPAPER_CATEGORIES[cat] + "  •  " + (wallpaperIndex % 3 + 1) + " / 3");
+                name.setText(WALLPAPER_NAMES[wallpaperIndex]);
+                stage.setBackgroundDrawable(wallpaperDrawable(wallpaperIndex));
+            }
+        };
+        refresh.run();
+        dialog.setContentView(stage);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override public boolean onKey(DialogInterface d, int keyCode, KeyEvent event) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN) return true;
+                int categoryIndex = wallpaperIndex / 3;
+                int within = wallpaperIndex % 3;
+                if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                    wallpaperIndex = categoryIndex * 3 + (within + 2) % 3;
+                    refresh.run();
+                    return true;
+                }
+                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                    wallpaperIndex = categoryIndex * 3 + (within + 1) % 3;
+                    refresh.run();
+                    return true;
+                }
+                if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+                    int next = (categoryIndex + (keyCode == KeyEvent.KEYCODE_DPAD_UP ? 4 : 1)) % 5;
+                    wallpaperIndex = next * 3 + within;
+                    refresh.run();
+                    return true;
+                }
+                if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                    applyWallpaper();
+                    dialog.dismiss();
+                    return true;
+                }
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                    return true;
+                }
+                return true;
+            }
+        });
+        dialog.show();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(MATCH, MATCH);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+        }
+        stage.setFocusableInTouchMode(true);
+        stage.requestFocus();
     }
 
     // ================================================================ settings
@@ -735,6 +1034,19 @@ public class MainActivity extends Activity {
             styleRow.addView(c, cp);
         }
         p.addView(styleRow);
+
+        p.addView(sectionLabel("Personalisation"));
+        LinearLayout personal = box(LinearLayout.HORIZONTAL);
+        TextView wallpaperButton = chip("Wallpapers", new Runnable() {
+            @Override public void run() { d.dismiss(); showWallpaperGallery(); }
+        });
+        LinearLayout.LayoutParams wp = new LinearLayout.LayoutParams(WRAP, WRAP);
+        wp.rightMargin = dp(10);
+        personal.addView(wallpaperButton, wp);
+        personal.addView(chip("Manage apps", new Runnable() {
+            @Override public void run() { d.dismiss(); showAppManager(); }
+        }));
+        p.addView(personal);
 
         p.addView(sectionLabel("Weather"));
         LinearLayout wxRow = box(LinearLayout.HORIZONTAL);
@@ -906,8 +1218,18 @@ public class MainActivity extends Activity {
         new AsyncTask<Void, Void, List<AppEntry>>() {
             @Override protected List<AppEntry> doInBackground(Void... v) { return queryApps(); }
             @Override protected void onPostExecute(List<AppEntry> r) {
+                allApps.clear();
+                allApps.addAll(r);
+                applySavedAppOrder(allApps);
+                Set<String> hidden = hiddenApps();
                 apps.clear();
-                apps.addAll(r);
+                for (AppEntry app : allApps) {
+                    if (!hidden.contains(app.pkg)) apps.add(app);
+                }
+                if (editingIndex >= apps.size()) {
+                    editingIndex = -1;
+                    editMode = false;
+                }
                 populate();
             }
         }.execute();
