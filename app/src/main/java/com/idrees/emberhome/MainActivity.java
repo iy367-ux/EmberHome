@@ -1420,6 +1420,15 @@ public class MainActivity extends Activity {
         return v;
     }
 
+    private GradientDrawable msdPremiumSurface(int radius) {
+        GradientDrawable surface = new GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                new int[]{0xF01B202B, 0xF00D1119});
+        surface.setCornerRadius(dp(radius));
+        surface.setStroke(dp(1), 0xFF303744);
+        return surface;
+    }
+
     private void buildMsd338Ui() {
         Drawable customWallpaper = loadCustomWallpaper();
         root.setBackgroundDrawable(customWallpaper != null ? customWallpaper : wallpaperDrawable(wallpaperIndex));
@@ -1429,8 +1438,10 @@ public class MainActivity extends Activity {
 
         LinearLayout nav = box(LinearLayout.HORIZONTAL);
         nav.setGravity(Gravity.CENTER_VERTICAL);
-        shell.addView(nav, new LinearLayout.LayoutParams(MATCH, dp(54)));
-        TextView brand = tv("EMBER", 18, FG);
+        nav.setPadding(dp(14), dp(4), dp(10), dp(4));
+        nav.setBackground(msdPremiumSurface(16));
+        shell.addView(nav, new LinearLayout.LayoutParams(MATCH, dp(58)));
+        TextView brand = tv("EMBERHOME", 17, FG);
         brand.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
         nav.addView(brand, new LinearLayout.LayoutParams(0, WRAP, 1f));
         addMsdNav(nav, "HOME", "home");
@@ -1452,7 +1463,7 @@ public class MainActivity extends Activity {
         scrollP.topMargin = dp(14);
         shell.addView(scroll, scrollP);
         LinearLayout body = box(LinearLayout.VERTICAL);
-        body.setPadding(dp(4), dp(8), dp(4), dp(24));
+        body.setPadding(dp(6), dp(10), dp(6), dp(28));
         scroll.addView(body);
 
         if ("home".equals(msdPage)) buildMsdHome(body);
@@ -1490,7 +1501,8 @@ public class MainActivity extends Activity {
     }
 
     private void addMsdSection(LinearLayout body, String title) {
-        TextView t = tv(title, 16, AMBER);
+        TextView t = tv(title.toUpperCase(), 12, AMBER);
+        t.setLetterSpacing(0.12f);
         t.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(MATCH, WRAP);
         p.topMargin = dp(18);
@@ -1501,20 +1513,25 @@ public class MainActivity extends Activity {
     private void buildMsdHome(LinearLayout body) {
         LinearLayout hero = box(LinearLayout.HORIZONTAL);
         hero.setGravity(Gravity.CENTER_VERTICAL);
-        hero.setPadding(dp(22), dp(20), dp(22), dp(20));
-        hero.setBackground(flat(false, dp(18)));
+        hero.setPadding(dp(28), dp(24), dp(28), dp(24));
+        hero.setBackground(msdPremiumSurface(22));
         LinearLayout left = box(LinearLayout.VERTICAL);
         hero.addView(left, new LinearLayout.LayoutParams(0, WRAP, 1f));
-        left.addView(tv("YOUR ENTERTAINMENT, IN ONE PLACE", 12, AMBER));
-        TextView title = tv("Welcome home", 36, FG);
+        TextView eyebrow = tv("MSD338 EDITION   /   SMART HUB", 11, AMBER);
+        eyebrow.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        left.addView(eyebrow);
+        TextView title = tv("Your screen.\nYour world.", 38, FG);
         title.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
         LinearLayout.LayoutParams titleP = new LinearLayout.LayoutParams(MATCH, WRAP);
         titleP.topMargin = dp(8);
         left.addView(title, titleP);
-        left.addView(tv("Open an app, browse your library or choose a TV input.", 14, SOFT));
+        TextView heroSub = tv("Entertainment, apps and connected devices —\nall in one beautifully simple place.", 14, SOFT);
+        LinearLayout.LayoutParams heroSubP = new LinearLayout.LayoutParams(MATCH, WRAP);
+        heroSubP.topMargin = dp(7);
+        left.addView(heroSub, heroSubP);
         LinearLayout right = box(LinearLayout.VERTICAL);
         right.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        right.addView(clock("HH:mm", 42, FG, true));
+        right.addView(clock("HH:mm", 48, FG, true));
         TextView date = dateView(13);
         date.setGravity(Gravity.RIGHT);
         right.addView(date);
@@ -1555,7 +1572,7 @@ public class MainActivity extends Activity {
 
     private void addMsdQuickCard(LinearLayout row, String title, String detail, String page) {
         LinearLayout card = box(LinearLayout.VERTICAL);
-        card.setPadding(dp(16), dp(15), dp(16), dp(15));
+        card.setPadding(dp(18), dp(17), dp(18), dp(17));
         card.setBackground(stateFlat(dp(14), false));
         card.setFocusable(true);
         card.setClickable(true);
@@ -1694,7 +1711,7 @@ public class MainActivity extends Activity {
         addMsdSection(body, "YOUR LIBRARY");
         LinearLayout note = box(LinearLayout.VERTICAL);
         note.setPadding(dp(20), dp(18), dp(20), dp(18));
-        note.setBackground(flat(false, dp(16)));
+        note.setBackground(msdPremiumSurface(18));
         note.addView(tv("Local media", 20, FG));
         TextView description = tv("Your TV's own file and media apps manage local playback. EmberHome can launch them, but does not replace their playback engines.", 14, SOFT);
         LinearLayout.LayoutParams descP = new LinearLayout.LayoutParams(MATCH, WRAP);
@@ -1720,7 +1737,7 @@ public class MainActivity extends Activity {
             LinearLayout split = box(LinearLayout.HORIZONTAL);
             LinearLayout sidebar = box(LinearLayout.VERTICAL);
             sidebar.setPadding(dp(8), dp(8), dp(8), dp(8));
-            sidebar.setBackground(flat(false, dp(14)));
+            sidebar.setBackground(msdPremiumSurface(16));
             String[] labels = {"Appearance", "Apps", "TV"};
             for (String label : labels) {
                 TextView item = tv(label, 16, FG);
@@ -1729,7 +1746,8 @@ public class MainActivity extends Activity {
             }
             split.addView(sidebar, new LinearLayout.LayoutParams(dp(150), WRAP));
             LinearLayout options = box(LinearLayout.VERTICAL);
-            options.setPadding(dp(18), dp(12), dp(18), dp(12));
+            options.setPadding(dp(22), dp(14), dp(22), dp(14));
+            options.setBackground(msdPremiumSurface(16));
             options.addView(tv("Appearance", 20, FG));
             options.addView(msdCommand("Change wallpaper", new Runnable() {
                 @Override public void run() { showWallpaperGallery(); }
@@ -1762,6 +1780,16 @@ public class MainActivity extends Activity {
         body.addView(msdCommand("Choose wallpaper", new Runnable() {
             @Override public void run() { showWallpaperGallery(); }
         }));
+        addMsdSection(body, "APPS DISPLAY");
+        int appLayout = prefs.getInt("msd_app_layout", 0);
+        LinearLayout appChoices = box(LinearLayout.HORIZONTAL);
+        appChoices.addView(msdChoice("Classic App Drawer", appLayout == 0, new Runnable() {
+            @Override public void run() { prefs.edit().putInt("msd_app_layout", 0).apply(); buildUi(); }
+        }));
+        appChoices.addView(msdChoice("Apple-style Grid", appLayout == 1, new Runnable() {
+            @Override public void run() { prefs.edit().putInt("msd_app_layout", 1).apply(); buildUi(); }
+        }));
+        body.addView(appChoices);
         body.addView(msdCommand("Manage visible apps", new Runnable() {
             @Override public void run() { showAppManager(); }
         }));
