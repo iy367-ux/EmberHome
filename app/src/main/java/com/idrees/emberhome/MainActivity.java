@@ -1016,6 +1016,72 @@ public class MainActivity extends Activity {
         stage.requestFocus();
     }
 
+    private String iconSizeLabel() {
+        int size = prefs.getInt("icon_size", 1);
+        return "Icon size: " + (size == 0 ? "Small" : (size == 2 ? "Large" : "Medium"));
+    }
+
+    private void startAerialSetup() {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            ArrayList<String> missing = new ArrayList<String>();
+            if (android.os.Build.VERSION.SDK_INT >= 33) {
+                if (checkSelfPermission("android.permission.READ_MEDIA_VIDEO") != PackageManager.PERMISSION_GRANTED)
+                    missing.add("android.permission.READ_MEDIA_VIDEO");
+                if (checkSelfPermission("android.permission.READ_MEDIA_IMAGES") != PackageManager.PERMISSION_GRANTED)
+                    missing.add("android.permission.READ_MEDIA_IMAGES");
+                if (android.os.Build.VERSION.SDK_INT >= 34
+                        && checkSelfPermission("android.permission.READ_MEDIA_VISUAL_USER_SELECTED") != PackageManager.PERMISSION_GRANTED)
+                    missing.add("android.permission.READ_MEDIA_VISUAL_USER_SELECTED");
+            } else if (checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != PackageManager.PERMISSION_GRANTED) {
+                missing.add("android.permission.READ_EXTERNAL_STORAGE");
+            }
+            if (!missing.isEmpty()) {
+                requestPermissions(missing.toArray(new String[missing.size()]), MEDIA_PERMISSION_REQUEST);
+                return;
+            }
+        }
+        openDreamSettings();
+    }
+
+    private void openDreamSettings() {
+        try {
+            startActivity(new Intent(Settings.ACTION_DREAM_SETTINGS));
+            Toast.makeText(this, "Choose EmberHome Aerial. Media folder: Movies/EmberHome/Aerial",
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "This device does not expose Android screensaver settings. Fire TV support may vary.",
+                    Toast.LENGTH_LONG).show();
+            openSystemSettings();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MEDIA_PERMISSION_REQUEST) {
+            boolean granted = false;
+            for (int result : grantResults) if (result == PackageManager.PERMISSION_GRANTED) granted = true;
+            if (granted || grantResults.length == 0) openDreamSettings();
+            else Toast.makeText(this, "Allow media access to use your local Aerial videos and pictures.",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void showDeviceInfo() {
+        String maker = android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL;
+        String kind = DeviceProfile.isAmazonFireTv() ? "Amazon Fire TV detected" : "Android device";
+        String ram = DeviceProfile.isLowRamDevice(this) ? "Low-RAM profile" : "Standard memory profile";
+        String info = maker + "\\n" + kind + "\\n" + ram
+                + "\\nAndroid API: " + android.os.Build.VERSION.SDK_INT
+                + "\\nResponsive grid columns: " + DeviceProfile.gridColumns(this)
+                + "\\nAerial media folder: Movies/EmberHome/Aerial";
+        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
+                .setTitle("Device compatibility")
+                .setMessage(info)
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
     // ================================================================ settings
 
     private void showSettings() {
