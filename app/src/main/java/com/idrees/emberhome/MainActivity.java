@@ -1219,7 +1219,10 @@ public class MainActivity extends Activity {
         more.addView(chip("Close", new Runnable() { @Override public void run() { d.dismiss(); } }));
         p.addView(more);
 
-        ScrollView scroll = new ScrollView(this);\n        scroll.setFillViewport(true);\n        scroll.addView(p);\n        d.setContentView(scroll);
+        ScrollView scroll = new ScrollView(this);
+        scroll.setFillViewport(true);
+        scroll.addView(p);
+        d.setContentView(scroll);
         if (d.getWindow() != null) {
             d.getWindow().setLayout(dp(700), WRAP);
             d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
