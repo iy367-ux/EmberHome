@@ -69,6 +69,48 @@ public class AerialDreamService extends DreamService {
             root.addView(sceneView, new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
+
+        // Blueprint page 4: understated clock/date at bottom-left and scene caption at bottom-right.
+        FrameLayout overlay = new FrameLayout(this);
+        overlay.setClickable(false);
+        FrameLayout.LayoutParams overlayParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        root.addView(overlay, overlayParams);
+
+        android.widget.LinearLayout clockPanel = new android.widget.LinearLayout(this);
+        clockPanel.setOrientation(android.widget.LinearLayout.VERTICAL);
+        clockPanel.setPadding(0, 0, 0, 0);
+        android.widget.TextClock time = new android.widget.TextClock(this);
+        time.setFormat12Hour("h:mm");
+        time.setFormat24Hour("HH:mm");
+        time.setTextColor(Color.WHITE);
+        time.setTextSize(48);
+        time.setTypeface(android.graphics.Typeface.create("sans-serif-light", android.graphics.Typeface.NORMAL));
+        clockPanel.addView(time);
+        android.widget.TextClock date = new android.widget.TextClock(this);
+        date.setFormat12Hour("EEEE, d MMMM");
+        date.setFormat24Hour("EEEE, d MMMM");
+        date.setTextColor(0xFFE4E2E8);
+        date.setTextSize(16);
+        clockPanel.addView(date);
+        FrameLayout.LayoutParams clockParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.LEFT | Gravity.BOTTOM);
+        clockParams.leftMargin = 56;
+        clockParams.bottomMargin = 36;
+        overlay.addView(clockPanel, clockParams);
+
+        android.widget.TextView caption = new android.widget.TextView(this);
+        caption.setText("Coastline at dusk\\nPress any key to wake");
+        caption.setTextColor(0xFFE4E2E8);
+        caption.setTextSize(14);
+        caption.setGravity(Gravity.RIGHT);
+        FrameLayout.LayoutParams captionParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+                Gravity.RIGHT | Gravity.BOTTOM);
+        captionParams.rightMargin = 56;
+        captionParams.bottomMargin = 40;
+        overlay.addView(caption, captionParams);
     }
 
     private File mediaFolder() {
