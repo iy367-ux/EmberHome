@@ -40,6 +40,8 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
+            adb shell settings put system accelerometer_rotation 0
+            adb shell settings put system user_rotation 1
             adb install -r EmberHome-MSD338-Premium.apk
             adb shell am force-stop com.idrees.emberhome.msd338
             adb shell am start -n com.idrees.emberhome.msd338/com.idrees.emberhome.MainActivity
