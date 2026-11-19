@@ -1671,7 +1671,7 @@ public class MainActivity extends Activity {
             item.setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){openMsdPage(page);}});
             sidebar.addView(item,new LinearLayout.LayoutParams(MATCH,dp(58)));
         }
-        shell.addView(sidebar,new LinearLayout.LayoutParams(dp(62),MATCH));
+        shell.addView(sidebar,new LinearLayout.LayoutParams(dp(62),WRAP));
         LinearLayout content=box(LinearLayout.VERTICAL);
         content.setPadding(dp(20),dp(4),dp(8),dp(4));
         LinearLayout hero=box(LinearLayout.HORIZONTAL);
@@ -1924,7 +1924,7 @@ public class MainActivity extends Activity {
             });
             sidebar.addView(item, new LinearLayout.LayoutParams(MATCH, WRAP));
         }
-        split.addView(sidebar, new LinearLayout.LayoutParams(dp(170), MATCH));
+        split.addView(sidebar, new LinearLayout.LayoutParams(dp(170), WRAP));
 
         LinearLayout options = box(LinearLayout.VERTICAL);
         options.setPadding(dp(20), dp(14), dp(20), dp(14));
@@ -1949,7 +1949,7 @@ public class MainActivity extends Activity {
         options.addView(msdCommand("About EmberHome", new Runnable() {
             @Override public void run() { showAboutEmber(); }
         }));
-        split.addView(options, new LinearLayout.LayoutParams(0, MATCH, 1f));
+        split.addView(options, new LinearLayout.LayoutParams(0, WRAP, 1f));
         body.addView(split);
         if (cards.getChildCount() > 0) firstTile = cards.getChildAt(0);
     }
