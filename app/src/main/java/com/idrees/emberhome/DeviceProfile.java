@@ -20,6 +20,9 @@ final class DeviceProfile {
     }
 
     static boolean isLowRamDevice(Context context) {
+        // The known CVTE PB801 reports about 480 MB RAM. Use conservative UI
+        // defaults even if the vendor ActivityManager does not flag low-RAM.
+        if (Msd338Profile.isTargetDevice()) return true;
         try {
             ActivityManager manager = (ActivityManager)
                     context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -31,9 +34,13 @@ final class DeviceProfile {
 
     /**
      * Choose a grid density from available logical width, not TV diagonal size.
-     * This avoids assuming every television reports the same pixel density.
+     * The PB801 gets a fixed five-column layout to avoid overly dense tiles.
      */
     static int gridColumns(Context context) {
+        if (Msd338Profile.isTargetDevice()) {
+            return Msd338Profile.recommendedHomeColumns();
+        }
+
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         float density = metrics.density > 0f ? metrics.density : 1f;
         float widthDp = metrics.widthPixels / density;
