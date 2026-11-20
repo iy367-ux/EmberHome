@@ -1,67 +1,88 @@
 # EmberHome
 
-**A TV launcher project focused on a clean, remote-friendly home-screen experience.**
+**A remote-friendly home-screen launcher for Android TVs and streaming devices.**
 
-EmberHome is built for Android-based TVs and streaming devices. This repository contains the current v2.0.0 source archive, the build workflow, and the preserved legacy project.
+EmberHome is an independent launcher project focused on a clean TV experience and practical D-pad navigation. This repository is the public home for the project, its active source archive, automated builds, and preserved historical editions.
 
-## Compatibility and development direction
+> **Development direction:** Existing EmberHome builds have supported Android 4.4.4 and newer. The Android 4.4.4-compatible line is now being deprecated. Future active development is moving to **Android 6.0 (API 23) and newer**.
 
-- **Existing editions:** EmberHome has supported Android 4.4.4 (KitKat) and newer.
-- **Legacy support is being deprecated:** the Android 4.4.4-compatible line is being phased out. Existing builds may continue to be used, but new features and ongoing development are not guaranteed for that line.
-- **Future releases:** development is moving to **Android 6.0 (API 23) and newer**. New features will target this newer baseline.
+## Getting EmberHome
 
-The legacy project is preserved under [`legacy/android-4.4.4/`](legacy/android-4.4.4/) for reference. It is not the active development line.
+### Download a build
 
-## Download
+The latest successful build is available from [GitHub Actions](https://github.com/iy367-ux/EmberHome/actions):
 
-The latest successful GitHub Actions build publishes an APK artifact:
+1. Open the latest successful **Build APK** workflow run.
+2. Find the artifact named `EmberHome-v2.0.0-apk`.
+3. Download and extract it to obtain `EmberHome.apk`.
 
-1. Open [Actions](https://github.com/iy367-ux/EmberHome/actions).
-2. Select the latest successful **Build APK** run.
-3. Download the `EmberHome-v2.0.0-apk` artifact and extract `EmberHome.apk`.
+You can also check [GitHub Releases](https://github.com/iy367-ux/EmberHome/releases) for versioned releases.
 
-Tagged releases will also attach the APK to the corresponding [GitHub Release](https://github.com/iy367-ux/EmberHome/releases).
+**Build status:** The current `main` branch has passed its GitHub Actions build. The workflow currently produces a **debug/development APK**, not a signed production release. Treat it as a test build until a release is explicitly marked stable and signed.
 
-> Builds are development/debug APKs unless a release is explicitly marked otherwise. Check the release notes and device compatibility before installing.
+### Install using ADB
 
-## Install on an Android TV
-
-You can install over ADB from a computer on the same network:
+Enable network ADB on your TV/device, connect your computer to the same network, then run:
 
 ```bash
 adb connect <TV_IP_ADDRESS>:5555
 adb install -r EmberHome.apk
 ```
 
-Then press **Home** on the TV remote and choose EmberHome from the launcher selection screen. The exact steps for setting a default launcher vary by TV manufacturer and Android version.
+Press **Home** on the remote and select EmberHome when the device offers a launcher choice. The exact default-launcher steps vary by manufacturer and Android version.
 
-## Build from source
+**Safety note:** Do not disable or remove your device's stock launcher as a routine installation step. Keep a way to return to the original home screen.
 
-The active v2.0.0 Android project is kept as a source archive at [`source/EmberHome-v2.0.0.zip`](source/EmberHome-v2.0.0.zip). GitHub Actions extracts that archive into a temporary build directory and runs the Gradle build there; it does not overwrite the checked-in repository files.
+## Compatibility
+
+- **Existing editions:** Android 4.4.4 (KitKat / API 19) and newer, depending on the edition and device.
+- **Legacy line:** Android 4.4.4 support is being phased out. Legacy builds are preserved for existing compatible devices, but should not be expected to receive new features or ongoing maintenance.
+- **Future active development:** Android 6.0 (API 23) and newer.
+
+Android TV and Amazon Fire TV devices can differ in their launcher, screensaver, permissions, and system-settings behaviour. Compatibility with a particular model should be confirmed by testing; a successful APK build does not prove every device feature works.
+
+## Source and building
+
+The active v2.0.0 project is currently stored as [`source/EmberHome-v2.0.0.zip`](source/EmberHome-v2.0.0.zip). GitHub Actions extracts it into a temporary directory and builds it without overwriting repository files.
 
 To build locally:
 
-1. Extract the source archive.
-2. Open the extracted `EmberHome` project directory in Android Studio, or use a compatible Java/Gradle/Android SDK setup.
+1. Download and extract the source archive.
+2. Open the extracted Android project in Android Studio, or use a compatible Java, Gradle, and Android SDK installation.
 3. Run:
 
 ```bash
 gradle assembleDebug
 ```
 
-The debug APK is generated at `app/build/outputs/apk/debug/app-debug.apk` inside the extracted project.
+The debug APK is generated under `app/build/outputs/apk/debug/` in the extracted project.
 
-## Repository layout
+## Repository map
 
-| Path | Purpose |
+| Location | Purpose |
 | --- | --- |
 | `source/` | Active v2.0.0 source archive used by CI |
-| `legacy/android-4.4.4/` | Preserved earlier Android 4.4.4-compatible project |
+| `legacy/android-4.4.4/` | Earlier Android 4.4.4-compatible project, preserved for reference |
 | `.github/workflows/` | Automated APK build and release workflow |
+| `docs/BRANCHES.md` | What each development and legacy branch is for |
+
+## Branches and project history
+
+The `main` branch is the official public branch. Historical device ports and experiments are kept separate so they cannot accidentally become the current release. See [Branch guide](docs/BRANCHES.md) before choosing a branch.
+
+## Reporting a problem
+
+Please use [GitHub Issues](https://github.com/iy367-ux/EmberHome/issues). Include:
+
+- Your TV/streaming-device make and model.
+- Android version and API level, if known.
+- EmberHome version and how it was installed.
+- What you expected, what happened, and steps to reproduce it.
+- Relevant screenshots or logs, with personal information removed.
 
 ## Project status
 
-EmberHome is actively evolving. Features, device compatibility, and release availability may change between builds. Please use GitHub Issues to report reproducible bugs or request improvements.
+EmberHome is evolving. Features, supported devices, and release availability may change. Please read the compatibility notes before installing and do not treat an experimental branch or debug artifact as a stable release.
 
 ---
 
