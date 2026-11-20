@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: EmberHome documentation
+    url: https://github.com/iy367-ux/EmberHome#readme
+    about: Read compatibility, installation and build guidance before opening an issue.
