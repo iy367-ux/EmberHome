@@ -1,30 +1,26 @@
-[README.md](https://github.com/user-attachments/files/35078002/README.md)
-# Ember Home - TV launcher for Android 4.4+
+> **HISTORICAL DEVELOPMENT BRANCH — NOT A RELEASE**
+>
+> This branch preserves earlier EmberHome v1.1 development work. It is not the active source of truth and should not be installed or merged into `main` without review.
+>
+> Existing Android 4.4.4-compatible builds are being phased out. Future active EmberHome development targets Android 6.0 (API 23) and newer. See the [main repository](https://github.com/iy367-ux/EmberHome) for current downloads and guidance.
 
-Dark, ad-free home screen with four styles (Poster, Rows, Spotlight, Grid), a clock, weather,
-and a settings menu to switch styles. minSdk 19. No libraries, no tracking.
+# EmberHome v1.1 — historical development
 
-## Remote controls
-- D-pad: move. OK: open app. Hold OK: add to favorites (Rows style) or app info / uninstall.
-- Menu key (or the Settings button): change style, weather city, units.
+This branch contains earlier launcher experiments and feature work, including:
 
-## Weather
-Uses wttr.in (free, no account). By default it finds your city from your internet connection;
-you can type a city in Settings. Only the city name (or nothing) is sent.
+- Multiple home-screen layouts and remote-first navigation.
+- Wallpaper selection and custom photo wallpaper.
+- App management, hidden apps and saved app ordering.
+- Aerial screensaver / Android DreamService integration.
+- Device-profile and low-memory handling.
+- Expanded appearance and personalisation settings.
 
-## Build option 1: GitHub (easiest, no Android Studio)
-1. Create a GitHub repo and upload this whole folder.
-2. Open the Actions tab -> "Build APK" -> Run workflow. When it finishes, download "EmberHome-apk".
-3. To publish for others: create a release tagged v1.0 - the APK is attached automatically.
+These features are preserved as development history. Their presence in this branch does not mean they are complete, supported, or compatible with the current active project.
 
-## Build option 2: Android Studio
-Open this folder, wait for sync, Build > Build APK(s).
-APK: app/build/outputs/apk/debug/app-debug.apk
+## Reusing code safely
 
-## Install on a TV
-    adb connect <tv-ip>:5555
-    adb install -r EmberHome.apk
-Press Home, choose Ember Home, tap Always.
-If the old launcher keeps coming back:
-    adb shell pm list packages | findstr launcher
-    adb shell pm disable-user <stock-launcher-package>     (undo: pm enable <package>)
+Before carrying any feature forward, review its Android API requirements, manifest permissions, device-specific assumptions, memory use, and behaviour on Android 6.0+. Test it on representative Android TV and Fire TV hardware. Do not cherry-pick this branch wholesale into `main`.
+
+## Branch status
+
+Historical only. No release is offered from this branch. Use `main` for the official project and the [branch guide](https://github.com/iy367-ux/EmberHome/blob/main/docs/BRANCHES.md) for repository structure.
