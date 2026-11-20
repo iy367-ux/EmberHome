@@ -21,7 +21,7 @@ jobs:
             unzip -l "$ZIP" | sed -n '1,100p'
             mkdir -p /tmp/emberhome-v2
             unzip -q "$ZIP" -d /tmp/emberhome-v2
-            ROOT="$(find /tmp/emberhome-v2 -type f \\( -name settings.gradle -o -name settings.gradle.kts \\) -printf '%h\\n' | head -n 1)"
+            ROOT="$(find /tmp/emberhome-v2 -type f -name settings.gradle -print -quit | xargs -r dirname)"
             if [ -n "$ROOT" ] && [ -d "$ROOT/app" ]; then
               echo "Using Android project from ZIP: $ROOT"
               rsync -a --delete --exclude='.git' --exclude='.github' "$ROOT"/ "$GITHUB_WORKSPACE"/
