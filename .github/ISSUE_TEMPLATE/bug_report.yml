@@ -1,0 +1,56 @@
+name: Bug report
+description: Report a reproducible EmberHome problem
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Please check the README and compatibility notes first. Do not include passwords, account details, or private network information."
+  - type: input
+    id: device
+    attributes:
+      label: TV or streaming device
+      description: Include the make and model.
+      placeholder: "e.g. Amazon Fire TV Stick 4K"
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android / Fire OS version
+      placeholder: "e.g. Android 11 / Fire OS 8"
+    validations:
+      required: true
+  - type: input
+    id: emberhome
+    attributes:
+      label: EmberHome version or build
+      placeholder: "e.g. v2.0.0 debug artifact"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or logs (optional)
+      description: Remove personal information before sharing.
+    validations:
+      required: false
