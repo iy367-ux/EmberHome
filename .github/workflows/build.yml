@@ -1,7 +1,7 @@
 name: Build APK
 on:
   push:
-    branches: [main]
+    branches: [main, icon-sharpness-fix]
     tags: ['v*']
   workflow_dispatch:
 permissions:
@@ -25,6 +25,14 @@ jobs:
             if [ -n "$ROOT" ] && [ -d "$ROOT/app" ]; then
               echo "Using Android project from ZIP: $ROOT"
               rsync -a --delete --exclude='.git' --exclude='.github' "$ROOT"/ "$GITHUB_WORKSPACE"/
+              echo "=== ZIP SOURCE: HomeView.java icon-related code ==="
+              grep -nE 'loadIcon|setImageDrawable|ImageView|setScaleType|icon' app/src/main/java/com/emberhome/launcher/HomeView.java | head -100
+              echo "=== ZIP SOURCE: AppRepo.java ==="
+              sed -n '1,240p' app/src/main/java/com/emberhome/launcher/AppRepo.java
+              echo "=== ZIP SOURCE: AppEntry.java ==="
+              cat app/src/main/java/com/emberhome/launcher/AppEntry.java
+              echo "=== ZIP SOURCE: HomeView.java first 300 lines ==="
+              sed -n '1,300p' app/src/main/java/com/emberhome/launcher/HomeView.java
             else
               echo "::warning::ZIP does not contain a complete Gradle Android project (settings.gradle + app/). Building checked-in project instead."
             fi
