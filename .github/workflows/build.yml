@@ -11,6 +11,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Inspect and use uploaded v2.0.0 source ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP="EmberHome(1).zip"
+          if [ -f "$ZIP" ]; then
+            echo "=== ZIP contents ==="
+            unzip -l "$ZIP" | sed -n '1,100p'
+            mkdir -p /tmp/emberhome-v2
+            unzip -q "$ZIP" -d /tmp/emberhome-v2
+            ROOT="$(find /tmp/emberhome-v2 -type f \\( -name settings.gradle -o -name settings.gradle.kts \\) -printf '%h\\n' | head -n 1)"
+            if [ -n "$ROOT" ] && [ -d "$ROOT/app" ]; then
+              echo "Using Android project from ZIP: $ROOT"
+              rsync -a --delete --exclude='.git' --exclude='.github' "$ROOT"/ "$GITHUB_WORKSPACE"/
+            else
+              echo "::warning::ZIP does not contain a complete Gradle Android project (settings.gradle + app/). Building checked-in project instead."
+            fi
+          else
+            echo "::error::Expected EmberHome(1).zip was not found."
+            exit 1
+          fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -22,7 +43,7 @@ jobs:
       - run: cp app/build/outputs/apk/debug/app-debug.apk EmberHome.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: EmberHome-apk
+          name: EmberHome-v2.0.0-apk
           path: EmberHome.apk
       - uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
