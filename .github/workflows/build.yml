@@ -1,51 +1,68 @@
 name: Build APK
+
 on:
   push:
     branches: [main]
     tags: ['v*']
   workflow_dispatch:
+
 permissions:
   contents: write
+
 jobs:
   build:
+    name: Build EmberHome APK
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Inspect and use uploaded v2.0.0 source ZIP
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Prepare active v2.0.0 source
         shell: bash
         run: |
           set -euo pipefail
-          ZIP="EmberHome(1).zip"
-          if [ -f "$ZIP" ]; then
-            echo "=== ZIP contents ==="
-            unzip -l "$ZIP" | sed -n '1,100p'
-            mkdir -p /tmp/emberhome-v2
-            unzip -q "$ZIP" -d /tmp/emberhome-v2
-            ROOT="$(find /tmp/emberhome-v2 -type f -name settings.gradle -print -quit | xargs -r dirname)"
-            if [ -n "$ROOT" ] && [ -d "$ROOT/app" ]; then
-              echo "Using Android project from ZIP: $ROOT"
-              rsync -a --delete --exclude='.git' --exclude='.github' "$ROOT"/ "$GITHUB_WORKSPACE"/
-            else
-              echo "::warning::ZIP does not contain a complete Gradle Android project (settings.gradle + app/). Building checked-in project instead."
-            fi
-          else
-            echo "::error::Expected EmberHome(1).zip was not found."
+          ZIP="source/EmberHome-v2.0.0.zip"
+          test -f "$ZIP" || { echo "::error::Source archive not found: $ZIP"; exit 1; }
+
+          BUILD_DIR="$RUNNER_TEMP/emberhome-source"
+          mkdir -p "$BUILD_DIR"
+          unzip -q "$ZIP" -d "$BUILD_DIR"
+
+          PROJECT_DIR="$(find "$BUILD_DIR" -type f -name settings.gradle -print -quit | xargs -r dirname)"
+          if [ -z "$PROJECT_DIR" ] || [ ! -d "$PROJECT_DIR/app" ]; then
+            echo "::error::The source archive must contain a Gradle project with settings.gradle and app/."
             exit 1
           fi
-      - uses: actions/setup-java@v4
+
+          echo "EMBERHOME_PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          echo "Using source project: $PROJECT_DIR"
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
-      - uses: gradle/actions/setup-gradle@v3
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: 8.2
-      - run: gradle assembleDebug --no-daemon
-      - run: cp app/build/outputs/apk/debug/app-debug.apk EmberHome.apk
-      - uses: actions/upload-artifact@v4
+          gradle-version: '8.2'
+
+      - name: Assemble debug APK
+        run: gradle -p "$EMBERHOME_PROJECT_DIR" assembleDebug --no-daemon
+
+      - name: Stage APK
+        run: cp "$EMBERHOME_PROJECT_DIR/app/build/outputs/apk/debug/app-debug.apk" EmberHome.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
         with:
           name: EmberHome-v2.0.0-apk
           path: EmberHome.apk
-      - uses: softprops/action-gh-release@v2
+          if-no-files-found: error
+
+      - name: Attach APK to tagged release
         if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
         with:
           files: EmberHome.apk
