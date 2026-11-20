@@ -1,3 +1,9 @@
+> **ARCHIVED EXPERIMENTAL PORT — NOT THE ACTIVE RELEASE**
+>
+> This branch is a frozen Android 4.4.4 / API 19 port for the CVTE / MStar PB801 (MSD338) television. It is preserved for historical and device-specific reference. The Android 4.4.4 line is being deprecated; future active EmberHome development targets Android 6.0 (API 23) and newer.
+>
+> Use the [main branch](https://github.com/iy367-ux/EmberHome) for current project information. Do not merge this branch wholesale into `main`.
+
 <!-- CI build verification: Android 4.4/API 19 -->
 
 # EmberHome — Thiago-style KitKat port
@@ -35,17 +41,18 @@ It is a native Java implementation using Android's API-19 View, Canvas, PackageM
 - The UI is deliberately drawn without blur filters or continuous animation to stay responsive on the PB801's roughly 480 MB RAM.
 - Some settings pages, Cast, Bluetooth and HDMI source switching depend on the TV firmware. EmberHome opens the corresponding system screen when available; it does not claim privileged control over HDMI routing, tuner hardware, or protected system services.
 - App ordering and favourites are local launcher preferences. App launches use the installed app's declared launcher activity.
-- The package remains com.idrees.emberhome.msd338 for the MSD338 debug build. The stock CVTE launcher and system services are not disabled or removed.
+- The package remains `com.idrees.emberhome.msd338` for the MSD338 debug build. The stock CVTE launcher and system services are not disabled or removed.
 
 ## Build and test
 
-GitHub Actions builds EmberHome-Thiago-KitKat.apk, boots an Android 4.4 emulator, opens the launcher and captures home, app drawer, context menu, settings and control-centre screenshots.
+This historical branch's GitHub Actions workflow builds `EmberHome-Thiago-KitKat.apk`, boots an Android 4.4 emulator, opens the launcher and captures home, app drawer, context menu, settings and control-centre screenshots.
 
-The APK is available from the Actions run artifact named EmberHome-Thiago-KitKat-APK.
+The APK is available from the Actions run artifact named `EmberHome-Thiago-KitKat-APK`, when that workflow run and artifact are available.
 
 ## Upstream attribution
 
-The UI direction and feature behaviour are based on Thiago OS (MIT), copyright (c) 2026 Thiago. See THIAGO_OS_LICENSE.txt. This port is independently implemented in Java for API 19; it does not bundle the upstream Compose implementation or Inter font.
+The UI direction and feature behaviour are based on Thiago OS (MIT), copyright (c) 2026 Thiago. See [THIAGO_OS_LICENSE.txt](THIAGO_OS_LICENSE.txt). This port is independently implemented in Java for API 19; it does not bundle the upstream Compose implementation or Inter font.
 
+## Branch status
 
-The API 19 test also checks Back-key overlay dismissal and the complete Home → Settings → Control Centre navigation path.
+Frozen legacy experiment. No ongoing feature development is planned. Review the [main README](https://github.com/iy367-ux/EmberHome) and [branch guide](https://github.com/iy367-ux/EmberHome/blob/main/docs/BRANCHES.md) for the current project direction.
