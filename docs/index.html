@@ -56,7 +56,8 @@ h2{font-size:27px;letter-spacing:-.035em;margin:0;font-weight:780}
 .info{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:34px}
 .info-card{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:16px;padding:18px 19px}
 .info-card strong{display:block;font-size:13px;margin-bottom:4px}
-.info-card p{font-size:12px;color:var(--muted);margin:0}\n.info-card.compatibility{grid-column:1/-1}
+.info-card p{font-size:12px;color:var(--muted);margin:0}
+.info-card.compatibility{grid-column:1/-1}
 footer{border-top:1px solid var(--line);padding:23px clamp(22px,5vw,88px) 34px;color:#7f8998;font-size:12px}
 .foot-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
 footer a{color:#d9a17c;text-decoration:none}
@@ -85,9 +86,9 @@ footer a{color:#d9a17c;text-decoration:none}
     <article class="card"><div class="kind">Release library</div><p class="version">Loading…</p><p class="note">Fetching the latest versions.</p></article>
   </section>
   <section class="info" aria-label="Release information">
-    <div class="info-card"><strong>Android compatibility</strong><p>Support for Android 4.4.4 is being gradually phased out, so newer Android versions are recommended for future releases.</p></div>
     <div class="info-card"><strong>Stable releases</strong><p>Recommended for everyday use. Choose a stable build for the most dependable experience.</p></div>
     <div class="info-card"><strong>Beta releases</strong><p>Preview builds with newer changes. They may contain bugs or unfinished features.</p></div>
+    <div class="info-card compatibility"><strong>Android compatibility</strong><p>Support for Android 4.4.4 is being gradually phased out, so newer Android versions are recommended for future releases.</p></div>
   </section>
 </main>
 <footer><div class="foot-inner"><span>© EmberHome · Official project downloads</span><span><a href="https://github.com/iy367-ux/EmberHome">GitHub repository</a> &nbsp;·&nbsp; <a href="https://github.com/iy367-ux/EmberHome/releases">All releases</a></span></div></footer>
