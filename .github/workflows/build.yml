@@ -2,7 +2,7 @@ name: Build APK
 
 on:
   push:
-    branches: [main]
+    branches: [main, emberhome-update-2]
     tags: ['v*']
   workflow_dispatch:
 
@@ -21,7 +21,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ZIP="source/EmberHome-v2.0.0.zip"
+          ZIP="EmberHome(2).zip"
           test -f "$ZIP" || { echo "::error::Source archive not found: $ZIP"; exit 1; }
 
           BUILD_DIR="$RUNNER_TEMP/emberhome-source"
@@ -57,7 +57,7 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: EmberHome-v2.0.0-apk
+          name: EmberHome-update-2-apk
           path: EmberHome.apk
           if-no-files-found: error
 
