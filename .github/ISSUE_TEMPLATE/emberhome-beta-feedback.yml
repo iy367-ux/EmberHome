@@ -1,17 +1,17 @@
-name: EmberHome Beta Tester Feedback
-description: Tell us how EmberHome worked on your Android TV or TV box.
-title: "[Beta Feedback]: "
+name: EmberHome User Feedback
+description: Share your experience with any EmberHome version, including beta and stable releases.
+title: "[Feedback]: "
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for testing EmberHome! This short questionnaire helps improve the launcher.
+        Thanks for using EmberHome! Whether you're using a beta, preview, or stable release, your feedback helps improve the launcher.
         Please answer honestly. You can leave optional questions blank.
         **Privacy:** Your answers will be submitted as a public GitHub issue. Do not include personal information.
   - type: input
     id: device
     attributes:
-      label: What device did you test EmberHome on?
+      label: What device are you using EmberHome on?
       description: Include the TV/box model if you know it.
       placeholder: e.g. MSD338 Android TV box
     validations:
@@ -26,8 +26,21 @@ body:
   - type: input
     id: emberhome_version
     attributes:
-      label: Which EmberHome version did you test?
-      placeholder: e.g. v2.5.0
+      label: Which EmberHome version are you using?
+      description: Include the version number and whether it is beta, preview, or stable, if known.
+      placeholder: e.g. v2.5.0 stable
+    validations:
+      required: true
+  - type: dropdown
+    id: release_type
+    attributes:
+      label: Which release are you using?
+      options:
+        - Stable release
+        - Beta release
+        - Preview / pre-release
+        - Development build
+        - Not sure
     validations:
       required: true
   - type: dropdown
@@ -56,7 +69,7 @@ body:
   - type: checkboxes
     id: features_tested
     attributes:
-      label: Which parts did you try?
+      label: Which parts have you tried?
       description: Select all that apply.
       options:
         - label: Apple TV-inspired home screen
@@ -68,7 +81,7 @@ body:
   - type: dropdown
     id: appearance
     attributes:
-      label: What did you think of the design?
+      label: What do you think of the design?
       options:
         - Excellent
         - Good
@@ -80,38 +93,38 @@ body:
   - type: dropdown
     id: performance
     attributes:
-      label: How smoothly did it run?
+      label: How smoothly does it run?
       options:
         - Very smooth
         - Mostly smooth
         - Sometimes laggy
         - Very laggy or slow
-        - It frequently froze or crashed
+        - It frequently freezes or crashes
     validations:
       required: true
   - type: dropdown
     id: stability
     attributes:
-      label: Did you experience crashes or bugs?
+      label: Have you experienced crashes or bugs?
       options:
         - No problems
         - One or two minor problems
         - Several problems
-        - It was unusable
+        - It is unusable
     validations:
       required: true
   - type: textarea
     id: favourite
     attributes:
-      label: What did you like most?
+      label: What do you like most?
       description: Tell us about your favourite feature or part of the design.
-      placeholder: I liked...
+      placeholder: I like...
     validations:
       required: false
   - type: textarea
     id: problems
     attributes:
-      label: What did not work properly?
+      label: What does not work properly?
       description: Describe any bugs, freezes, visual issues, or confusing controls. Include steps to reproduce a problem if possible.
       placeholder: When I...
     validations:
