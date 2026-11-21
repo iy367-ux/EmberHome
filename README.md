@@ -8,17 +8,23 @@ EmberHome is an independent launcher project focused on a clean TV experience an
 
 ## Getting EmberHome
 
-### Download a build
+### Download on your TV with Downloader
 
-The latest successful build is available from [GitHub Actions](https://github.com/iy367-ux/EmberHome/actions):
+1. Install and open the **Downloader** app on your Android TV or streaming device.
+2. Enter the EmberHome Downloader code:
 
-1. Open the latest successful **Build APK** workflow run.
-2. Find the artifact named `EmberHome-v2.0.0-apk`.
-3. Download and extract it to obtain `EmberHome.apk`.
+   **7686858**
+3. Select **Go** and wait for the EmberHome downloads page to load.
+4. Choose a version that matches your device and download the APK.
+5. Open the downloaded APK and follow Android's installation prompts. If prompted, allow Downloader to install unknown apps.
 
-You can also check [GitHub Releases](https://github.com/iy367-ux/EmberHome/releases) for versioned releases.
+You can also open the [EmberHome Downloads page](https://iy367-ux.github.io/EmberHome/) directly.
 
-**Build status:** The current `main` branch has passed its GitHub Actions build. The workflow currently produces a **debug/development APK**, not a signed production release. Treat it as a test build until a release is explicitly marked stable and signed.
+### Download from GitHub
+
+Visit [GitHub Releases](https://github.com/iy367-ux/EmberHome/releases) and download the APK attached to the version you want. Prefer a stable release for everyday use. Pre-releases and development builds may contain bugs.
+
+**Build status:** GitHub Actions can produce debug/development APKs. An Actions artifact is a test build, not automatically a signed production release. Treat a build as stable only when it is explicitly published as a stable GitHub Release.
 
 ### Install using ADB
 
@@ -33,6 +39,8 @@ Press **Home** on the remote and select EmberHome when the device offers a launc
 
 **Safety note:** Do not disable or remove your device's stock launcher as a routine installation step. Keep a way to return to the original home screen.
 
+For more detailed instructions, see the [Installation Guide](docs/INSTALLATION.md).
+
 ## Compatibility
 
 - **Existing editions:** Android 4.4.4 (KitKat / API 19) and newer, depending on the edition and device.
@@ -40,6 +48,10 @@ Press **Home** on the remote and select EmberHome when the device offers a launc
 - **Future active development:** Android 6.0 (API 23) and newer.
 
 Android TV and Amazon Fire TV devices can differ in their launcher, screensaver, permissions, and system-settings behaviour. Compatibility with a particular model should be confirmed by testing; a successful APK build does not prove every device feature works.
+
+## Screenshots
+
+Screenshots of the available home-screen styles and settings will be added here as verified captures from the app. Check the [EmberHome repository](https://github.com/iy367-ux/EmberHome) for the latest project updates.
 
 ## Source and building
 
@@ -65,6 +77,7 @@ The debug APK is generated under `app/build/outputs/apk/debug/` in the extracted
 | `legacy/android-4.4.4/` | Earlier Android 4.4.4-compatible project, preserved for reference |
 | `.github/workflows/` | Automated APK build and release workflow |
 | `docs/BRANCHES.md` | What each development and legacy branch is for |
+| `docs/INSTALLATION.md` | Step-by-step installation instructions |
 
 ## Branches and project history
 
@@ -72,17 +85,14 @@ The `main` branch is the official public branch. Historical device ports and exp
 
 ## Downloader version picker
 
-A TV-friendly version selector is available at [EmberHome Downloads](https://iy367-ux.github.io/EmberHome/) once GitHub Pages is enabled with branch `main` and folder `/docs`. It lists versions 2.0.0, 1.5.0, and 1.0.0, and enables downloads only when a matching public GitHub Release contains an APK asset. See [Downloader setup](docs/DOWNLOADER.md) for publishing and creating the AFTVnews numeric code.
+A TV-friendly version selector is available at [EmberHome Downloads](https://iy367-ux.github.io/EmberHome/). Enter Downloader code **7686858** to open it from the Downloader app. The selector lists versions 2.0.0, 1.5.0, and 1.0.0, and enables downloads only when a matching public GitHub Release contains an APK asset. See [Downloader setup](docs/DOWNLOADER.md) for publishing and maintaining the page.
 
-## Reporting a problem
+## Reporting a problem or suggesting an idea
 
-Please use [GitHub Issues](https://github.com/iy367-ux/EmberHome/issues). Include:
+- [Submit user feedback](https://github.com/iy367-ux/EmberHome/issues/new/choose) — for anyone using a stable, beta, preview, or development build.
+- [View existing issues and feedback](https://github.com/iy367-ux/EmberHome/issues).
 
-- Your TV/streaming-device make and model.
-- Android version and API level, if known.
-- EmberHome version and how it was installed.
-- What you expected, what happened, and steps to reproduce it.
-- Relevant screenshots or logs, with personal information removed.
+When reporting a problem, include your device model, Android version, EmberHome version, what happened, and steps to reproduce it. Attach screenshots or logs only after removing personal information.
 
 ## Project status
 
