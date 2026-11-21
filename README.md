@@ -70,6 +70,10 @@ The debug APK is generated under `app/build/outputs/apk/debug/` in the extracted
 
 The `main` branch is the official public branch. Historical device ports and experiments are kept separate so they cannot accidentally become the current release. See [Branch guide](docs/BRANCHES.md) before choosing a branch.
 
+## Downloader version picker
+
+A TV-friendly version selector is available at [EmberHome Downloads](https://iy367-ux.github.io/EmberHome/) once GitHub Pages is enabled with branch `main` and folder `/docs`. It lists versions 2.0.0, 1.5.0, and 1.0.0, and enables downloads only when a matching public GitHub Release contains an APK asset. See [Downloader setup](docs/DOWNLOADER.md) for publishing and creating the AFTVnews numeric code.
+
 ## Reporting a problem
 
 Please use [GitHub Issues](https://github.com/iy367-ux/EmberHome/issues). Include:
