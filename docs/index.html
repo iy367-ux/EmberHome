@@ -57,7 +57,7 @@ footer a{color:#ffb276}
   var api="https://api.github.com/repos/iy367-ux/EmberHome/releases?per_page=100";
   function cleanTag(tag){return String(tag||"").replace(/^v/i,"").replace(/^release[-_ ]?/i,"");}
   function parseVersion(value){
-    var match=String(value).match(new RegExp("^(\\\\d+)\\\\.(\\\\d+)\\\\.(\\\\d+)(?:[-+].*)?$"));
+    var match=String(value).match(new RegExp("^(\\d+)\\.(\\d+)\\.(\\d+)(?:[-+].*)?$"));
     return match?{major:+match[1],minor:+match[2],patch:+match[3]}:null;
   }
   function compareVersions(a,b){
@@ -75,7 +75,7 @@ footer a{color:#ffb276}
     var note=document.createElement("p");note.className="note";
     article.appendChild(tag);article.appendChild(title);article.appendChild(note);
     var assets=release.assets||[],apkAssets=[];
-    for(var i=0;i<assets.length;i++){if(new RegExp("\\\\.apk$","i").test(assets[i].name||""))apkAssets.push(assets[i]);}
+    for(var i=0;i<assets.length;i++){if(new RegExp("\\.apk$","i").test(assets[i].name||""))apkAssets.push(assets[i]);}
     if(apkAssets.length){
       note.textContent=release.name||("Version "+version);
       for(var j=0;j<apkAssets.length;j++){
