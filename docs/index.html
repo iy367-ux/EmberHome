@@ -3,55 +3,94 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#10131b">
-<title>EmberHome Downloads</title>
+<meta name="theme-color" content="#090b10">
+<meta name="description" content="Official EmberHome launcher downloads. Browse stable and beta releases for Android TV.">
+<title>EmberHome — Downloads</title>
 <style>
-:root{color-scheme:dark;--bg:#10131b;--panel:#191f2b;--line:#30394a;--text:#f4f6fb;--muted:#aab4c5;--accent:#ff8a35;--green:#9be4b3}
+:root{color-scheme:dark;--bg:#090b10;--panel:#121720;--panel2:#171f2b;--line:rgba(255,255,255,.1);--text:#f5f6f8;--muted:#98a2b3;--ember:#ff8a3d;--ember2:#ffc078;--green:#83e0ad;--blue:#9ebeff}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 50% -15%,#29364b 0%,var(--bg) 58%);color:var(--text);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
-main{width:min(900px,92%);margin:0 auto;padding:38px 0 56px}
-header{text-align:center;margin:0 auto 30px}
-.logo{font-size:clamp(32px,7vw,54px);font-weight:900;letter-spacing:.14em;margin:0;color:#fff}
-.logo span{color:var(--accent)}
-.sub{color:var(--muted);letter-spacing:.17em;font-size:12px;margin-top:5px}
-.intro{max-width:620px;margin:22px auto 0;color:var(--muted)}
-h2{font-size:20px;margin:0 0 14px}
-.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.card{background:linear-gradient(145deg,#1d2635,var(--panel));border:1px solid var(--line);border-radius:18px;padding:20px;min-height:190px;display:flex;flex-direction:column;gap:10px}
-.version{font-size:25px;font-weight:800;margin:0}
-.tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.note{color:var(--muted);font-size:14px;flex:1}
-a.action,.disabled{display:block;text-align:center;padding:12px 15px;border-radius:11px;font-weight:750;text-decoration:none}
-a.action{background:var(--accent);color:#17120e}
-a.action:focus,a.action:hover{outline:3px solid #fff;outline-offset:3px;filter:brightness(1.08)}
-.disabled{background:#30394a;color:#aab4c5}
-.status{color:var(--green);font-size:13px;font-weight:650}
-#status{color:var(--muted);text-align:center;margin:18px 0;min-height:24px;font-size:14px}
-footer{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;text-align:center;color:var(--muted);font-size:13px}
-footer a{color:#ffb276}
-.small{font-size:12px;color:var(--muted);margin-top:10px}
-@media(max-width:520px){main{padding-top:25px}.card{min-height:170px}}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 78% 0%,rgba(255,123,48,.13),transparent 34%),radial-gradient(ellipse at 12% 20%,rgba(70,98,145,.12),transparent 32%),var(--bg);color:var(--text);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}
+.shell{width:min(1120px,calc(100% - 44px));margin:auto}
+.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:850;letter-spacing:.13em;font-size:17px}
+.mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,#ffb36d,#e85b24);display:grid;place-items:center;color:#1a0d06;font-weight:950;font-size:19px;box-shadow:0 5px 24px rgba(255,116,48,.25)}
+.brand span{color:var(--ember)}
+.toplink{font-size:13px;color:#c3cad5;text-decoration:none;border:1px solid var(--line);padding:9px 14px;border-radius:999px;transition:.2s}
+.toplink:hover,.toplink:focus{border-color:rgba(255,151,84,.7);outline:none}
+.hero{position:relative;overflow:hidden;padding:76px 0 62px;border-bottom:1px solid var(--line)}
+.hero:after{content:"";position:absolute;width:420px;height:420px;right:2%;top:-140px;border-radius:50%;border:1px solid rgba(255,157,91,.13);box-shadow:0 0 0 38px rgba(255,157,91,.025),0 0 0 78px rgba(255,157,91,.018),inset 0 0 90px rgba(255,125,54,.06);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;color:#ffb77e;font-size:11px;letter-spacing:.2em;font-weight:800;text-transform:uppercase}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ember);box-shadow:0 0 13px var(--ember)}
+h1{font-size:clamp(42px,7vw,76px);line-height:.99;letter-spacing:-.055em;margin:20px 0 17px;font-weight:850;max-width:720px}
+h1 span{background:linear-gradient(95deg,#fff 12%,#ffc28e 75%,#ff8744);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{max-width:590px;color:#aab3c1;font-size:17px;margin:0}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.chip{font-size:12px;color:#c4cbd6;border:1px solid var(--line);background:rgba(255,255,255,.025);padding:7px 12px;border-radius:999px}
+main{padding:44px 0 60px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:22px}
+.kicker{color:var(--ember2);font-size:10px;font-weight:800;letter-spacing:.19em;text-transform:uppercase;margin:0 0 6px}
+h2{font-size:27px;letter-spacing:-.035em;margin:0;font-weight:780}
+.section-copy{color:var(--muted);font-size:13px;margin:5px 0 0}
+#status{font-size:12px;color:var(--muted);margin:0 0 18px;min-height:18px}
+.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:15px}
+.card{position:relative;overflow:hidden;min-height:245px;padding:22px;border:1px solid var(--line);border-radius:19px;background:linear-gradient(150deg,rgba(28,37,51,.94),rgba(15,19,27,.97));display:flex;flex-direction:column;gap:12px;transition:transform .22s,border-color .22s,box-shadow .22s}
+.card:before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(255,143,76,.7),transparent);opacity:.65}
+.card:hover{transform:translateY(-3px);border-color:rgba(255,153,91,.38);box-shadow:0 14px 38px rgba(0,0,0,.22)}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.kind{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:850;color:#d6dce5}
+.pill{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:5px 9px}
+.pill.stable{color:var(--green);background:rgba(80,195,132,.1);border:1px solid rgba(80,195,132,.22)}
+.pill.beta{color:#ffc17e;background:rgba(255,153,69,.1);border:1px solid rgba(255,153,69,.24)}
+.version{font-size:30px;line-height:1.1;letter-spacing:-.04em;font-weight:850;margin:3px 0 0}
+.note{color:var(--muted);font-size:13px;margin:0;flex:1}
+.actions{display:grid;gap:8px;margin-top:4px}
+.action,.disabled{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:11px;padding:10px 14px;font-weight:800;font-size:13px;text-decoration:none}
+.action{color:#211108;background:linear-gradient(105deg,#ffb36d,#ff8740);box-shadow:0 5px 20px rgba(255,126,55,.13);transition:filter .2s,transform .2s}
+.action:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.action:focus-visible,.toplink:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.disabled{color:#8993a3;background:rgba(255,255,255,.055);border:1px solid var(--line)}
+.avail{font-size:11px;color:var(--green);font-weight:700}
+.empty{grid-column:1/-1;padding:28px;border:1px dashed var(--line);border-radius:16px;color:var(--muted)}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:34px}
+.info-card{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:16px;padding:18px 19px}
+.info-card strong{display:block;font-size:13px;margin-bottom:4px}
+.info-card p{font-size:12px;color:var(--muted);margin:0}
+footer{border-top:1px solid var(--line);padding:23px 0 34px;color:#7f8998;font-size:12px}
+.foot-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+footer a{color:#d9a17c;text-decoration:none}
+@media(max-width:650px){.shell{width:min(100% - 30px,1120px)}.hero{padding:57px 0 45px}.hero:after{right:-230px;opacity:.6}.section-head{display:block}.info{grid-template-columns:1fr}.topbar{height:65px}.list{grid-template-columns:1fr}.card{min-height:220px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body>
-<main>
-<header>
-  <p class="logo">EMBER<span>HOME</span></p>
-  <div class="sub">OFFICIAL DOWNLOAD CENTRE</div>
-  <p class="intro">Every published EmberHome version appears here automatically. Stable and beta releases are listed separately; download links appear when an APK is attached.</p>
+<div class="shell">
+<nav class="topbar" aria-label="Main navigation">
+  <a class="brand" href="https://github.com/iy367-ux/EmberHome" aria-label="EmberHome GitHub home"><span class="mark">E</span> EMBER<span>HOME</span></a>
+  <a class="toplink" href="https://github.com/iy367-ux/EmberHome/releases">Release notes ↗</a>
+</nav>
+<header class="hero">
+  <div class="eyebrow"><span class="dot"></span> Official download centre</div>
+  <h1>Your TV.<br><span>Your home screen.</span></h1>
+  <p class="lead">Find the EmberHome version that fits your device. Browse stable builds or try the latest beta, with downloads served directly from GitHub.</p>
+  <div class="hero-meta"><span class="chip">Made for Android TV</span><span class="chip">Remote-friendly</span><span class="chip">Stable + beta builds</span></div>
 </header>
-<section aria-labelledby="versions-title">
-  <h2 id="versions-title">All versions</h2>
-  <div class="list" id="versions"><article class="card"><p class="tag">Loading releases</p><p class="version">EmberHome</p><p class="note">Fetching every published version from GitHub…</p></article></div>
-  <p id="status" role="status" aria-live="polite">Connecting to GitHub Releases…</p>
-</section>
-<footer>
-  <p>Published by <a href="https://github.com/iy367-ux/EmberHome">iy367-ux / EmberHome</a></p>
-  <p>Check the release notes and your device's Android compatibility before installing.</p>
-  <p><a href="https://github.com/iy367-ux/EmberHome/releases">View all releases on GitHub</a></p>
-  <div class="small">Downloads are provided directly from official EmberHome GitHub Releases.</div>
-</footer>
+<main>
+  <div class="section-head">
+    <div><p class="kicker">The release library</p><h2>Choose your EmberHome</h2><p class="section-copy">New published releases appear here automatically.</p></div>
+  </div>
+  <p id="status" role="status" aria-live="polite">Loading official GitHub releases…</p>
+  <section class="list" id="versions" aria-label="Available EmberHome versions">
+    <article class="card"><div class="kind">Release library</div><p class="version">Loading…</p><p class="note">Fetching the latest versions.</p></article>
+  </section>
+  <section class="info" aria-label="Release information">
+    <div class="info-card"><strong>Stable releases</strong><p>Recommended for everyday use. Choose a stable build for the most dependable experience.</p></div>
+    <div class="info-card"><strong>Beta releases</strong><p>Preview builds with newer changes. They may contain bugs or unfinished features.</p></div>
+  </section>
 </main>
+<footer><div class="foot-inner"><span>© EmberHome · Official project downloads</span><span><a href="https://github.com/iy367-ux/EmberHome">GitHub repository</a> &nbsp;·&nbsp; <a href="https://github.com/iy367-ux/EmberHome/releases">All releases</a></span></div></footer>
+</div>
 <script>
 (function(){
   var api="https://api.github.com/repos/iy367-ux/EmberHome/releases?per_page=100";
@@ -66,54 +105,51 @@ footer a{color:#ffb276}
     if(av)return -1;if(bv)return 1;
     return b.localeCompare(a,undefined,{numeric:true,sensitivity:"base"});
   }
+  function node(tag,className,text){
+    var el=document.createElement(tag);if(className)el.className=className;if(text!==undefined)el.textContent=text;return el;
+  }
   function makeCard(release){
-    var version=cleanTag(release.tag_name),parsed=parseVersion(version);
-    var stable=!!parsed&&parsed.minor===0&&parsed.patch===0;
-    var article=document.createElement("article");article.className="card";
-    var tag=document.createElement("div");tag.className="tag";tag.textContent=stable?"Stable release":"Beta release";
-    var title=document.createElement("p");title.className="version";title.textContent="EmberHome "+version;
-    var note=document.createElement("p");note.className="note";
-    article.appendChild(tag);article.appendChild(title);article.appendChild(note);
+    var version=cleanTag(release.tag_name);
+    var article=node("article","card");
+    var top=node("div","card-top");
+    top.appendChild(node("span","kind","EMBERHOME RELEASE"));
+    top.appendChild(node("span","pill "+(release.prerelease?"beta":"stable"),release.prerelease?"Beta":"Stable"));
+    var title=node("h3","version","v"+version);
+    var note=node("p","note",release.name||release.body||("EmberHome "+version));
+    top.setAttribute("aria-label",release.prerelease?"Beta release":"Stable release");
+    article.appendChild(top);article.appendChild(title);article.appendChild(note);
     var assets=release.assets||[],apkAssets=[];
     for(var i=0;i<assets.length;i++){if(new RegExp("\\.apk$","i").test(assets[i].name||""))apkAssets.push(assets[i]);}
+    var actions=node("div","actions");
     if(apkAssets.length){
-      note.textContent=release.name||("Version "+version);
       for(var j=0;j<apkAssets.length;j++){
-        var asset=apkAssets[j],link=document.createElement("a");
-        link.className="action";link.href=asset.browser_download_url;
-        link.textContent=apkAssets.length>1?("Download "+asset.name):"Download APK";
-        link.style.marginTop="4px";article.appendChild(link);
+        var asset=apkAssets[j],link=node("a","action",apkAssets.length>1?("Download "+asset.name):"Download APK");
+        link.href=asset.browser_download_url;link.rel="noopener";actions.appendChild(link);
       }
-      var status=document.createElement("div");status.className="status";status.textContent="APK available";article.appendChild(status);
+      article.appendChild(actions);article.appendChild(node("div","avail","● APK ready to install"));
     }else{
-      note.textContent=(release.name||("Version "+version))+" — published release, but no APK file is attached yet.";
-      var disabled=document.createElement("div");disabled.className="disabled";disabled.textContent="APK not attached";article.appendChild(disabled);
+      actions.appendChild(node("div","disabled","APK not attached yet"));article.appendChild(actions);
     }
     return article;
   }
   function render(releases){
     var host=document.getElementById("versions");host.innerHTML="";
-    if(!releases.length){host.textContent="No published releases found yet.";return;}
+    if(!releases.length){host.appendChild(node("div","empty","No published releases found yet. Please check the GitHub Releases page."));return;}
     releases.sort(function(a,b){return compareVersions(cleanTag(a.tag_name),cleanTag(b.tag_name));});
     for(var i=0;i<releases.length;i++)host.appendChild(makeCard(releases[i]));
   }
-  var xhr=new XMLHttpRequest();
-  xhr.open("GET",api,true);
-  xhr.setRequestHeader("Accept","application/vnd.github+json");
+  var xhr=new XMLHttpRequest();xhr.open("GET",api,true);xhr.setRequestHeader("Accept","application/vnd.github+json");
   xhr.onreadystatechange=function(){
     if(xhr.readyState!==4)return;
     if(xhr.status>=200&&xhr.status<300){
       try{
         var releases=JSON.parse(xhr.responseText)||[];
-        releases=releases.filter(function(r){return !r.draft;});
-        render(releases);
-        document.getElementById("status").textContent="All published versions are loaded from GitHub Releases. Stable and beta releases are shown.";
-      }catch(e){document.getElementById("status").textContent="Could not read release information. Use the GitHub Releases link below.";}
-    }else{
-      document.getElementById("status").textContent="GitHub release lookup is temporarily unavailable. Try again later or view releases on GitHub.";
-    }
+        releases=releases.filter(function(r){return !r.draft;});render(releases);
+        document.getElementById("status").textContent=releases.length+" published release"+(releases.length===1?"":"s")+" · synced from GitHub";
+      }catch(e){document.getElementById("status").textContent="Could not read releases. Please use the GitHub Releases link above.";}
+    }else{document.getElementById("status").textContent="GitHub is temporarily unavailable. Please try again or open the release notes.";}
   };
-  xhr.onerror=function(){document.getElementById("status").textContent="Network error while checking releases. Check your connection and try again.";};
+  xhr.onerror=function(){document.getElementById("status").textContent="Network error. Check your connection and try again.";};
   xhr.send();
 })();
 </script>
