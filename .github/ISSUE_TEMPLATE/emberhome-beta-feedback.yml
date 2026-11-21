@@ -1,0 +1,144 @@
+name: EmberHome Beta Tester Feedback
+description: Tell us how EmberHome worked on your Android TV or TV box.
+title: "[Beta Feedback]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing EmberHome! This short questionnaire helps improve the launcher.
+        Please answer honestly. You can leave optional questions blank.
+        **Privacy:** Your answers will be submitted as a public GitHub issue. Do not include personal information.
+  - type: input
+    id: device
+    attributes:
+      label: What device did you test EmberHome on?
+      description: Include the TV/box model if you know it.
+      placeholder: e.g. MSD338 Android TV box
+    validations:
+      required: true
+  - type: input
+    id: android_version
+    attributes:
+      label: Which Android version is your device running?
+      placeholder: e.g. Android 4.4.4
+    validations:
+      required: true
+  - type: input
+    id: emberhome_version
+    attributes:
+      label: Which EmberHome version did you test?
+      placeholder: e.g. v2.5.0
+    validations:
+      required: true
+  - type: dropdown
+    id: installation
+    attributes:
+      label: How was installation?
+      options:
+        - Very easy
+        - Easy
+        - Had a few problems
+        - Could not install
+    validations:
+      required: true
+  - type: dropdown
+    id: overall_rating
+    attributes:
+      label: Overall, how would you rate EmberHome?
+      options:
+        - "5 - Excellent"
+        - "4 - Very good"
+        - "3 - Okay"
+        - "2 - Needs improvement"
+        - "1 - Poor"
+    validations:
+      required: true
+  - type: checkboxes
+    id: features_tested
+    attributes:
+      label: Which parts did you try?
+      description: Select all that apply.
+      options:
+        - label: Apple TV-inspired home screen
+        - label: Google TV-inspired home screen
+        - label: VIDAA-inspired home screen
+        - label: Screensaver
+        - label: Settings
+        - label: App launching and navigation
+  - type: dropdown
+    id: appearance
+    attributes:
+      label: What did you think of the design?
+      options:
+        - Excellent
+        - Good
+        - Average
+        - Needs improvement
+        - Poor
+    validations:
+      required: true
+  - type: dropdown
+    id: performance
+    attributes:
+      label: How smoothly did it run?
+      options:
+        - Very smooth
+        - Mostly smooth
+        - Sometimes laggy
+        - Very laggy or slow
+        - It frequently froze or crashed
+    validations:
+      required: true
+  - type: dropdown
+    id: stability
+    attributes:
+      label: Did you experience crashes or bugs?
+      options:
+        - No problems
+        - One or two minor problems
+        - Several problems
+        - It was unusable
+    validations:
+      required: true
+  - type: textarea
+    id: favourite
+    attributes:
+      label: What did you like most?
+      description: Tell us about your favourite feature or part of the design.
+      placeholder: I liked...
+    validations:
+      required: false
+  - type: textarea
+    id: problems
+    attributes:
+      label: What did not work properly?
+      description: Describe any bugs, freezes, visual issues, or confusing controls. Include steps to reproduce a problem if possible.
+      placeholder: When I...
+    validations:
+      required: false
+  - type: textarea
+    id: improvements
+    attributes:
+      label: What should we improve or add next?
+      placeholder: I would like EmberHome to...
+    validations:
+      required: true
+  - type: dropdown
+    id: recommendation
+    attributes:
+      label: Would you recommend EmberHome to someone else?
+      options:
+        - Definitely
+        - Probably
+        - Not sure yet
+        - Probably not
+        - Definitely not
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Optional additional comments.
+    validations:
+      required: false
