@@ -38,15 +38,11 @@ footer a{color:#ffb276}
 <header>
   <p class="logo">EMBER<span>HOME</span></p>
   <div class="sub">OFFICIAL DOWNLOAD CENTRE</div>
-  <p class="intro">Choose an EmberHome version below. Only versions with a published APK release can be downloaded here.</p>
+  <p class="intro">Every published EmberHome version appears here automatically. Stable and beta releases are listed separately; download links appear when an APK is attached.</p>
 </header>
 <section aria-labelledby="versions-title">
-  <h2 id="versions-title">Choose your version</h2>
-  <div class="list" id="versions">
-    <article class="card"><p class="tag">Loading release information</p><p class="version">EmberHome 2.0.0</p><p class="note">Checking the official release list…</p></article>
-    <article class="card"><p class="tag">Loading release information</p><p class="version">EmberHome 1.5.0</p><p class="note">Checking the official release list…</p></article>
-    <article class="card"><p class="tag">Loading release information</p><p class="version">EmberHome 1.0.0</p><p class="note">Checking the official release list…</p></article>
-  </div>
+  <h2 id="versions-title">All versions</h2>
+  <div class="list" id="versions"><article class="card"><p class="tag">Loading releases</p><p class="version">EmberHome</p><p class="note">Fetching every published version from GitHub…</p></article></div>
   <p id="status" role="status" aria-live="polite">Connecting to GitHub Releases…</p>
 </section>
 <footer>
@@ -58,37 +54,48 @@ footer a{color:#ffb276}
 </main>
 <script>
 (function(){
-  var versions=["2.0.0","1.5.0","1.0.0"];
-  var found={};
   var api="https://api.github.com/repos/iy367-ux/EmberHome/releases?per_page=100";
   function cleanTag(tag){return String(tag||"").replace(/^v/i,"").replace(/^release[-_ ]?/i,"");}
-  function makeCard(version,release){
+  function parseVersion(value){
+    var match=String(value).match(new RegExp("^(\\\\d+)\\\\.(\\\\d+)\\\\.(\\\\d+)(?:[-+].*)?$"));
+    return match?{major:+match[1],minor:+match[2],patch:+match[3]}:null;
+  }
+  function compareVersions(a,b){
+    var av=parseVersion(a),bv=parseVersion(b);
+    if(av&&bv)return bv.major-av.major||bv.minor-av.minor||bv.patch-av.patch;
+    if(av)return -1;if(bv)return 1;
+    return b.localeCompare(a,undefined,{numeric:true,sensitivity:"base"});
+  }
+  function makeCard(release){
+    var version=cleanTag(release.tag_name),parsed=parseVersion(version);
+    var stable=!!parsed&&parsed.minor===0&&parsed.patch===0;
     var article=document.createElement("article");article.className="card";
-    var tag=document.createElement("div");tag.className="tag";tag.textContent=version==="2.0.0"?"Current version line":"Previous version";
+    var tag=document.createElement("div");tag.className="tag";tag.textContent=stable?"Stable release":"Beta release";
     var title=document.createElement("p");title.className="version";title.textContent="EmberHome "+version;
     var note=document.createElement("p");note.className="note";
     article.appendChild(tag);article.appendChild(title);article.appendChild(note);
-    if(release){
-      var asset=null,assets=release.assets||[];
-      for(var i=0;i<assets.length;i++){if(/\.apk$/i.test(assets[i].name||"")){asset=assets[i];break;}}
-      if(asset){
-        note.textContent=(release.name||("Version "+version))+" · "+Math.max(1,Math.round((asset.size||0)/1048576))+" MB";
-        var link=document.createElement("a");link.className="action";link.href=asset.browser_download_url;link.textContent="Download APK";
-        article.appendChild(link);
-        var status=document.createElement("div");status.className="status";status.textContent="APK available";article.appendChild(status);
-      }else{
-        note.textContent="A GitHub release exists, but it does not contain an APK attachment yet.";
-        var disabled=document.createElement("div");disabled.className="disabled";disabled.textContent="APK not attached";article.appendChild(disabled);
+    var assets=release.assets||[],apkAssets=[];
+    for(var i=0;i<assets.length;i++){if(new RegExp("\\\\.apk$","i").test(assets[i].name||""))apkAssets.push(assets[i]);}
+    if(apkAssets.length){
+      note.textContent=release.name||("Version "+version);
+      for(var j=0;j<apkAssets.length;j++){
+        var asset=apkAssets[j],link=document.createElement("a");
+        link.className="action";link.href=asset.browser_download_url;
+        link.textContent=apkAssets.length>1?("Download "+asset.name):"Download APK";
+        link.style.marginTop="4px";article.appendChild(link);
       }
+      var status=document.createElement("div");status.className="status";status.textContent="APK available";article.appendChild(status);
     }else{
-      note.textContent="No APK release has been published for this version yet.";
-      var disabled2=document.createElement("div");disabled2.className="disabled";disabled2.textContent="Not published yet";article.appendChild(disabled2);
+      note.textContent=(release.name||("Version "+version))+" — published release, but no APK file is attached yet.";
+      var disabled=document.createElement("div");disabled.className="disabled";disabled.textContent="APK not attached";article.appendChild(disabled);
     }
     return article;
   }
-  function render(){
+  function render(releases){
     var host=document.getElementById("versions");host.innerHTML="";
-    for(var i=0;i<versions.length;i++)host.appendChild(makeCard(versions[i],found[versions[i]]||null));
+    if(!releases.length){host.textContent="No published releases found yet.";return;}
+    releases.sort(function(a,b){return compareVersions(cleanTag(a.tag_name),cleanTag(b.tag_name));});
+    for(var i=0;i<releases.length;i++)host.appendChild(makeCard(releases[i]));
   }
   var xhr=new XMLHttpRequest();
   xhr.open("GET",api,true);
@@ -98,12 +105,9 @@ footer a{color:#ffb276}
     if(xhr.status>=200&&xhr.status<300){
       try{
         var releases=JSON.parse(xhr.responseText)||[];
-        for(var i=0;i<releases.length;i++){
-          var version=cleanTag(releases[i].tag_name);
-          if(versions.indexOf(version)!==-1&&!releases[i].draft&&!releases[i].prerelease)found[version]=releases[i];
-        }
-        render();
-        document.getElementById("status").textContent="Release list updated from GitHub.";
+        releases=releases.filter(function(r){return !r.draft;});
+        render(releases);
+        document.getElementById("status").textContent="All published versions are loaded from GitHub Releases. Stable and beta releases are shown.";
       }catch(e){document.getElementById("status").textContent="Could not read release information. Use the GitHub Releases link below.";}
     }else{
       document.getElementById("status").textContent="GitHub release lookup is temporarily unavailable. Try again later or view releases on GitHub.";
