@@ -34,12 +34,12 @@ h1{font-size:clamp(56px,8.2vw,108px);line-height:.91;letter-spacing:-.085em;font
 h1 span{color:var(--green)}
 .intro{max-width:490px;font-size:16px;line-height:1.75;color:#b7beb3;margin:0}
 .hero-actions{display:flex;align-items:center;gap:22px;margin-top:34px;flex-wrap:wrap}
-.button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:12px;font-weight:760;letter-spacing:.015em;padding:13px 18px;border-radius:3px;background:var(--paper);color:var(--bg);transition:background .2s,color .2s}
-.button:hover{background:var(--ember)}
+.button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:12px;font-weight:760;letter-spacing:.015em;padding:13px 18px;border-radius:3px;background:var(--ember);color:#11151D;transition:background .2s,color .2s}
+.button:hover{background:#D99A75}
 .underlink{font-size:12px;text-decoration:none;color:#c2c9bd;border-bottom:1px solid #697367;padding:4px 0}
 .underlink:hover{color:var(--ember);border-color:var(--ember)}
 .hero-footnote{margin-top:19px;font-size:10px;color:var(--quiet);letter-spacing:.025em}
-.brand-panel{min-height:350px;position:relative;border:1px solid #465144;background:#354353;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.brand-panel{min-height:350px;position:relative;border:1px solid #536273;background:var(--panel);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .brand-panel:before,.brand-panel:after{content:"";position:absolute;border:1px solid rgba(213,220,226,.14);border-radius:50%;width:270px;height:270px}
 .brand-panel:after{width:370px;height:370px}
 .brand-panel img{width:148px;height:148px;position:relative;z-index:1;filter:drop-shadow(0 18px 34px rgba(0,0,0,.25))}
@@ -60,26 +60,26 @@ h2{font-size:clamp(34px,5vw,58px);line-height:1;letter-spacing:-.07em;font-weigh
 .release-status{font-size:11px;color:var(--quiet);min-height:20px;margin:0 0 7px}
 .release-list{border-top:1px solid #536273}
 .release-row{display:grid;grid-template-columns:75px minmax(0,1fr) 120px 150px;gap:20px;align-items:center;padding:20px 5px;border-bottom:1px solid var(--line)}
-.release-row:hover{background:rgba(255,255,255,.018)}
+.release-row:nth-child(even){background:rgba(53,67,83,.22)}\n.release-row:hover{background:rgba(196,122,80,.10)}
 .release-index{font-size:10px;color:var(--quiet);letter-spacing:.12em}
 .release-title{font-size:17px;letter-spacing:-.035em;font-weight:670}
 .release-sub{font-size:11px;color:var(--muted);margin-top:3px;max-width:650px;overflow-wrap:anywhere}
 .release-type{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#D5DCE2;border:1px solid #667585;padding:5px 8px;width:max-content}
 .release-type.beta{color:var(--ember);border-color:#95664D}
-.download-link{font-size:11px;text-align:center;text-decoration:none;padding:10px 12px;border:1px solid #87927f;color:var(--paper);border-radius:2px;font-weight:700}
-.download-link:hover{background:var(--paper);color:var(--bg);border-color:var(--paper)}
+.download-link{font-size:11px;text-align:center;text-decoration:none;padding:10px 12px;border:1px solid #8A6655;color:var(--paper);border-radius:2px;font-weight:700}
+.download-link:hover{background:var(--ember);color:var(--bg);border-color:var(--ember)}
 .download-link.disabled{color:#737e72;border-color:#394238;pointer-events:none}
 .empty{padding:22px 5px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
 .how-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.step{padding:25px 25px 27px 0;min-height:174px}
-.step+.step{border-left:1px solid var(--line);padding-left:25px}
+.step{padding:25px 20px 27px;background:var(--panel);min-height:174px}
+.step+.step{border-left:1px solid var(--bg);padding-left:20px}
 .step-no{font-size:10px;letter-spacing:.15em;color:var(--ember)}
 .step h3{font-size:16px;letter-spacing:-.03em;font-weight:650;margin:22px 0 7px}
 .step p{font-size:12px;line-height:1.7;color:var(--muted);margin:0;max-width:300px}
-.code-line{margin-top:24px;padding:20px 22px;border:1px solid #536273;background:#354353;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.code-line{margin-top:24px;padding:20px 22px;border:1px solid #536273;background:var(--panel);display:flex;align-items:center;justify-content:space-between;gap:20px}
 .code-label{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:#aeb8a4}
 .code-number{font-size:31px;letter-spacing:.1em;font-weight:650;color:var(--paper);line-height:1.25}
-.copy-button{font:inherit;font-size:11px;font-weight:700;color:var(--paper);background:transparent;border:1px solid #64715f;border-radius:2px;padding:9px 13px;cursor:pointer}
+.copy-button{font:inherit;font-size:11px;font-weight:700;color:var(--paper);background:transparent;border:1px solid #8A6655;border-radius:2px;padding:9px 13px;cursor:pointer}
 .copy-button:hover{background:var(--paper);color:var(--bg)}
 .compat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
 .compat-item{background:var(--panel);padding:25px}
@@ -87,7 +87,7 @@ h2{font-size:clamp(34px,5vw,58px);line-height:1;letter-spacing:-.07em;font-weigh
 .compat-item p{font-size:12px;line-height:1.75;color:var(--muted);margin:0}
 .compat-item .tag{display:block;margin-top:17px;color:var(--ember);font-size:9px;text-transform:uppercase;letter-spacing:.13em}
 .docs-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.doc-link{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 20px;border:1px solid var(--line);text-decoration:none;transition:border-color .2s,background .2s}
+.doc-link{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 20px;border:1px solid var(--line);background:rgba(53,67,83,.52);text-decoration:none;transition:border-color .2s,background .2s}
 .doc-link:hover{border-color:#8D9AA7;background:#414F5E}
 .doc-link strong{font-size:13px;font-weight:650}
 .doc-link small{display:block;font-size:10px;color:var(--muted);margin-top:3px}
@@ -128,8 +128,8 @@ footer{padding:29px 0 36px}
    </div>
   </div>
  </div>
- <div class="marquee" style="background:var(--panel)"><div class="wrap marquee-inner"><span><strong>01</strong> &nbsp; Android TV & streaming devices</span><span><strong>02</strong> &nbsp; Remote-friendly navigation</span><span><strong>03</strong> &nbsp; Open project</span></div></div>
- <section id="about" style="background:var(--panel)">
+ <div class="marquee"><div class="wrap marquee-inner"><span><strong>01</strong> &nbsp; Android TV & streaming devices</span><span><strong>02</strong> &nbsp; Remote-friendly navigation</span><span><strong>03</strong> &nbsp; Open project</span></div></div>
+ <section id="about">
   <div class="wrap">
    <div class="section-heading"><div><p class="section-label">01 / The project</p><h2>Made for the<br>way TVs work.</h2></div><p>Television is a different kind of screen. You sit further away. You navigate with a remote. EmberHome is an independent launcher project focused on a clean home-screen experience and practical D-pad navigation.</p></div>
    <div class="docs-row">
@@ -145,7 +145,7 @@ footer{padding:29px 0 36px}
    <div class="release-list" id="release-list"><div class="empty">Loading published EmberHome versions…</div></div>
   </div>
  </section>
- <section id="install" style="background:var(--panel)">
+ <section id="install">
   <div class="wrap">
    <div class="section-heading"><div><p class="section-label">03 / Install on your TV</p><h2>Get it on<br>the big screen.</h2></div><p>Use the Downloader app on a compatible Android TV or streaming device. Enter the code below to open this official download page directly on your television.</p></div>
    <div class="how-grid">
@@ -167,7 +167,7 @@ footer{padding:29px 0 36px}
    </div>
   </div>
  </section>
- <section id="help" style="background:var(--panel)">
+ <section id="help">
   <div class="wrap">
    <div class="section-heading"><div><p class="section-label">05 / Documentation</p><h2>Need a hand?</h2></div><p>Installation steps, troubleshooting and project details live alongside the source. If something goes wrong, include your device model, Android version and EmberHome version when asking for help.</p></div>
    <div class="docs-row">
