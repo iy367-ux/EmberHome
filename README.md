@@ -53,6 +53,8 @@ Android TV and Amazon Fire TV devices can differ in their launcher, screensaver,
 
 A look at EmberHome's home-screen designs, personalization options, and settings.
 
+> **Screenshot notice:** The app icons and logos shown in these screenshots are illustrative placeholders used to demonstrate the layouts. They are not the actual icons bundled with EmberHome. On your TV, EmberHome will display the real icons/logos provided by the apps installed on that device.
+
 | Home experiences | |
 | --- | --- |
 | **Classic Home**<br><img src="docs/assets/01-home.png" alt="EmberHome home screen" width="100%"> | **Ember Dock**<br><img src="docs/assets/02-ember-dock.png" alt="Ember Dock home style" width="100%"> |
