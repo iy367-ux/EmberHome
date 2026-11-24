@@ -103,13 +103,22 @@ footer{padding:29px 0 36px}
 @media(max-width:850px){.hero-grid{grid-template-columns:1fr;gap:38px}.brand-panel{min-height:270px}.brand-panel img{width:120px;height:120px}.section-heading{grid-template-columns:1fr;gap:16px}.release-row{grid-template-columns:45px minmax(0,1fr) 90px 125px;gap:12px}}
 @media(max-width:600px){.wrap{width:calc(100% - 36px)}header{height:68px}.nav-right{gap:15px}.nav-right a:not(.nav-download){display:none}.hero{padding:72px 0 62px}h1{font-size:clamp(53px,14vw,76px)}.brand-panel{min-height:235px}.marquee-inner{justify-content:flex-start;column-gap:25px;row-gap:8px}section{padding:61px 0}.release-head{align-items:start;flex-direction:column}.release-row{grid-template-columns:32px minmax(0,1fr) 75px;gap:9px;padding:17px 2px}.release-type{font-size:8px;padding:4px 5px}.download-link{grid-column:2/4;justify-self:start;min-width:140px}.how-grid{grid-template-columns:1fr}.step{min-height:0;padding:20px 0}.step+.step{border-left:0;border-top:1px solid var(--line);padding:20px 0}.step h3{margin:10px 0 5px}.compat-grid,.docs-row{grid-template-columns:1fr}.code-line{padding:15px;gap:10px}.code-number{font-size:25px}.footer-row{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+/* Screenshot gallery */
+.gallery-note{margin:0 0 24px;padding:15px 18px;border:1px solid #8A6655;background:rgba(196,122,80,.08);color:#E4D9D1;font-size:12px;line-height:1.75}
+.gallery-note strong{color:var(--ember)}
+.screenshot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.screenshot-card{margin:0;min-width:0;border:1px solid var(--line);background:var(--panel);overflow:hidden}
+.screenshot-card img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;object-position:top}
+.screenshot-card figcaption{padding:12px 14px;font-size:11px;letter-spacing:.025em;color:var(--ink)}
+@media(max-width:600px){.screenshot-grid{grid-template-columns:1fr}.screenshot-card img{aspect-ratio:16/9}}
 </style>
 </head>
 <body>
 <header>
  <div class="wrap nav">
   <a class="brand" href="#top" aria-label="EmberHome home"><img src="./assets/emberhome-mark.svg" alt=""><span class="brand-name">Ember<span>Home</span></span></a>
-  <nav class="nav-right" aria-label="Main navigation"><a href="#about">About</a><a href="#compatibility">Compatibility</a><a class="nav-download" href="#downloads">Downloads</a></nav>
+  <nav class="nav-right" aria-label="Main navigation"><a href="#about">About</a><a href="#screenshots">Screenshots</a><a href="#compatibility">Compatibility</a><a class="nav-download" href="#downloads">Downloads</a></nav>
  </div>
 </header>
 <main id="top">
@@ -135,6 +144,25 @@ footer{padding:29px 0 36px}
    <div class="docs-row">
     <a class="doc-link" href="https://github.com/iy367-ux/EmberHome"><span><strong>Open-source project</strong><small>Browse the code and project history</small></span><span class="arrow">↗</span></a>
     <a class="doc-link" href="https://github.com/iy367-ux/EmberHome/issues/new/choose"><span><strong>Feedback & bug reports</strong><small>Share an issue or suggest an improvement</small></span><span class="arrow">↗</span></a>
+   </div>
+  </div>
+ </section>
+
+ <section id="screenshots">
+  <div class="wrap">
+   <div class="section-heading"><div><p class="section-label">02 / Look around</p><h2>See EmberHome<br>in action.</h2></div><p>A preview of the home-screen styles, settings and personalization screens being developed for EmberHome.</p></div>
+   <p class="gallery-note"><strong>Preview notice:</strong> The app icons and logos shown in these screenshots are illustrative placeholders for demonstration purposes only. They are not the actual icons supplied with EmberHome. On your TV, EmberHome will use the real icons/logos provided by the apps installed on your device.</p>
+   <div class="screenshot-grid">
+    <figure class="screenshot-card"><img src="./assets/01-home.png" alt="EmberHome classic home screen preview" loading="lazy"><figcaption>Classic Home</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/02-ember-dock.png" alt="Ember Dock home style preview" loading="lazy"><figcaption>Ember Dock</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/03-cinema-rail.png" alt="Cinema Rail home style preview" loading="lazy"><figcaption>Cinema Rail</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/04-glass-tvos.png" alt="Glass tvOS home style preview" loading="lazy"><figcaption>Glass tvOS</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/05-google-tv.png" alt="Google TV inspired home style preview" loading="lazy"><figcaption>Google TV style</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/06-settings.png" alt="EmberHome settings screen preview" loading="lazy"><figcaption>Settings</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/07-wallpapers.png" alt="EmberHome wallpaper selection preview" loading="lazy"><figcaption>Wallpapers</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/08-manage-apps.png" alt="EmberHome manage apps screen preview" loading="lazy"><figcaption>Manage Apps</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/09-screensaver-gallery.png" alt="EmberHome screensaver gallery preview" loading="lazy"><figcaption>Screensaver Gallery</figcaption></figure>
+    <figure class="screenshot-card"><img src="./assets/10-profile.png" alt="EmberHome profile screen preview" loading="lazy"><figcaption>Profile</figcaption></figure>
    </div>
   </div>
  </section>
