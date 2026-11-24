@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111712">
+<meta name="theme-color" content="#11151D">
 <meta name="description" content="EmberHome — a remote-friendly home-screen launcher for Android TVs and streaming devices. Official downloads, installation help and compatibility notes.">
 <link rel="icon" type="image/svg+xml" href="./assets/emberhome-mark.svg">
 <title>EmberHome — A home screen that feels like home</title>
 <style>
-:root{color-scheme:dark;--bg:#111712;--paper:#e9e9df;--ink:#f0f0e8;--muted:#a7afa3;--quiet:#788176;--line:#343d34;--panel:#19211b;--panel2:#202a22;--ember:#e9a16b;--green:#b9c6a6;--max:1240px}
+:root{color-scheme:dark;--bg:#11151D;--paper:#F0EDE8;--ink:#F3F0EB;--muted:#BAC2CA;--quiet:#929DA8;--line:#4B5866;--panel:#354353;--panel2:#414F5E;--ember:#C47A50;--green:#D5DCE2;--max:1240px}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:88px}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
@@ -20,7 +20,7 @@ header{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
 .brand img{width:36px;height:36px;display:block}
 .brand-name{font-size:16px;letter-spacing:-.045em;font-weight:760}
-.brand-name span{color:#aeb9a6;font-weight:450}
+.brand-name span{color:#C47A50;font-weight:450}
 .nav-right{display:flex;align-items:center;gap:31px}
 .nav-right a{font-size:12px;color:#c1c7bc;text-decoration:none}
 .nav-right a:hover{color:var(--ember)}
@@ -39,14 +39,14 @@ h1 span{color:var(--green)}
 .underlink{font-size:12px;text-decoration:none;color:#c2c9bd;border-bottom:1px solid #697367;padding:4px 0}
 .underlink:hover{color:var(--ember);border-color:var(--ember)}
 .hero-footnote{margin-top:19px;font-size:10px;color:var(--quiet);letter-spacing:.025em}
-.brand-panel{min-height:350px;position:relative;border:1px solid #465144;background:#172019;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.brand-panel:before,.brand-panel:after{content:"";position:absolute;border:1px solid rgba(185,198,166,.18);border-radius:50%;width:270px;height:270px}
+.brand-panel{min-height:350px;position:relative;border:1px solid #465144;background:#354353;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.brand-panel:before,.brand-panel:after{content:"";position:absolute;border:1px solid rgba(213,220,226,.14);border-radius:50%;width:270px;height:270px}
 .brand-panel:after{width:370px;height:370px}
 .brand-panel img{width:148px;height:148px;position:relative;z-index:1;filter:drop-shadow(0 18px 34px rgba(0,0,0,.25))}
-.panel-caption{position:absolute;bottom:16px;left:18px;right:18px;display:flex;justify-content:space-between;color:#8e998a;font-size:9px;letter-spacing:.13em;text-transform:uppercase}
+.panel-caption{position:absolute;bottom:16px;left:18px;right:18px;display:flex;justify-content:space-between;color:#C4CDD5;font-size:9px;letter-spacing:.13em;text-transform:uppercase}
 .marquee{border-bottom:1px solid var(--line);padding:16px 0}
 .marquee-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.marquee span{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#9da797}
+.marquee span{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#BAC2CA}
 .marquee strong{color:var(--ember);font-weight:650}
 section{padding:83px 0;border-bottom:1px solid var(--line)}
 .section-label{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--ember);font-weight:750;margin:0 0 17px}
@@ -58,14 +58,14 @@ h2{font-size:clamp(34px,5vw,58px);line-height:1;letter-spacing:-.07em;font-weigh
 .github-link{font-size:11px;color:#c1c8bc;text-decoration:none;border-bottom:1px solid #667061;padding-bottom:5px;white-space:nowrap}
 .github-link:hover{color:var(--ember);border-color:var(--ember)}
 .release-status{font-size:11px;color:var(--quiet);min-height:20px;margin:0 0 7px}
-.release-list{border-top:1px solid #53604f}
+.release-list{border-top:1px solid #536273}
 .release-row{display:grid;grid-template-columns:75px minmax(0,1fr) 120px 150px;gap:20px;align-items:center;padding:20px 5px;border-bottom:1px solid var(--line)}
 .release-row:hover{background:rgba(255,255,255,.018)}
 .release-index{font-size:10px;color:var(--quiet);letter-spacing:.12em}
 .release-title{font-size:17px;letter-spacing:-.035em;font-weight:670}
 .release-sub{font-size:11px;color:var(--muted);margin-top:3px;max-width:650px;overflow-wrap:anywhere}
-.release-type{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--green);border:1px solid #52614f;padding:5px 8px;width:max-content}
-.release-type.beta{color:var(--ember);border-color:#72533f}
+.release-type{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#D5DCE2;border:1px solid #667585;padding:5px 8px;width:max-content}
+.release-type.beta{color:var(--ember);border-color:#95664D}
 .download-link{font-size:11px;text-align:center;text-decoration:none;padding:10px 12px;border:1px solid #87927f;color:var(--paper);border-radius:2px;font-weight:700}
 .download-link:hover{background:var(--paper);color:var(--bg);border-color:var(--paper)}
 .download-link.disabled{color:#737e72;border-color:#394238;pointer-events:none}
@@ -76,19 +76,19 @@ h2{font-size:clamp(34px,5vw,58px);line-height:1;letter-spacing:-.07em;font-weigh
 .step-no{font-size:10px;letter-spacing:.15em;color:var(--ember)}
 .step h3{font-size:16px;letter-spacing:-.03em;font-weight:650;margin:22px 0 7px}
 .step p{font-size:12px;line-height:1.7;color:var(--muted);margin:0;max-width:300px}
-.code-line{margin-top:24px;padding:20px 22px;border:1px solid #53604f;background:#19221a;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.code-line{margin-top:24px;padding:20px 22px;border:1px solid #536273;background:#354353;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .code-label{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:#aeb8a4}
 .code-number{font-size:31px;letter-spacing:.1em;font-weight:650;color:var(--paper);line-height:1.25}
 .copy-button{font:inherit;font-size:11px;font-weight:700;color:var(--paper);background:transparent;border:1px solid #64715f;border-radius:2px;padding:9px 13px;cursor:pointer}
 .copy-button:hover{background:var(--paper);color:var(--bg)}
 .compat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
-.compat-item{background:var(--bg);padding:25px}
+.compat-item{background:var(--panel);padding:25px}
 .compat-item h3{font-size:15px;margin:0 0 8px;font-weight:650}
 .compat-item p{font-size:12px;line-height:1.75;color:var(--muted);margin:0}
 .compat-item .tag{display:block;margin-top:17px;color:var(--ember);font-size:9px;text-transform:uppercase;letter-spacing:.13em}
 .docs-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .doc-link{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 20px;border:1px solid var(--line);text-decoration:none;transition:border-color .2s,background .2s}
-.doc-link:hover{border-color:#75826e;background:#182019}
+.doc-link:hover{border-color:#8D9AA7;background:#414F5E}
 .doc-link strong{font-size:13px;font-weight:650}
 .doc-link small{display:block;font-size:10px;color:var(--muted);margin-top:3px}
 .doc-link .arrow{color:var(--ember);font-size:17px}
@@ -98,7 +98,7 @@ footer{padding:29px 0 36px}
 .footer-brand img{width:24px;height:24px}
 .footer-note{font-size:10px;color:var(--quiet)}
 .footer-links{display:flex;gap:20px}
-.footer-links a{font-size:10px;color:#a5afa1;text-decoration:none}
+.footer-links a{font-size:10px;color:#BAC2CA;text-decoration:none}
 .footer-links a:hover{color:var(--ember)}
 @media(max-width:850px){.hero-grid{grid-template-columns:1fr;gap:38px}.brand-panel{min-height:270px}.brand-panel img{width:120px;height:120px}.section-heading{grid-template-columns:1fr;gap:16px}.release-row{grid-template-columns:45px minmax(0,1fr) 90px 125px;gap:12px}}
 @media(max-width:600px){.wrap{width:calc(100% - 36px)}header{height:68px}.nav-right{gap:15px}.nav-right a:not(.nav-download){display:none}.hero{padding:72px 0 62px}h1{font-size:clamp(53px,14vw,76px)}.brand-panel{min-height:235px}.marquee-inner{justify-content:flex-start;column-gap:25px;row-gap:8px}section{padding:61px 0}.release-head{align-items:start;flex-direction:column}.release-row{grid-template-columns:32px minmax(0,1fr) 75px;gap:9px;padding:17px 2px}.release-type{font-size:8px;padding:4px 5px}.download-link{grid-column:2/4;justify-self:start;min-width:140px}.how-grid{grid-template-columns:1fr}.step{min-height:0;padding:20px 0}.step+.step{border-left:0;border-top:1px solid var(--line);padding:20px 0}.step h3{margin:10px 0 5px}.compat-grid,.docs-row{grid-template-columns:1fr}.code-line{padding:15px;gap:10px}.code-number{font-size:25px}.footer-row{align-items:flex-start;flex-direction:column}}
@@ -123,13 +123,13 @@ footer{padding:29px 0 36px}
     <p class="hero-footnote">Choose a build for your Android version. Keep your device's original launcher installed.</p>
    </div>
    <div class="brand-panel" aria-label="EmberHome brand mark">
-    <img src="./assets/emberhome-mark.svg" alt="EmberHome home and flame symbol">
+    <img src="./assets/emberhome-mark.svg" alt="EmberHome architectural E and roof symbol">
     <div class="panel-caption"><span>EmberHome</span><span>Made for the big screen</span></div>
    </div>
   </div>
  </div>
- <div class="marquee"><div class="wrap marquee-inner"><span><strong>01</strong> &nbsp; Android TV & streaming devices</span><span><strong>02</strong> &nbsp; Remote-friendly navigation</span><span><strong>03</strong> &nbsp; Open project</span></div></div>
- <section id="about">
+ <div class="marquee" style="background:var(--panel)"><div class="wrap marquee-inner"><span><strong>01</strong> &nbsp; Android TV & streaming devices</span><span><strong>02</strong> &nbsp; Remote-friendly navigation</span><span><strong>03</strong> &nbsp; Open project</span></div></div>
+ <section id="about" style="background:var(--panel)">
   <div class="wrap">
    <div class="section-heading"><div><p class="section-label">01 / The project</p><h2>Made for the<br>way TVs work.</h2></div><p>Television is a different kind of screen. You sit further away. You navigate with a remote. EmberHome is an independent launcher project focused on a clean home-screen experience and practical D-pad navigation.</p></div>
    <div class="docs-row">
@@ -145,7 +145,7 @@ footer{padding:29px 0 36px}
    <div class="release-list" id="release-list"><div class="empty">Loading published EmberHome versions…</div></div>
   </div>
  </section>
- <section id="install">
+ <section id="install" style="background:var(--panel)">
   <div class="wrap">
    <div class="section-heading"><div><p class="section-label">03 / Install on your TV</p><h2>Get it on<br>the big screen.</h2></div><p>Use the Downloader app on a compatible Android TV or streaming device. Enter the code below to open this official download page directly on your television.</p></div>
    <div class="how-grid">
@@ -167,7 +167,7 @@ footer{padding:29px 0 36px}
    </div>
   </div>
  </section>
- <section id="help">
+ <section id="help" style="background:var(--panel)">
   <div class="wrap">
    <div class="section-heading"><div><p class="section-label">05 / Documentation</p><h2>Need a hand?</h2></div><p>Installation steps, troubleshooting and project details live alongside the source. If something goes wrong, include your device model, Android version and EmberHome version when asking for help.</p></div>
    <div class="docs-row">
