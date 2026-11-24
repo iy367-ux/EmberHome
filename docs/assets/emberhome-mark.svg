@@ -1,13 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
   <defs>
-    <filter id="ember-copper" color-interpolation-filters="sRGB">
-      <feColorMatrix type="matrix" values="
-        0 0 0 0 0.769
-        0 0 0 0 0.478
-        0 0 0 0 0.314
-        -0.9 -0.9 -0.9 0 2.65"/>
-    </filter>
+    
+    <linearGradient id="burnishedCopper" x1="15%" y1="10%" x2="85%" y2="90%">
+      <stop offset="0%" stop-color="#E2A078" />
+      <stop offset="45%" stop-color="#C47A50" />
+      <stop offset="100%" stop-color="#8C5130" />
+    </linearGradient>
+
+    
+    <path id="leftEPath" d="
+      M 232,320
+      L 585,161
+      L 585,433
+      L 477,433
+      L 477,506
+      L 585,506
+      L 585,579
+      L 477,579
+      L 477,652
+      L 585,652
+      L 585,802
+      L 232,802
+      Z
+    " />
+
+    
+    <mask id="knockoutRightShape" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1080">
+      <rect width="1080" height="1080" fill="white" />
+      <use href="#leftEPath" fill="none" stroke="black" stroke-width="64" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="10" />
+    </mask>
   </defs>
-  <image href="./Zoc3sWSVRm_-jdzU4Vivi3I_WUXFiEaTDd0lTd4z33cu9i3LgVZaGCDqYLEqNWGXv_DDyqH4-K88UU72aIhvX9sN-m0aaDQWVBw4bAlsKZzcB5WUYX9PtnXqBsdz5mOx5XbVtazBge8k8kdoui5hdyXHQIaPvSh9CthVCUauLBpLTeYP7Znf30DH6jFtyOQH.jpg"
-    x="0" y="0" width="1024" height="1024" preserveAspectRatio="xMidYMid meet" filter="url(#ember-copper)"/>
+
+  
+  <rect x="0" y="0" width="1080" height="1080" rx="270" fill="#354353" />
+  <rect x="3" y="3" width="1074" height="1074" rx="267" fill="none" stroke="#47586B" stroke-width="6" />
+
+  
+  <g fill="none" stroke="url(#burnishedCopper)" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="10">
+    
+    <path d="
+      M 377,342
+      L 812,397
+      L 812,874
+      L 377,874
+      Z
+    " stroke-width="28" mask="url(#knockoutRightShape)" />
+
+    
+    <use href="#leftEPath" stroke-width="28" />
+  </g>
 </svg>
