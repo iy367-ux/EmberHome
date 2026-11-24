@@ -57,11 +57,11 @@ A look at EmberHome's home-screen designs, personalization options, and settings
 
 | Home experiences | |
 | --- | --- |
-| **Classic Home**<br><img src="docs/assets/01-home.png" alt="EmberHome home screen" width="100%"> | **Ember Dock**<br><img src="docs/assets/02-ember-dock.png" alt="Ember Dock home style" width="100%"> |
-| **Cinema Rail**<br><img src="docs/assets/03-cinema-rail.png" alt="Cinema Rail home style" width="100%"> | **Glass tvOS**<br><img src="docs/assets/04-glass-tvos.png" alt="Glass tvOS home style" width="100%"> |
-| **Google TV style**<br><img src="docs/assets/05-google-tv.png" alt="Google TV inspired home style" width="100%"> | **Settings**<br><img src="docs/assets/06-settings.png" alt="EmberHome settings" width="100%"> |
-| **Wallpapers**<br><img src="docs/assets/07-wallpapers.png" alt="Wallpaper selection" width="100%"> | **Manage Apps**<br><img src="docs/assets/08-manage-apps.png" alt="Manage apps screen" width="100%"> |
-| **Screensaver Gallery**<br><img src="docs/assets/09-screensaver-gallery.png" alt="Screensaver gallery" width="100%"> | **Profile**<br><img src="docs/assets/10-profile.png" alt="EmberHome profile screen" width="100%"> |
+| **Ember Dock**<br><img src="docs/assets/02-ember-dock.png" alt="Ember Dock home style" width="100%"> | **Cinema Rail**<br><img src="docs/assets/03-cinema-rail.png" alt="Cinema Rail home style" width="100%"> |
+| **Glass tvOS**<br><img src="docs/assets/04-glass-tvos.png" alt="Glass tvOS home style" width="100%"> | **Google TV style**<br><img src="docs/assets/05-google-tv.png" alt="Google TV inspired home style" width="100%"> |
+| **Settings**<br><img src="docs/assets/06-settings.png" alt="EmberHome settings" width="100%"> | **Wallpapers**<br><img src="docs/assets/07-wallpapers.png" alt="Wallpaper selection" width="100%"> |
+| **Manage Apps**<br><img src="docs/assets/08-manage-apps.png" alt="Manage apps screen" width="100%"> | **Screensaver Gallery**<br><img src="docs/assets/09-screensaver-gallery.png" alt="Screensaver gallery" width="100%"> |
+| **Profile**<br><img src="docs/assets/10-profile.png" alt="EmberHome profile screen" width="100%"> | |
 
 All screenshots are stored in [`docs/assets/`](docs/assets/) in this repository.
 
