@@ -3,156 +3,201 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090b10">
-<meta name="description" content="Official EmberHome launcher downloads. Legacy builds support Android 4.4.4 and newer; support for older Android versions is gradually being phased out.">
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/iy367-ux/EmberHome/v1.0.0/app/src/main/res/drawable-nodpi/ic_launcher.png">
-<title>EmberHome — Downloads</title>
+<meta name="theme-color" content="#0b0d10">
+<meta name="description" content="EmberHome is a thoughtful Android TV home screen. Find official stable, beta and legacy downloads.">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<title>EmberHome — A better place to start</title>
 <style>
-:root{color-scheme:dark;--bg:#090b10;--panel:#121720;--panel2:#171f2b;--line:rgba(255,255,255,.1);--text:#f5f6f8;--muted:#98a2b3;--ember:#ff8a3d;--ember2:#ffc078;--green:#83e0ad;--blue:#9ebeff}
+:root{color-scheme:dark;--bg:#0b0d10;--surface:#12161b;--surface2:#181e24;--line:#282f36;--text:#f3f1ed;--muted:#a3a9ae;--soft:#737d84;--ember:#f18a4b;--ember2:#ffbd82;--max:1160px}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 78% 0%,rgba(255,123,48,.13),transparent 34%),radial-gradient(ellipse at 12% 20%,rgba(70,98,145,.12),transparent 32%),var(--bg);color:var(--text);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
 a{color:inherit}
-.shell{width:100%;margin:0 auto}
-.topbar{height:76px;width:100%;padding:0 clamp(22px,5vw,88px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;text-decoration:none;font-weight:900;letter-spacing:.16em;font-size:18px}
-.brand span{color:var(--ember)}
-.toplink{font-size:13px;color:#c3cad5;text-decoration:none;border:1px solid var(--line);padding:9px 14px;border-radius:999px;transition:.2s}
-.toplink:hover,.toplink:focus{border-color:rgba(255,151,84,.7);outline:none}
-.hero{position:relative;overflow:hidden;padding:76px clamp(22px,5vw,88px) 62px;border-bottom:1px solid var(--line);background:linear-gradient(105deg,rgba(255,255,255,.018),transparent 65%)}
-.hero:after{content:"";position:absolute;width:420px;height:420px;right:2%;top:-140px;border-radius:50%;border:1px solid rgba(255,157,91,.13);box-shadow:0 0 0 38px rgba(255,157,91,.025),0 0 0 78px rgba(255,157,91,.018),inset 0 0 90px rgba(255,125,54,.06);pointer-events:none}
-.eyebrow{display:inline-flex;align-items:center;gap:9px;color:#ffb77e;font-size:11px;letter-spacing:.2em;font-weight:800;text-transform:uppercase}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--ember);box-shadow:0 0 13px var(--ember)}
-h1{font-size:clamp(42px,7vw,76px);line-height:.99;letter-spacing:-.055em;margin:20px 0 17px;font-weight:850;max-width:720px}
-h1 span{background:linear-gradient(95deg,#fff 12%,#ffc28e 75%,#ff8744);-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{max-width:590px;color:#aab3c1;font-size:17px;margin:0}
-.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
-.chip{font-size:12px;color:#c4cbd6;border:1px solid var(--line);background:rgba(255,255,255,.025);padding:7px 12px;border-radius:999px}
-main{padding:44px clamp(22px,5vw,88px) 60px}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:22px}
-.kicker{color:var(--ember2);font-size:10px;font-weight:800;letter-spacing:.19em;text-transform:uppercase;margin:0 0 6px}
-h2{font-size:27px;letter-spacing:-.035em;margin:0;font-weight:780}
-.section-copy{color:var(--muted);font-size:13px;margin:5px 0 0}
-#status{font-size:12px;color:var(--muted);margin:0 0 18px;min-height:18px}
-.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:15px}
-.card{position:relative;overflow:hidden;min-height:245px;padding:22px;border:1px solid var(--line);border-radius:19px;background:linear-gradient(150deg,rgba(28,37,51,.94),rgba(15,19,27,.97));display:flex;flex-direction:column;gap:12px;transition:transform .22s,border-color .22s,box-shadow .22s}
-.card:before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(255,143,76,.7),transparent);opacity:.65}
-.card:hover{transform:translateY(-3px);border-color:rgba(255,153,91,.38);box-shadow:0 14px 38px rgba(0,0,0,.22)}
-.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.kind{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:850;color:#d6dce5}
-.pill{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:5px 9px}
-.pill.stable{color:var(--green);background:rgba(80,195,132,.1);border:1px solid rgba(80,195,132,.22)}
-.pill.beta{color:#ffc17e;background:rgba(255,153,69,.1);border:1px solid rgba(255,153,69,.24)}
-.version{font-size:30px;line-height:1.1;letter-spacing:-.04em;font-weight:850;margin:3px 0 0}
-.note{color:var(--muted);font-size:13px;margin:0;flex:1}
-.actions{display:grid;gap:8px;margin-top:4px}
-.action,.disabled{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:11px;padding:10px 14px;font-weight:800;font-size:13px;text-decoration:none}
-.action{color:#211108;background:linear-gradient(105deg,#ffb36d,#ff8740);box-shadow:0 5px 20px rgba(255,126,55,.13);transition:filter .2s,transform .2s}
-.action:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.action:focus-visible,.toplink:focus-visible{outline:3px solid #fff;outline-offset:3px}
-.disabled{color:#8993a3;background:rgba(255,255,255,.055);border:1px solid var(--line)}
-.avail{font-size:11px;color:var(--green);font-weight:700}
-.empty{grid-column:1/-1;padding:28px;border:1px dashed var(--line);border-radius:16px;color:var(--muted)}
-.info{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:34px}
-.info-card{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:16px;padding:18px 19px}
-.info-card strong{display:block;font-size:13px;margin-bottom:4px}
-.info-card p{font-size:12px;color:var(--muted);margin:0}
-.info-card.compatibility{grid-column:1/-1}
-footer{border-top:1px solid var(--line);padding:23px clamp(22px,5vw,88px) 34px;color:#7f8998;font-size:12px}
-.foot-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-footer a{color:#d9a17c;text-decoration:none}
-@media(max-width:650px){.hero{padding-top:57px;padding-bottom:45px}.hero:after{right:-230px;opacity:.6}.section-head{display:block}.info{grid-template-columns:1fr}.topbar{height:65px}.list{grid-template-columns:1fr}.card{min-height:220px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+button,a{-webkit-tap-highlight-color:transparent}
+.wrap{width:min(var(--max),calc(100% - 48px));margin-inline:auto}
+header{height:76px;display:flex;align-items:center;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:rgba(11,13,16,.88);backdrop-filter:blur(18px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.identity{display:flex;align-items:center;gap:11px;text-decoration:none}
+.mark{width:34px;height:34px;display:block;flex:none}
+.wordmark{font-size:15px;font-weight:760;letter-spacing:-.035em}
+.wordmark span{color:#b7bdc1;font-weight:520}
+.navlinks{display:flex;align-items:center;gap:27px}
+.navlinks a{font-size:12px;color:#b5bbc0;text-decoration:none;transition:color .18s}
+.navlinks a:hover{color:var(--ember2)}
+.navlinks .nav-cta{color:#17110d;background:#f0a16a;padding:9px 15px;border-radius:7px;font-weight:760}
+.hero{padding:102px 0 86px;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero:before{content:"";position:absolute;width:520px;height:520px;right:-120px;top:-220px;border-radius:50%;border:1px solid rgba(241,138,75,.14);box-shadow:0 0 0 54px rgba(241,138,75,.025),0 0 0 108px rgba(241,138,75,.018);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:54px;align-items:center;position:relative}
+.overline{display:flex;align-items:center;gap:10px;color:var(--ember2);font-size:10px;font-weight:780;letter-spacing:.2em;text-transform:uppercase}
+.overline:before{content:"";width:22px;height:1px;background:var(--ember)}
+h1{font-size:clamp(48px,6.8vw,82px);line-height:.98;letter-spacing:-.067em;margin:23px 0 22px;font-weight:760;max-width:650px}
+h1 em{font-style:normal;color:var(--ember2)}
+.intro{font-size:16px;color:#aeb4b8;max-width:510px;margin:0}
+.hero-actions{display:flex;align-items:center;gap:19px;flex-wrap:wrap;margin-top:31px}
+.primary{display:inline-flex;align-items:center;justify-content:center;padding:13px 19px;border-radius:8px;background:var(--ember);color:#1b120d;font-size:13px;font-weight:800;text-decoration:none;transition:background .2s,transform .2s}
+.primary:hover{background:#ffad75;transform:translateY(-1px)}
+.text-link{font-size:12px;color:#c6c9ca;text-decoration:none;border-bottom:1px solid #656d72;padding:4px 0}
+.text-link:hover{color:var(--ember2);border-color:var(--ember)}
+.hero-note{font-size:11px;color:#7e878d;margin-top:18px}
+.showcase{position:relative;min-height:330px;border:1px solid #30363b;border-radius:16px;background:linear-gradient(145deg,#1a2026,#101419 72%);padding:23px;box-shadow:0 30px 80px rgba(0,0,0,.26)}
+.showcase-top{display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#89939a}
+.screen{margin-top:25px;border-radius:9px;overflow:hidden;background:linear-gradient(115deg,#28343a,#17232a 56%,#34261f);height:213px;padding:19px;position:relative}
+.screen:after{content:"";position:absolute;width:230px;height:230px;right:-36px;top:-70px;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(245,156,94,.55),rgba(155,83,48,.1) 53%,transparent 70%)}
+.screen-label{font-size:9px;letter-spacing:.15em;color:#e9c7aa;text-transform:uppercase;position:relative;z-index:1}
+.screen-title{font-size:25px;letter-spacing:-.05em;font-weight:760;margin-top:7px;position:relative;z-index:1}
+.screen-sub{font-size:10px;color:#c3c9c9;position:relative;z-index:1}
+.tiles{display:flex;gap:8px;position:absolute;left:19px;right:19px;bottom:18px;z-index:2}
+.tile{height:59px;flex:1;border-radius:6px;background:linear-gradient(140deg,#49545a,#202930);border:1px solid rgba(255,255,255,.12)}
+.tile:nth-child(2){background:linear-gradient(140deg,#7c5947,#30251f)}
+.tile:nth-child(3){background:linear-gradient(140deg,#425a63,#1e2a30)}
+.tile:nth-child(4){background:linear-gradient(140deg,#575d68,#242832)}
+.showcase-foot{display:flex;justify-content:space-between;margin-top:13px;color:#7e888f;font-size:10px}
+section{padding:76px 0;border-bottom:1px solid var(--line)}
+.section-top{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:28px}
+.eyebrow{color:var(--ember2);font-size:10px;font-weight:780;letter-spacing:.18em;text-transform:uppercase;margin:0 0 8px}
+h2{font-size:clamp(27px,3.4vw,39px);letter-spacing:-.05em;line-height:1.08;margin:0;font-weight:720}
+.section-desc{color:var(--muted);font-size:13px;max-width:430px;margin:0}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.feature{padding:22px 21px;border:1px solid var(--line);border-radius:11px;background:var(--surface);min-height:160px}
+.feature-number{font-size:10px;color:var(--ember);letter-spacing:.12em;font-weight:800}
+.feature h3{font-size:15px;margin:17px 0 6px;letter-spacing:-.02em}
+.feature p{font-size:12px;color:var(--muted);margin:0;max-width:300px}
+.logo-story{display:grid;grid-template-columns:150px 1fr;gap:36px;align-items:center;padding:26px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(120deg,#151a1f,#101317)}
+.logo-large{width:112px;height:112px;margin:auto}
+.logo-story h3{font-size:18px;margin:0 0 8px;letter-spacing:-.03em}
+.logo-story p{font-size:13px;color:var(--muted);margin:0;max-width:700px}
+.release-intro{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:22px}
+#release-status{font-size:11px;color:var(--soft);margin:0 0 14px;min-height:17px}
+.release-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.release-card{display:flex;flex-direction:column;min-height:230px;padding:21px;border:1px solid var(--line);border-radius:11px;background:var(--surface);transition:border-color .2s,transform .2s}
+.release-card:hover{border-color:#78513b;transform:translateY(-2px)}
+.release-meta{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.release-kind{font-size:9px;letter-spacing:.15em;color:#a5adb2;text-transform:uppercase;font-weight:800}
+.pill{font-size:9px;text-transform:uppercase;letter-spacing:.1em;padding:4px 8px;border-radius:4px;font-weight:800}
+.pill.stable{color:#a6d6b7;background:#1b3026}
+.pill.beta{color:#f3bd8b;background:#35261e}
+.release-version{font-size:27px;font-weight:750;letter-spacing:-.055em;margin:17px 0 4px}
+.release-name{font-size:12px;color:var(--muted);margin:0 0 18px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.release-download{display:flex;align-items:center;justify-content:center;min-height:42px;padding:10px 12px;border-radius:7px;background:#e99a62;color:#1b120d;text-decoration:none;font-size:12px;font-weight:800}
+.release-download:hover{background:#ffb47e}
+.release-download.secondary{background:#252d33;color:#e6e7e6;border:1px solid #384149}
+.release-download.secondary:hover{background:#303a42}
+.release-empty{grid-column:1/-1;border:1px dashed #384149;padding:22px;border-radius:10px;color:var(--muted);font-size:13px}
+.compat{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.compat-card{padding:23px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.compat-card h3{font-size:14px;margin:0 0 7px}
+.compat-card p{font-size:12px;color:var(--muted);margin:0}
+.compat-card small{display:block;color:var(--ember2);font-size:10px;margin-top:12px}
+footer{padding:28px 0 36px}
+.footer-inner{display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap}
+.footer-brand{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:750}
+.footer-brand .mark{width:23px;height:23px}
+.footer-note{font-size:10px;color:var(--soft)}
+.footer-links{display:flex;gap:18px}
+.footer-links a{font-size:11px;color:#9da5aa;text-decoration:none}
+.footer-links a:hover{color:var(--ember2)}
+@media(max-width:800px){.hero-grid{grid-template-columns:1fr;gap:38px}.showcase{max-width:560px}.release-grid{grid-template-columns:repeat(2,1fr)}.section-top{align-items:start;flex-direction:column}.section-desc{max-width:600px}}
+@media(max-width:560px){.wrap{width:min(var(--max),calc(100% - 34px))}header{height:66px}.navlinks{gap:14px}.navlinks a:not(.nav-cta){display:none}.hero{padding:72px 0 58px}.hero-grid{gap:32px}h1{font-size:52px}.showcase{min-height:290px;padding:15px}.screen{height:190px}.features,.release-grid,.compat{grid-template-columns:1fr}.feature{min-height:0}.logo-story{grid-template-columns:1fr;gap:17px;text-align:center;padding:22px}.logo-large{width:86px;height:86px}.release-card{min-height:205px}section{padding:58px 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="shell">
-<nav class="topbar" aria-label="Main navigation">
-  <a class="brand" href="https://github.com/iy367-ux/EmberHome" aria-label="EmberHome GitHub home">EMBER<span>HOME</span></a>
-  <a class="toplink" href="https://github.com/iy367-ux/EmberHome/releases">Release notes ↗</a>
-</nav>
-<header class="hero">
-  <div class="eyebrow"><span class="dot"></span> Official download centre</div>
-  <h1>Your TV.<br><span>Your home screen.</span></h1>
-  <p class="lead">Find the EmberHome version that fits your device. Browse stable builds or try the latest beta, with downloads served directly from GitHub.</p>
-  <div class="hero-meta"><span class="chip">Made for Android TV</span><span class="chip">Remote-friendly</span><span class="chip">Stable + beta builds</span><span class="chip">Legacy builds: Android 4.4.4+</span></div>
+<header>
+ <div class="wrap nav">
+  <a class="identity" href="#home" aria-label="EmberHome home">
+   <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M9 29.5 32 10l23 19.5v23a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3z" fill="#20272d" stroke="#58636b" stroke-width="1.5"/><path d="M32 16c2.8 8.1-5.6 12.2-5.6 20.2 0 3.7 1.8 6.2 4.6 7.8-.9-6.2 3.7-9 7.4-13.1 5.9 5.3 8.7 10.4 7.2 16.2-1.6 6.1-7.4 10.3-14.1 10.3-9.4 0-16.2-6.6-16.2-15.7C15.3 30.6 24.2 24.2 32 16Z" fill="#f18a4b"/><path d="M31.8 51.1c-4.1 0-6.8-3-6.8-6.8 0-3.3 2.2-5.6 5.2-8.7-.2 4.4 1.9 5.8 4.1 7.4 1.8 1.4 2.9 2.7 2.9 4.1 0 2.3-2.2 4-5.4 4Z" fill="#ffe0c3"/></svg>
+   <span class="wordmark">Ember<span>Home</span></span>
+  </a>
+  <nav class="navlinks" aria-label="Main navigation"><a href="#about">About</a><a href="#compatibility">Compatibility</a><a class="nav-cta" href="#downloads">Get EmberHome</a></nav>
+ </div>
 </header>
-<main>
-  <div class="section-head">
-    <div><p class="kicker">The release library</p><h2>Choose your EmberHome</h2><p class="section-copy">New published releases appear here automatically.</p></div>
+<main id="home">
+ <div class="hero">
+  <div class="wrap hero-grid">
+   <div>
+    <div class="overline">A home screen made for the big screen</div>
+    <h1>Make your TV<br>feel like <em>yours.</em></h1>
+    <p class="intro">EmberHome brings your apps and entertainment together in a calmer, more personal Android TV experience. Less clutter. More control. A better place to start.</p>
+    <div class="hero-actions"><a class="primary" href="#downloads">Explore downloads</a><a class="text-link" href="https://github.com/iy367-ux/EmberHome">Explore the project</a></div>
+    <p class="hero-note">For Android TV and compatible Android devices.</p>
+   </div>
+   <div class="showcase" aria-label="Illustrative EmberHome television interface">
+    <div class="showcase-top"><span>EmberHome interface</span><span>01 / HOME</span></div>
+    <div class="screen"><div class="screen-label">Good evening</div><div class="screen-title">Your space.<br>Your choices.</div><div class="screen-sub">Everything you love, within reach.</div><div class="tiles"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div></div>
+    <div class="showcase-foot"><span>Designed around the remote</span><span>Personal by design</span></div>
+   </div>
   </div>
-  <p id="status" role="status" aria-live="polite">Loading official GitHub releases…</p>
-  <section class="list" id="versions" aria-label="Available EmberHome versions">
-    <article class="card"><div class="kind">Release library</div><p class="version">Loading…</p><p class="note">Fetching the latest versions.</p></article>
-  </section>
-  <section class="info" aria-label="Release information">
-    <div class="info-card"><strong>Stable releases</strong><p>Recommended for everyday use. Choose a stable build for the most dependable experience.</p></div>
-    <div class="info-card"><strong>Beta releases</strong><p>Preview builds with newer changes. They may contain bugs or unfinished features.</p></div>
-    <div class="info-card compatibility"><strong>Android compatibility</strong><p>Support for Android 4.4.4 is being gradually phased out, so newer Android versions are recommended for future releases.</p></div>
-  </section>
+ </div>
+ <section id="about">
+  <div class="wrap">
+   <div class="section-top"><div><p class="eyebrow">The EmberHome approach</p><h2>Simple at first glance.<br>Thoughtful underneath.</h2></div><p class="section-desc">A launcher should make the television easier to use, not give you another thing to manage. EmberHome is built around that idea.</p></div>
+   <div class="features">
+    <article class="feature"><span class="feature-number">01 / YOUR SPACE</span><h3>A home that feels personal</h3><p>Make the screen feel like your own, with a visual style that puts your apps first.</p></article>
+    <article class="feature"><span class="feature-number">02 / LESS NOISE</span><h3>Keep the focus</h3><p>A considered layout helps you get to what you want without unnecessary visual clutter.</p></article>
+    <article class="feature"><span class="feature-number">03 / YOUR DEVICE</span><h3>Built with compatibility in mind</h3><p>Choose a release that matches your Android version and the capabilities of your device.</p></article>
+   </div>
+   <div style="height:15px"></div>
+   <div class="logo-story">
+    <svg class="logo-large" viewBox="0 0 64 64" role="img" aria-label="EmberHome flame and home mark"><path d="M9 29.5 32 10l23 19.5v23a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3z" fill="#20272d" stroke="#58636b" stroke-width="1.5"/><path d="M32 16c2.8 8.1-5.6 12.2-5.6 20.2 0 3.7 1.8 6.2 4.6 7.8-.9-6.2 3.7-9 7.4-13.1 5.9 5.3 8.7 10.4 7.2 16.2-1.6 6.1-7.4 10.3-14.1 10.3-9.4 0-16.2-6.6-16.2-15.7C15.3 30.6 24.2 24.2 32 16Z" fill="#f18a4b"/><path d="M31.8 51.1c-4.1 0-6.8-3-6.8-6.8 0-3.3 2.2-5.6 5.2-8.7-.2 4.4 1.9 5.8 4.1 7.4 1.8 1.4 2.9 2.7 2.9 4.1 0 2.3-2.2 4-5.4 4Z" fill="#ffe0c3"/></svg>
+    <div><h3>A small mark with a simple meaning.</h3><p>The outline is a home: the place you return to. Inside it, the ember flame represents warmth, energy and the spark of discovery. Together, they express what EmberHome is meant to be — a welcoming starting point for everything you watch and enjoy.</p></div>
+   </div>
+  </div>
+ </section>
+ <section id="downloads">
+  <div class="wrap">
+   <div class="release-intro"><div><p class="eyebrow">Official releases</p><h2>Find your version.</h2></div><p class="section-desc">Downloads are read directly from the EmberHome GitHub releases. Choose a stable build for everyday use or a beta to preview changes.</p></div>
+   <p id="release-status" role="status" aria-live="polite">Loading published releases…</p>
+   <div class="release-grid" id="release-list"><div class="release-empty">Connecting to the official release library…</div></div>
+  </div>
+ </section>
+ <section id="compatibility">
+  <div class="wrap">
+   <div class="section-top"><div><p class="eyebrow">Before you install</p><h2>Check your Android version.</h2></div><p class="section-desc">Compatibility can vary by device and build. Always read the release notes before installing.</p></div>
+   <div class="compat">
+    <article class="compat-card"><h3>Android 5.0 and newer</h3><p>Use the latest release marked compatible with your device. Newer builds are the recommended choice where supported.</p><small>Recommended for ongoing use</small></article>
+    <article class="compat-card"><h3>Android 4.4.4 legacy support</h3><p>Legacy builds remain available for older devices. Support for Android 4.4.4 is being gradually phased out.</p><small>Legacy compatibility · limited future support</small></article>
+   </div>
+  </div>
+ </section>
 </main>
-<footer><div class="foot-inner"><span>© EmberHome · Official project downloads</span><span><a href="https://github.com/iy367-ux/EmberHome">GitHub repository</a> &nbsp;·&nbsp; <a href="https://github.com/iy367-ux/EmberHome/releases">All releases</a></span></div></footer>
-</div>
+<footer><div class="wrap footer-inner"><div><div class="footer-brand"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M9 29.5 32 10l23 19.5v23a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3z" fill="#20272d" stroke="#58636b" stroke-width="1.5"/><path d="M32 16c2.8 8.1-5.6 12.2-5.6 20.2 0 3.7 1.8 6.2 4.6 7.8-.9-6.2 3.7-9 7.4-13.1 5.9 5.3 8.7 10.4 7.2 16.2-1.6 6.1-7.4 10.3-14.1 10.3-9.4 0-16.2-6.6-16.2-15.7C15.3 30.6 24.2 24.2 32 16Z" fill="#f18a4b"/></svg>EmberHome</div><div class="footer-note">A better place to start.</div></div><div class="footer-links"><a href="https://github.com/iy367-ux/EmberHome">GitHub</a><a href="https://github.com/iy367-ux/EmberHome/releases">All releases</a></div></div></footer>
 <script>
 (function(){
-  var api="https://api.github.com/repos/iy367-ux/EmberHome/releases?per_page=100";
-  function cleanTag(tag){return String(tag||"").replace(/^v/i,"").replace(/^release[-_ ]?/i,"");}
-  function parseVersion(value){
-    var match=String(value).match(new RegExp("^(\\d+)\\.(\\d+)\\.(\\d+)(?:[-+].*)?$"));
-    return match?{major:+match[1],minor:+match[2],patch:+match[3]}:null;
+ const endpoint="https://api.github.com/repos/iy367-ux/EmberHome/releases?per_page=100";
+ const list=document.getElementById("release-list");
+ const status=document.getElementById("release-status");
+ const make=(tag,cls,text)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el;};
+ function clean(tag){return String(tag||"").replace(/^v/i,"");}
+ function compare(a,b){
+  const x=clean(a).match(/^(\d+)\.(\d+)\.(\d+)/),y=clean(b).match(/^(\d+)\.(\d+)\.(\d+)/);
+  if(x&&y)return (+y[1]- +x[1])||(+y[2]- +x[2])||(+y[3]- +x[3]);
+  if(x)return -1;if(y)return 1;return String(b).localeCompare(String(a),undefined,{numeric:true});
+ }
+ function card(r){
+  const item=make("article","release-card"),meta=make("div","release-meta");
+  meta.append(make("span","release-kind","EmberHome release"),make("span","pill "+(r.prerelease?"beta":"stable"),r.prerelease?"Beta":"Stable"));
+  const version=make("h3","release-version","v"+clean(r.tag_name));
+  const desc=make("p","release-name",r.name||((r.body||"").replace(/[#>*_\x60]/g,"").trim().slice(0,180))||"Official EmberHome release.");
+  const apk=(r.assets||[]).filter(a=>/\.apk$/i.test(a.name||""));
+  item.append(meta,version,desc);
+  if(apk.length){
+   apk.forEach((a,i)=>{const link=make("a","release-download"+(i?" secondary":""),apk.length>1?a.name:"Download APK");link.href=a.browser_download_url;link.rel="noopener noreferrer";item.appendChild(link);});
+  }else{
+   const link=make("a","release-download secondary","View release details");link.href=r.html_url;link.rel="noopener noreferrer";item.appendChild(link);
   }
-  function compareVersions(a,b){
-    var av=parseVersion(a),bv=parseVersion(b);
-    if(av&&bv)return bv.major-av.major||bv.minor-av.minor||bv.patch-av.patch;
-    if(av)return -1;if(bv)return 1;
-    return b.localeCompare(a,undefined,{numeric:true,sensitivity:"base"});
-  }
-  function node(tag,className,text){
-    var el=document.createElement(tag);if(className)el.className=className;if(text!==undefined)el.textContent=text;return el;
-  }
-  function makeCard(release){
-    var version=cleanTag(release.tag_name);
-    var article=node("article","card");
-    var top=node("div","card-top");
-    top.appendChild(node("span","kind","EMBERHOME RELEASE"));
-    top.appendChild(node("span","pill "+(release.prerelease?"beta":"stable"),release.prerelease?"Beta":"Stable"));
-    var title=node("h3","version","v"+version);
-    var note=node("p","note",release.name||release.body||("EmberHome "+version));
-    top.setAttribute("aria-label",release.prerelease?"Beta release":"Stable release");
-    article.appendChild(top);article.appendChild(title);article.appendChild(note);
-    var assets=release.assets||[],apkAssets=[];
-    for(var i=0;i<assets.length;i++){if(new RegExp("\\.apk$","i").test(assets[i].name||""))apkAssets.push(assets[i]);}
-    var actions=node("div","actions");
-    if(apkAssets.length){
-      for(var j=0;j<apkAssets.length;j++){
-        var asset=apkAssets[j],link=node("a","action",apkAssets.length>1?("Download "+asset.name):"Download APK");
-        link.href=asset.browser_download_url;link.rel="noopener";actions.appendChild(link);
-      }
-      article.appendChild(actions);article.appendChild(node("div","avail","● APK ready to install"));
-    }else{
-      actions.appendChild(node("div","disabled","APK not attached yet"));article.appendChild(actions);
-    }
-    return article;
-  }
-  function render(releases){
-    var host=document.getElementById("versions");host.innerHTML="";
-    if(!releases.length){host.appendChild(node("div","empty","No published releases found yet. Please check the GitHub Releases page."));return;}
-    releases.sort(function(a,b){return compareVersions(cleanTag(a.tag_name),cleanTag(b.tag_name));});
-    for(var i=0;i<releases.length;i++)host.appendChild(makeCard(releases[i]));
-  }
-  var xhr=new XMLHttpRequest();xhr.open("GET",api,true);xhr.setRequestHeader("Accept","application/vnd.github+json");
-  xhr.onreadystatechange=function(){
-    if(xhr.readyState!==4)return;
-    if(xhr.status>=200&&xhr.status<300){
-      try{
-        var releases=JSON.parse(xhr.responseText)||[];
-        releases=releases.filter(function(r){return !r.draft;});render(releases);
-        document.getElementById("status").textContent=releases.length+" published release"+(releases.length===1?"":"s")+" · synced from GitHub";
-      }catch(e){document.getElementById("status").textContent="Could not read releases. Please use the GitHub Releases link above.";}
-    }else{document.getElementById("status").textContent="GitHub is temporarily unavailable. Please try again or open the release notes.";}
-  };
-  xhr.onerror=function(){document.getElementById("status").textContent="Network error. Check your connection and try again.";};
-  xhr.send();
+  return item;
+ }
+ fetch(endpoint,{headers:{Accept:"application/vnd.github+json"}}).then(response=>{if(!response.ok)throw new Error("GitHub release request failed");return response.json();}).then(releases=>{
+  const published=(releases||[]).filter(r=>!r.draft).sort((a,b)=>compare(a.tag_name,b.tag_name));
+  list.replaceChildren();
+  if(!published.length){list.appendChild(make("div","release-empty","No published releases yet. Check the GitHub Releases page for updates."));}
+  else published.forEach(r=>list.appendChild(card(r)));
+  status.textContent=published.length+" published release"+(published.length===1?"":"s")+" · synced from GitHub";
+ }).catch(()=>{
+  list.replaceChildren();const empty=make("div","release-empty","The release list could not be loaded right now. You can still open the official GitHub releases page.");
+  const link=make("a","text-link","Open GitHub releases");link.href="https://github.com/iy367-ux/EmberHome/releases";link.style.display="inline-block";link.style.marginTop="10px";empty.appendChild(document.createElement("br"));empty.appendChild(link);list.appendChild(empty);
+  status.textContent="Release service temporarily unavailable.";
+ });
 })();
 </script>
 </body>
