@@ -40,20 +40,15 @@ jobs:
           java-version: '17'
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.2'
       - name: Build debug APK
         working-directory: ${{ steps.locate.outputs.project_dir }}
-        run: |
-          if [ -f ./gradlew ]; then
-            chmod +x ./gradlew
-            ./gradlew assembleDebug --stacktrace
-          else
-            gradle assembleDebug --stacktrace
-          fi
+        run: gradle assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: EmberHome-debug-APK
-          path: |
-            ${{ steps.locate.outputs.project_dir }}/**/build/outputs/apk/debug/*.apk
+          name: EmberHome-ready-source-APK
+          path: ${{ steps.locate.outputs.project_dir }}/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
